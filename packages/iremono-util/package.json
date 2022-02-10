@@ -1,5 +1,5 @@
 {
-  "name": "@iremono/backend-core",
+  "name": "@iremono/util",
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
@@ -8,9 +8,6 @@
   "scripts": {
     "build": "rm -rf dist && yarn tsc",
     "postinstall": "yarn build"
-  },
-  "dependencies": {
-    "@iremono/util": "1.0.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.13",

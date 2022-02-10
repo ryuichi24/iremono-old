@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@iremono/backend-core": "1.0.0",
+    "@iremono/util": "1.0.0",
     "bcryptjs": "^2.4.3",
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1"
