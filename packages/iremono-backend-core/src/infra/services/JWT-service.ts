@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { TokenService } from '../../../services';
+import { TokenService } from '../../services';
 
 interface JwtOptions {
   jwtSecret: string;
@@ -18,7 +18,7 @@ export const constructJwtService = (jwtOptions: JwtOptions): TokenService =>
         expiresIn: jwtOptions.jwtExpiresIn,
       };
     },
-    verifyToken: (token: string, secret: string) => {
-      return jwt.verify(token, secret);
+    verifyToken: (token: string) => {
+      return jwt.verify(token, jwtOptions.jwtSecret);
     },
   });

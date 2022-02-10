@@ -1,5 +1,4 @@
-import { Identity } from '../../../../../entities';
-import { IdentityRepository } from '../../../../../repositories';
+import { Identity, IdentityRepository } from '../../../..';
 
 interface IdentityRow {
   id: string;

@@ -1,4 +1,4 @@
-import { Entity, EntityProps } from '../shared/entities/models';
+import { Entity, EntityProps } from '../shared/entities';
 
 interface Props extends EntityProps {
   email: string;

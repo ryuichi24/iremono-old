@@ -1,6 +1,6 @@
 import { makeIdentityDTO } from '../../../models';
 import { IdentityRepository } from '../../../repositories';
-import { UseCase } from '../../../shared/application/use-case-lib';
+import { UseCase } from '../../../shared/use-case-lib';
 import { CheckIdentityRequestDTO } from './check-identity-request-DTO';
 import { CheckIdentityResponseDTO } from './check-identity-response-DTO';
 

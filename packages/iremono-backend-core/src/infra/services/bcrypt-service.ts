@@ -1,5 +1,5 @@
 import bcryptjs from 'bcryptjs';
-import { HashService } from '../../../services';
+import { HashService } from '../../services';
 
 export const constructBcryptService = (): HashService =>
   Object.freeze({

@@ -5,5 +5,5 @@ interface AccessToken {
 
 export interface TokenService {
   generateAccessToken(payload: { [key: string]: string }): AccessToken;
-  verifyToken(token: string, secret: string): any;
+  verifyToken(token: string): any;
 }

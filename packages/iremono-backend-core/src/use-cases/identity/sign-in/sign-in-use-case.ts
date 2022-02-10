@@ -1,6 +1,6 @@
 import { IdentityRepository } from '../../../repositories';
 import { HashService, TokenService } from '../../../services';
-import { UseCase } from '../../../shared/application/use-case-lib';
+import { UseCase } from '../../../shared/use-case-lib';
 import { SignInResponseDTO } from './sigin-in-response-DTO';
 import { SignInRequestDTO } from './sign-in-request-DTO';
 

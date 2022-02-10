@@ -1,7 +1,7 @@
 import { Identity } from '../../../entities';
 import { IdentityRepository } from '../../../repositories';
 import { HashService, TokenService } from '../../../services';
-import { UseCase } from '../../../shared/application/use-case-lib';
+import { UseCase } from '../../../shared/use-case-lib';
 import { SignUpRequestDTO } from './sign-up-request-DTO';
 import { SignUpResponseDTO } from './sign-up-response-DTO';
 
