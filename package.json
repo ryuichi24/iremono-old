@@ -1,0 +1,18 @@
+{
+  "name": "iremono",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "yarn concurrently \"yarn dev-server\" \"yarn dev-web\"",
+    "dev-web": "yarn workspace @iremono/web dev",
+    "dev-server": "yarn workspace @iremono/server dev"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "concurrently": "^7.0.0"
+  }
+}
