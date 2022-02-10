@@ -10,6 +10,7 @@
     "dev": "export $(cat .env.dev | grep -v \"#\" | xargs) && export NODE_ENV=development && nodemon --exec ts-node src/index.ts"
   },
   "dependencies": {
+    "@iremono/backend-core": "1.0.0",
     "bcryptjs": "^2.4.3",
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1"
