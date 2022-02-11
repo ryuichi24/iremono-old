@@ -6,6 +6,7 @@ import { constructBcryptService, constructJwtService } from '@iremono/backend-co
 import {
   CheckIdentityUseCase,
   CreateFolderUseCase,
+  DeleteFolderInTrashUseCase,
   ListItemsInFolderUseCase,
   RemoveFileUseCase,
   RemoveFolderUseCase,
@@ -26,6 +27,7 @@ import {
 } from '../controllers/files';
 import {
   CreateFolderController,
+  DeleteFolderInTrashController,
   ListItemsInFolderController,
   RemoveFolderController,
   RestoreFolderController,
@@ -68,8 +70,13 @@ const uploadFileUseCase = new UploadFileUseCase(storageItemRepository);
 const updateFileUseCase = new UpdateFileUseCase(storageItemRepository);
 const removeFileUseCase = new RemoveFileUseCase(storageItemRepository);
 const restoreFileUseCase = new RestoreFileUseCase(storageItemRepository);
+const deleteFolderInTrashUseCase = new DeleteFolderInTrashUseCase(storageItemRepository);
 
 export const uploadFileController = new UploadFileController(uploadFileUseCase, loggerFactory);
 export const updateFileController = new UpdateFileController(updateFileUseCase, loggerFactory);
 export const removeFileController = new RemoveFileController(removeFileUseCase, loggerFactory);
 export const restoreFileController = new RestoreFileController(restoreFileUseCase, loggerFactory);
+export const deleteFolderInTrashController = new DeleteFolderInTrashController(
+  deleteFolderInTrashUseCase,
+  loggerFactory,
+);

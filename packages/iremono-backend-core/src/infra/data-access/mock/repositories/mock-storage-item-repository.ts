@@ -69,6 +69,16 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     return entity;
   };
 
+  const remove = async (entity: StorageItem) => {
+    const indexOfEntity = storageItemTable.findIndex((item) => item.id === entity.id);
+    storageItemTable.splice(indexOfEntity, 1)[0];
+
+    logger.debug(
+      `a storage item has been removed.`,
+      `[storage-item-memory-table="${JSON.stringify(storageItemTable, null, '\t')}"]`,
+    );
+  };
+
   const findOneById = async (id: string, ownerId: string) => {
     const foundItemRow = storageItemTable.find((item) => item.id === id && item.ownerId === ownerId);
     if (!foundItemRow) return null;
@@ -98,6 +108,7 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
 
   return {
     save,
+    remove,
     findOneById,
     findByParentId,
     findAllDescendantsById,

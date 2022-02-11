@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   createFolderController,
+  deleteFolderInTrashController,
   jwtService,
   listItemsInFolderController,
   removeFolderController,
@@ -15,4 +16,5 @@ export const foldersRouter = express
   .patch('/:id', authHandler(jwtService), makeExpressHandler(updateFolderController))
   .post('/:id/remove', authHandler(jwtService), makeExpressHandler(removeFolderController))
   .post('/:id/restore', authHandler(jwtService), makeExpressHandler(restoreFolderController))
-  .get('/:id/items', authHandler(jwtService), makeExpressHandler(listItemsInFolderController));
+  .get('/:id/items', authHandler(jwtService), makeExpressHandler(listItemsInFolderController))
+  .delete('/:id/trash', authHandler(jwtService), makeExpressHandler(deleteFolderInTrashController));
