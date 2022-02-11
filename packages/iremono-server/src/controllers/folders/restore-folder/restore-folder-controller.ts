@@ -15,8 +15,8 @@ export class RestoreFolderController extends Controller<RestoreFolderUseCase> {
     await this._useCase.handle(dto);
 
     this._logger.info(
-      'user has removed a folder',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has removed a folder"]`,
+      'user has restored a folder',
+      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has restored a folder"]`,
     );
 
     return this._noContent();

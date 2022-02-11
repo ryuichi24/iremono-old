@@ -2,6 +2,7 @@ import express from 'express';
 import {
   createFolderController,
   jwtService,
+  listItemsInFolderController,
   removeFolderController,
   restoreFolderController,
   updateFolderController,
@@ -13,4 +14,5 @@ export const foldersRouter = express
   .post('/', authHandler(jwtService), makeExpressHandler(createFolderController))
   .patch('/:id', authHandler(jwtService), makeExpressHandler(updateFolderController))
   .post('/:id/remove', authHandler(jwtService), makeExpressHandler(removeFolderController))
-  .post('/:id/restore', authHandler(jwtService), makeExpressHandler(restoreFolderController));
+  .post('/:id/restore', authHandler(jwtService), makeExpressHandler(restoreFolderController))
+  .get('/:id/items', authHandler(jwtService), makeExpressHandler(listItemsInFolderController));
