@@ -1,0 +1,33 @@
+import { StorageItem } from '../../../entities';
+import { makeStorageItemDTO } from '../../../models';
+import { StorageItemRepository } from '../../../repositories';
+import { UseCase } from '../../../shared/use-case-lib';
+import { CreateFolderRequestDTO } from './create-folder-request-DTO';
+import { CreateFolderResponseDTO } from './create-folder-response-DTO';
+
+export class CreateFolderUseCase implements UseCase<CreateFolderRequestDTO, CreateFolderResponseDTO> {
+  private readonly _storageItemRepository: StorageItemRepository;
+
+  constructor(storageItemRepository: StorageItemRepository) {
+    this._storageItemRepository = storageItemRepository;
+  }
+
+  public async handle(dto: CreateFolderRequestDTO): Promise<CreateFolderResponseDTO> {
+    const parentFolder = await this._storageItemRepository.findOneById(dto.parentId, dto.ownerId);
+
+    if (!parentFolder) {
+      throw new Error('the parent folder does not exist.');
+    }
+
+    const folder = new StorageItem({
+      name: dto.name,
+      isFolder: true,
+      ownerId: dto.ownerId,
+      parentId: dto.parentId,
+    });
+
+    const saved = await this._storageItemRepository.save(folder);
+
+    return makeStorageItemDTO(saved);
+  }
+}

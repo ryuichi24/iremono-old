@@ -1,5 +1,5 @@
 import express from 'express';
-import { identityRouter } from './routes';
+import { foldersRouter, identityRouter } from './routes';
 import { errorHandler } from './shared/express-lib';
 import { loggerFactory } from './shared/utils/logger';
 
@@ -13,6 +13,7 @@ const app = express();
 app.use([express.json()]);
 
 app.use('/api/identity', identityRouter);
+app.use('/api/folders', foldersRouter);
 
 app.get('/api/health', async (_, res) => res.send('API is running'));
 

@@ -25,8 +25,8 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
   const logger = loggerFactory.createLogger('MockStorageItemRepository');
 
   const insert = async (entity: StorageItem) => {
-    const parentFolder = storageItemTable.find((item) => item.id === entity.id);
-    const ancestors = parentFolder ? [...parentFolder.ancestors, entity.id] : [];
+    const parentFolder = storageItemTable.find((item) => item.id === entity.parentId);
+    const ancestors = parentFolder ? [...parentFolder.ancestors, entity.parentId] : [];
     const row = makeStorageItemRowFromEntity(entity, ancestors);
     storageItemTable.push(row);
   };
@@ -114,7 +114,7 @@ const makeStorageItemEntityFromRow = (row: StorageItemRow) =>
 const makeStorageItemRowFromEntity = (entity: StorageItem, ancestors: (string | null)[]) => ({
   id: entity.id!,
   name: entity.name,
-  parentId: entity.id!,
+  parentId: entity.parentId!,
   ancestors: ancestors,
   ownerId: entity.ownerId,
   filePath: entity.filePath,
