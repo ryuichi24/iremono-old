@@ -1,6 +1,12 @@
 import express from 'express';
 import { config } from '../config';
-import { jwtService, removeFileController, updateFileController, uploadFileController } from '../dependency-container';
+import {
+  jwtService,
+  removeFileController,
+  restoreFileController,
+  updateFileController,
+  uploadFileController,
+} from '../dependency-container';
 import { authHandler, makeExpressHandler, uploadHandler } from '../shared/express-lib';
 
 export const filesRouter = express
@@ -12,4 +18,5 @@ export const filesRouter = express
     makeExpressHandler(uploadFileController),
   )
   .post('/:id', authHandler(jwtService), makeExpressHandler(updateFileController))
-  .post('/:id/remove', authHandler(jwtService), makeExpressHandler(removeFileController));
+  .post('/:id/remove', authHandler(jwtService), makeExpressHandler(removeFileController))
+  .post('/:id/restore', authHandler(jwtService), makeExpressHandler(restoreFileController));
