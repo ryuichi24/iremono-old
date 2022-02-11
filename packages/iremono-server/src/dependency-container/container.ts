@@ -27,7 +27,7 @@ import { CheckIdentityController, SignInController, SignUpController } from '../
 import { loggerFactory } from '../shared/utils/logger';
 
 // TODO: replace it once the real repository gets ready
-const identityRepository = constructMockIdentityRepository();
+const identityRepository = constructMockIdentityRepository(loggerFactory);
 const storageItemRepository = constructMockStorageItemRepository(loggerFactory);
 
 const bcryptService = constructBcryptService();

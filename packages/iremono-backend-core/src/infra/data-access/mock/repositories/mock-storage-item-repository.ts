@@ -24,71 +24,83 @@ const storageItemTable: StorageItemRow[] = [];
 export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory): StorageItemRepository => {
   const logger = loggerFactory.createLogger('MockStorageItemRepository');
 
-  const insert = async (entity: StorageItem) => {
+  const _insert = async (entity: StorageItem) => {
     const parentFolder = storageItemTable.find((item) => item.id === entity.parentId);
     const ancestors = parentFolder ? [...parentFolder.ancestors, entity.parentId] : [];
-    const row = makeStorageItemRowFromEntity(entity, ancestors);
-    storageItemTable.push(row);
+    const itemRow = makeStorageItemRowFromEntity(entity, ancestors);
+    storageItemTable.push(itemRow);
   };
 
-  const update = (entity: StorageItem) => {
+  const _update = (entity: StorageItem) => {
     const parentFolder = storageItemTable.find((item) => item.id === entity.parentId);
     const indexOfEntity = storageItemTable.findIndex((item) => item.id === entity.id);
-    const itemToUpdate = storageItemTable.splice(indexOfEntity, 1)[0];
+    const itemRowToUpdate = storageItemTable.splice(indexOfEntity, 1)[0];
     const ancestors = parentFolder ? [...parentFolder.ancestors, entity.parentId] : [];
 
-    itemToUpdate.id = entity.id!;
-    itemToUpdate.name = entity.name;
-    itemToUpdate.parentId = entity.parentId!;
-    itemToUpdate.ancestors = ancestors;
-    itemToUpdate.ownerId = entity.ownerId;
-    itemToUpdate.filePath = entity.filePath;
-    itemToUpdate.fileSize = entity.fileSize;
-    itemToUpdate.mimeType = entity.mimeType;
-    itemToUpdate.fileExtension = entity.fileExtension;
-    itemToUpdate.isFolder = entity.isFolder;
-    itemToUpdate.isInTrash = entity.isInTrash!;
-    itemToUpdate.lastViewedAt = entity.lastViewedAt!;
-    itemToUpdate.createdAt = entity.createdAt!;
-    itemToUpdate.updatedAt = entity.updatedAt!;
+    itemRowToUpdate.id = entity.id!;
+    itemRowToUpdate.name = entity.name;
+    itemRowToUpdate.parentId = entity.parentId!;
+    itemRowToUpdate.ancestors = ancestors;
+    itemRowToUpdate.ownerId = entity.ownerId;
+    itemRowToUpdate.filePath = entity.filePath;
+    itemRowToUpdate.fileSize = entity.fileSize;
+    itemRowToUpdate.mimeType = entity.mimeType;
+    itemRowToUpdate.fileExtension = entity.fileExtension;
+    itemRowToUpdate.isFolder = entity.isFolder;
+    itemRowToUpdate.isInTrash = entity.isInTrash!;
+    itemRowToUpdate.lastViewedAt = entity.lastViewedAt!;
+    itemRowToUpdate.createdAt = entity.createdAt!;
+    itemRowToUpdate.updatedAt = entity.updatedAt!;
 
-    storageItemTable.push(itemToUpdate);
+    storageItemTable.push(itemRowToUpdate);
+  };
+
+  const save = async (entity: StorageItem) => {
+    const entityExists = !!(await findOneById(entity.id, entity.ownerId));
+
+    if (!entityExists) await _insert(entity);
+    if (entityExists) await _update(entity);
+
+    logger.debug(
+      `a storage item has been saved.`,
+      `[storage-item-memory-table="${JSON.stringify(storageItemTable, null, '\t')}"]`,
+    );
+
+    return entity;
+  };
+
+  const findOneById = async (id: string, ownerId: string) => {
+    const foundItemRow = storageItemTable.find((item) => item.id === id && item.ownerId === ownerId);
+    if (!foundItemRow) return null;
+
+    return makeStorageItemEntityFromRow(foundItemRow);
+  };
+
+  const findByParentId = async (parentId: string, ownerId: string, inTrash: boolean) => {
+    const foundItemRows = storageItemTable.filter(
+      (itemRow) =>
+        itemRow.parentId === parentId &&
+        itemRow.ownerId === ownerId &&
+        (inTrash ? itemRow.isInTrash : !itemRow.isInTrash),
+    );
+    return foundItemRows.map((itemRow) => makeStorageItemEntityFromRow(itemRow));
+  };
+
+  const findAllDescendantsById = async (id: string, ownerId: string, inTrash: boolean) => {
+    const descendants = storageItemTable.filter(
+      (itemRow) =>
+        itemRow.ancestors.includes(id) &&
+        itemRow.ownerId === ownerId &&
+        (inTrash ? itemRow.isInTrash : !itemRow.isInTrash),
+    );
+    return descendants.map((descendant) => makeStorageItemEntityFromRow(descendant));
   };
 
   return {
-    save: async (entity: StorageItem) => {
-      const entityExists = !!storageItemTable.find((item) => item.id === entity.id && item.ownerId === entity.ownerId);
-
-      if (!entityExists) await insert(entity);
-      if (entityExists) await update(entity);
-
-      logger.debug(
-        `a storage item has been saved.`,
-        `[storage-item-memory-table="${JSON.stringify(storageItemTable, null, '\t')}"]`,
-      );
-
-      return entity;
-    },
-    findOneById: async (id: string, ownerId: string) => {
-      const foundItem = storageItemTable.find((item) => item.id === id && item.ownerId === ownerId);
-      if (!foundItem) return null;
-
-      return makeStorageItemEntityFromRow(foundItem);
-    },
-    findByParentId: async (parentId: string, ownerId: string, inTrash: boolean) => {
-      const foundItems = storageItemTable.filter(
-        (item) =>
-          item.parentId === parentId && item.ownerId === ownerId && (inTrash ? item.isInTrash : !item.isInTrash),
-      );
-      return foundItems.map((item) => makeStorageItemEntityFromRow(item));
-    },
-    findAllDescendantsById: async (id: string, ownerId: string, inTrash: boolean) => {
-      const descendants = storageItemTable.filter(
-        (item) =>
-          item.ancestors.includes(id) && item.ownerId === ownerId && (inTrash ? item.isInTrash : !item.isInTrash),
-      );
-      return descendants.map((descendant) => makeStorageItemEntityFromRow(descendant));
-    },
+    save,
+    findOneById,
+    findByParentId,
+    findAllDescendantsById,
   };
 };
 
