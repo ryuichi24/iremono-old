@@ -12,8 +12,10 @@ import {
   SignInUseCase,
   SignUpUseCase,
   UpdateFolderUseCase,
+  UploadFileUseCase,
 } from '@iremono/backend-core/src/use-cases';
 import { config } from '../config';
+import { UploadFileController } from '../controllers/files';
 import {
   CreateFolderController,
   ListItemsInFolderController,
@@ -53,3 +55,7 @@ export const updateFolderController = new UpdateFolderController(updateFolderUse
 export const removeFolderController = new RemoveFolderController(removeFolderUseCase, loggerFactory);
 export const restoreFolderController = new RestoreFolderController(restoreFolderUseCase, loggerFactory);
 export const listItemsInFolderController = new ListItemsInFolderController(listItemsInFolderUserCase, loggerFactory);
+
+const uploadFileUseCase = new UploadFileUseCase(storageItemRepository);
+
+export const uploadFileController = new UploadFileController(uploadFileUseCase, loggerFactory);

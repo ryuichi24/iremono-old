@@ -1,5 +1,5 @@
 import express from 'express';
-import { foldersRouter, identityRouter } from './routes';
+import { filesRouter, foldersRouter, identityRouter } from './routes';
 import { errorHandler } from './shared/express-lib';
 import { loggerFactory } from './shared/utils/logger';
 
@@ -14,6 +14,7 @@ app.use([express.json()]);
 
 app.use('/api/identity', identityRouter);
 app.use('/api/folders', foldersRouter);
+app.use('/api/files', filesRouter);
 
 app.get('/api/health', async (_, res) => res.send('API is running'));
 

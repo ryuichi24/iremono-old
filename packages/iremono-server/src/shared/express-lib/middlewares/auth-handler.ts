@@ -1,7 +1,7 @@
 import express from 'express';
 import { TokenService } from '@iremono/backend-core/src/services';
-import { loggerFactory } from '../../utils/logger';
 import { UnauthorizedError } from '../../utils/errors';
+import { loggerFactory } from '../../utils/logger';
 
 const logger = loggerFactory.createLogger('authHandler');
 

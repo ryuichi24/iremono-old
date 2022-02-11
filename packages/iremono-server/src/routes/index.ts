@@ -1,2 +1,3 @@
-export * from './identity-route';
-export * from './folders-route';
+export * from './identity-routes';
+export * from './folders-routes';
+export * from './files-routes';
