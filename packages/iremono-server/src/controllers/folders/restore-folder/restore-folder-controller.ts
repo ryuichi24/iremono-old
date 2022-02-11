@@ -5,6 +5,7 @@ import { makeRestoreFolderRequestDTO } from './make-restore-folder-request-DTO';
 
 export class RestoreFolderController extends Controller<RestoreFolderUseCase> {
   private readonly _logger: Logger;
+  
   constructor(useCase: RestoreFolderUseCase, loggerFactory: LoggerFactory) {
     super(useCase);
     this._logger = loggerFactory.createLogger(this.constructor.name);

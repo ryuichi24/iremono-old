@@ -5,6 +5,7 @@ import { makeUpdateFolderRequestDTO } from './make-update-folder-request-DTO';
 
 export class UpdateFolderController extends Controller<UpdateFolderUseCase> {
   private readonly _logger: Logger;
+  
   constructor(useCase: UpdateFolderUseCase, loggerFactory: LoggerFactory) {
     super(useCase);
     this._logger = loggerFactory.createLogger(this.constructor.name);

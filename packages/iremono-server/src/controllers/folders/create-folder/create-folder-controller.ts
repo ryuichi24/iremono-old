@@ -5,6 +5,7 @@ import { makeCreateFolderRequestDTO } from './make-create-folder-request-DTO';
 
 export class CreateFolderController extends Controller<CreateFolderUseCase> {
   private readonly _logger: Logger;
+  
   constructor(useCase: CreateFolderUseCase, loggerFactory: LoggerFactory) {
     super(useCase);
     this._logger = loggerFactory.createLogger(this.constructor.name);

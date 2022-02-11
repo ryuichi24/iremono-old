@@ -5,6 +5,7 @@ import { makeUploadFileRequestDTO } from './make-upload-file-request-DTO';
 
 export class UploadFileController extends Controller<UploadFileUseCase> {
   private readonly _logger: Logger;
+  
   constructor(useCase: UploadFileUseCase, loggerFactory: LoggerFactory) {
     super(useCase);
     this._logger = loggerFactory.createLogger(this.constructor.name);

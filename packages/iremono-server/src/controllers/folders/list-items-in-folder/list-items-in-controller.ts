@@ -5,6 +5,7 @@ import { makeListItemsInFolderRequestDTO } from './make-list-items-in-controller
 
 export class ListItemsInFolderController extends Controller<ListItemsInFolderUseCase> {
   private readonly _logger: Logger;
+  
   constructor(useCase: ListItemsInFolderUseCase, loggerFactory: LoggerFactory) {
     super(useCase);
     this._logger = loggerFactory.createLogger(this.constructor.name);

@@ -5,6 +5,7 @@ import { makeSignInRequestDTO } from './make-sign-in-request-DTO';
 
 export class SignInController extends Controller<SignInUseCase> {
   private readonly _logger: Logger;
+  
   constructor(useCase: SignInUseCase, loggerFactory: LoggerFactory) {
     super(useCase);
     this._logger = loggerFactory.createLogger(this.constructor.name);

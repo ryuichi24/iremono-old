@@ -5,6 +5,7 @@ import { makeRemoveFolderRequestDTO } from './make-remove-folder-request-DTO';
 
 export class RemoveFolderController extends Controller<RemoveFolderUseCase> {
   private readonly _logger: Logger;
+  
   constructor(useCase: RemoveFolderUseCase, loggerFactory: LoggerFactory) {
     super(useCase);
     this._logger = loggerFactory.createLogger(this.constructor.name);

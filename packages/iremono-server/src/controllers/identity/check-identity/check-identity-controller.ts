@@ -5,6 +5,7 @@ import { makeCheckIdentityRequestDTO } from './make-check-identity-DTO';
 
 export class CheckIdentityController extends Controller<CheckIdentityUseCase> {
   private readonly _logger: Logger;
+  
   constructor(useCase: CheckIdentityUseCase, loggerFactory: LoggerFactory) {
     super(useCase);
     this._logger = loggerFactory.createLogger(this.constructor.name);

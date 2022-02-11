@@ -5,6 +5,7 @@ import { makeUpdateFileRequestDTO } from './make-update-file-request-DTO';
 
 export class UpdateFileController extends Controller<UpdateFileUseCase> {
   private readonly _logger: Logger;
+  
   constructor(useCase: UpdateFileUseCase, loggerFactory: LoggerFactory) {
     super(useCase);
     this._logger = loggerFactory.createLogger(this.constructor.name);
