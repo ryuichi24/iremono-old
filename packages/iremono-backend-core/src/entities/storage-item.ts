@@ -16,9 +16,8 @@ interface Props extends EntityProps {
 
 export class StorageItem extends Entity<Props> {
   public constructor(props: Props, id?: string) {
-    super({ ...props, isRootFolder: props.isRootFolder || false }, id);
-
     const isNew = id === undefined;
+    super({ ...props, isRootFolder: props.isRootFolder || false, isInTrash: isNew ? false : props.isInTrash }, id);
 
     if (isNew) {
       //

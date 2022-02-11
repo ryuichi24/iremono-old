@@ -6,12 +6,13 @@ import { constructBcryptService, constructJwtService } from '@iremono/backend-co
 import {
   CheckIdentityUseCase,
   CreateFolderUseCase,
+  RemoveFolderUseCase,
   SignInUseCase,
   SignUpUseCase,
   UpdateFolderUseCase,
 } from '@iremono/backend-core/src/use-cases';
 import { config } from '../config';
-import { CreateFolderController, UpdateFolderController } from '../controllers/folders';
+import { CreateFolderController, RemoveFolderController, UpdateFolderController } from '../controllers/folders';
 import { CheckIdentityController, SignInController, SignUpController } from '../controllers/identity';
 import { loggerFactory } from '../shared/utils/logger';
 
@@ -35,6 +36,8 @@ export const checkIdentityController = new CheckIdentityController(checkIdentity
 
 const createFolderUseCase = new CreateFolderUseCase(storageItemRepository);
 const updateFolderUseCase = new UpdateFolderUseCase(storageItemRepository);
+const removeFolderUseCase = new RemoveFolderUseCase(storageItemRepository);
 
 export const createFolderController = new CreateFolderController(createFolderUseCase, loggerFactory);
 export const updateFolderController = new UpdateFolderController(updateFolderUseCase, loggerFactory);
+export const removeFolderController = new RemoveFolderController(removeFolderUseCase, loggerFactory);
