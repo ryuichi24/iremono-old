@@ -32,14 +32,14 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
   };
 
   const update = (entity: StorageItem) => {
-    const parentFolder = storageItemTable.find((item) => item.id === entity.id);
+    const parentFolder = storageItemTable.find((item) => item.id === entity.parentId);
     const indexOfEntity = storageItemTable.findIndex((item) => item.id === entity.id);
     const itemToUpdate = storageItemTable.splice(indexOfEntity, 1)[0];
-    const ancestors = parentFolder ? [...parentFolder.ancestors, entity.id] : [];
+    const ancestors = parentFolder ? [...parentFolder.ancestors, entity.parentId] : [];
 
     itemToUpdate.id = entity.id!;
     itemToUpdate.name = entity.name;
-    itemToUpdate.parentId = entity.id!;
+    itemToUpdate.parentId = entity.parentId!;
     itemToUpdate.ancestors = ancestors;
     itemToUpdate.ownerId = entity.ownerId;
     itemToUpdate.filePath = entity.filePath;
@@ -75,14 +75,14 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
 
       return makeStorageItemEntityFromRow(foundItem);
     },
-    findByParentId: async (parentId: string, ownerId: string, inTrash: boolean = false) => {
+    findByParentId: async (parentId: string, ownerId: string, inTrash: boolean) => {
       const foundItems = storageItemTable.filter(
         (item) =>
           item.parentId === parentId && item.ownerId === ownerId && (inTrash ? item.isInTrash : !item.isInTrash),
       );
       return foundItems.map((item) => makeStorageItemEntityFromRow(item));
     },
-    findAllDescendantsById: async (id: string, ownerId: string, inTrash: boolean = false) => {
+    findAllDescendantsById: async (id: string, ownerId: string, inTrash: boolean) => {
       const descendants = storageItemTable.filter(
         (item) =>
           item.ancestors.includes(id) && item.ownerId === ownerId && (inTrash ? item.isInTrash : !item.isInTrash),
