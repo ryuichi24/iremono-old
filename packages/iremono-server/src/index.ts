@@ -1,12 +1,13 @@
 import express from 'express';
+import { config } from './config';
 import { filesRouter, foldersRouter, identityRouter } from './routes';
 import { errorHandler } from './shared/express-lib';
 import { loggerFactory } from './shared/utils/logger';
 
 const logger = loggerFactory.createLogger('main');
 
-const HOST = process.env.HOST || 'localhost';
-const PORT = process.env.PORT || '4000';
+const HOST = config.serverConfig.HOST;
+const PORT = config.serverConfig.PORT;
 
 const app = express();
 

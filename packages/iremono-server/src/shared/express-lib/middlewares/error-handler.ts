@@ -14,7 +14,7 @@ export const errorHandler =
     }
 
     if (!config.serverConfig.IS_DEVELOPMENT) {
-      message = config.loggerConfig.PRODUCTION_ERROR_MESSAGE;
+      message = config.serverConfig.PRODUCTION_ERROR_MESSAGE;
     }
 
     return res.status(statusCode).json({
