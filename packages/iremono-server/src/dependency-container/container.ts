@@ -1,10 +1,19 @@
-import { constructMockIdentityRepository, constructMockStorageItemRepository } from "@iremono/backend-core/src/infra/data-access";
-import { constructBcryptService, constructJwtService } from "@iremono/backend-core/src/infra/services";
-import { CheckIdentityUseCase, CreateFolderUseCase, SignInUseCase, SignUpUseCase } from "@iremono/backend-core/src/use-cases";
-import { config } from "../config";
-import { CreateFolderController } from "../controllers/folders";
-import { CheckIdentityController, SignInController, SignUpController } from "../controllers/identity";
-import { loggerFactory } from "../shared/utils/logger";
+import {
+  constructMockIdentityRepository,
+  constructMockStorageItemRepository,
+} from '@iremono/backend-core/src/infra/data-access';
+import { constructBcryptService, constructJwtService } from '@iremono/backend-core/src/infra/services';
+import {
+  CheckIdentityUseCase,
+  CreateFolderUseCase,
+  SignInUseCase,
+  SignUpUseCase,
+  UpdateFolderUseCase,
+} from '@iremono/backend-core/src/use-cases';
+import { config } from '../config';
+import { CreateFolderController, UpdateFolderController } from '../controllers/folders';
+import { CheckIdentityController, SignInController, SignUpController } from '../controllers/identity';
+import { loggerFactory } from '../shared/utils/logger';
 
 // TODO: replace it once the real repository gets ready
 const identityRepository = constructMockIdentityRepository();
@@ -24,7 +33,8 @@ export const signUpController = new SignUpController(signUpUseCase, loggerFactor
 export const signInController = new SignInController(signInUseCase, loggerFactory);
 export const checkIdentityController = new CheckIdentityController(checkIdentityUseCase, loggerFactory);
 
-
 const createFolderUseCase = new CreateFolderUseCase(storageItemRepository);
+const updateFolderUseCase = new UpdateFolderUseCase(storageItemRepository);
 
 export const createFolderController = new CreateFolderController(createFolderUseCase, loggerFactory);
+export const updateFolderController = new UpdateFolderController(updateFolderUseCase, loggerFactory);
