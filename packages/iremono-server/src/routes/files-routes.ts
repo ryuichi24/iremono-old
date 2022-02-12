@@ -18,7 +18,7 @@ export const filesRouter = express
     uploadHandler({ folderPath: config.mediaConfig.PATH_TO_MEDIA_DIR }),
     makeExpressHandler(uploadFileController),
   )
-  .post('/:id', authHandler(jwtService), makeExpressHandler(updateFileController))
+  .patch('/:id', authHandler(jwtService), makeExpressHandler(updateFileController))
   .post('/:id/remove', authHandler(jwtService), makeExpressHandler(removeFileController))
   .post('/:id/restore', authHandler(jwtService), makeExpressHandler(restoreFileController))
   .delete('/:id/trash', authHandler(jwtService), makeExpressHandler(deleteFileInTrashController));
