@@ -1,5 +1,6 @@
 import { DeleteFolderInTrashUseCase } from '@iremono/backend-core/src/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/src/logger';
+import { deleteFromFileSystem } from '@iremono/util/src/file-system';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeDeleteFolderInTrashRequestDTO } from './make-delete-folder-in-trash-request-DTO';
 
@@ -13,8 +14,9 @@ export class DeleteFolderInTrashController extends Controller<DeleteFolderInTras
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
     const dto = makeDeleteFolderInTrashRequestDTO(request);
-    // TODO: delete files from file system
     const result = await this._useCase.handle(dto);
+
+    await Promise.all(result.deletedFiles.map((file) => deleteFromFileSystem(file.filePath!)));
 
     this._logger.info(
       'user has deleted a folder in trash',
