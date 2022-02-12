@@ -6,6 +6,7 @@ import { constructBcryptService, constructJwtService } from '@iremono/backend-co
 import {
   CheckIdentityUseCase,
   CreateFolderUseCase,
+  DeleteFileInTrashUseCase,
   DeleteFolderInTrashUseCase,
   ListItemsInFolderUseCase,
   RemoveFileUseCase,
@@ -20,6 +21,7 @@ import {
 } from '@iremono/backend-core/src/use-cases';
 import { config } from '../config';
 import {
+  DeleteFileInTrashController,
   RemoveFileController,
   RestoreFileController,
   UpdateFileController,
@@ -59,24 +61,26 @@ const updateFolderUseCase = new UpdateFolderUseCase(storageItemRepository);
 const removeFolderUseCase = new RemoveFolderUseCase(storageItemRepository);
 const restoreFolderUseCase = new RestoreFolderUseCase(storageItemRepository);
 const listItemsInFolderUserCase = new ListItemsInFolderUseCase(storageItemRepository);
+const deleteFolderInTrashUseCase = new DeleteFolderInTrashUseCase(storageItemRepository);
 
 export const createFolderController = new CreateFolderController(createFolderUseCase, loggerFactory);
 export const updateFolderController = new UpdateFolderController(updateFolderUseCase, loggerFactory);
 export const removeFolderController = new RemoveFolderController(removeFolderUseCase, loggerFactory);
 export const restoreFolderController = new RestoreFolderController(restoreFolderUseCase, loggerFactory);
 export const listItemsInFolderController = new ListItemsInFolderController(listItemsInFolderUserCase, loggerFactory);
+export const deleteFolderInTrashController = new DeleteFolderInTrashController(
+  deleteFolderInTrashUseCase,
+  loggerFactory,
+);
 
 const uploadFileUseCase = new UploadFileUseCase(storageItemRepository);
 const updateFileUseCase = new UpdateFileUseCase(storageItemRepository);
 const removeFileUseCase = new RemoveFileUseCase(storageItemRepository);
 const restoreFileUseCase = new RestoreFileUseCase(storageItemRepository);
-const deleteFolderInTrashUseCase = new DeleteFolderInTrashUseCase(storageItemRepository);
+const deleteFileInTrashUseCase = new DeleteFileInTrashUseCase(storageItemRepository);
 
 export const uploadFileController = new UploadFileController(uploadFileUseCase, loggerFactory);
 export const updateFileController = new UpdateFileController(updateFileUseCase, loggerFactory);
 export const removeFileController = new RemoveFileController(removeFileUseCase, loggerFactory);
 export const restoreFileController = new RestoreFileController(restoreFileUseCase, loggerFactory);
-export const deleteFolderInTrashController = new DeleteFolderInTrashController(
-  deleteFolderInTrashUseCase,
-  loggerFactory,
-);
+export const deleteFileInTrashController = new DeleteFileInTrashController(deleteFileInTrashUseCase, loggerFactory);

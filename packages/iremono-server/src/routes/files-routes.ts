@@ -1,6 +1,7 @@
 import express from 'express';
 import { config } from '../config';
 import {
+  deleteFileInTrashController,
   jwtService,
   removeFileController,
   restoreFileController,
@@ -19,4 +20,5 @@ export const filesRouter = express
   )
   .post('/:id', authHandler(jwtService), makeExpressHandler(updateFileController))
   .post('/:id/remove', authHandler(jwtService), makeExpressHandler(removeFileController))
-  .post('/:id/restore', authHandler(jwtService), makeExpressHandler(restoreFileController));
+  .post('/:id/restore', authHandler(jwtService), makeExpressHandler(restoreFileController))
+  .delete('/:id/trash', authHandler(jwtService), makeExpressHandler(deleteFileInTrashController));
