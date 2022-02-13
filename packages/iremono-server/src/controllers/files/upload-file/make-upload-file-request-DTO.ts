@@ -19,4 +19,7 @@ export const makeUploadFileRequestDTO = ({
   mimeType,
   fileInitializationVector,
   ownerId: user.id,
+  thumbnailPath,
+  thumbnailSize,
+  thumbnailInitializationVector,
 });

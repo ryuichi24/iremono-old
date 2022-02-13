@@ -1,7 +1,9 @@
 import crypto from 'crypto';
 import fs from 'fs';
+import { pipeline } from 'stream/promises';
 import path from 'path';
 import express from 'express';
+import sharp from 'sharp';
 import { createFolderIfNotExists } from '@iremono/util';
 import { parseMultipart } from '../../multipart-parser';
 import { loggerFactory } from '../../utils/logger';
@@ -23,11 +25,39 @@ export const uploadHandler =
       const writeStream = fs.createWriteStream(fileDest);
 
       const fileInitializationVector = cryptoService.generateInitializeVector();
-      const cipherStreamForFile = cryptoService.generateCipherStreamInCBC(encryptionKey, fileInitializationVector);
+      const fileCipherStream = cryptoService.generateCipherStreamInCBC(encryptionKey, fileInitializationVector);
 
       const { fileName, mimeType, formData } = await parseMultipart(req, req.headers, (file) => {
-        file.pipe(cipherStreamForFile).pipe(writeStream);
+        file.pipe(fileCipherStream).pipe(writeStream);
       });
+
+      const thumbnailDest = path.join(thumbnailsDir, crypto.randomUUID());
+
+      const thumbnailWriteStream = fs.createWriteStream(thumbnailDest);
+      const encryptedFileReadStream = fs.createReadStream(fileDest);
+
+      let thumbnailFileSize;
+      const imageResizeStream = sharp()
+        .resize(300)
+        .png()
+        .on('info', (info) => (thumbnailFileSize = info.size.toString()))
+        .on('error', (err: Error) => console.log(err));
+
+      const thumbnailInitializationVector = cryptoService.generateInitializeVector();
+      const thumbnailCipherStream = cryptoService.generateCipherStreamInCBC(
+        encryptionKey,
+        thumbnailInitializationVector,
+      );
+
+      const fileDecipherStream = cryptoService.generateDecipherStreamInCBC(encryptionKey, fileInitializationVector);
+
+      await pipeline(
+        encryptedFileReadStream,
+        fileDecipherStream,
+        imageResizeStream,
+        thumbnailCipherStream,
+        thumbnailWriteStream,
+      );
 
       req.uploadedFile = {
         fileName,
@@ -36,11 +66,12 @@ export const uploadHandler =
         filePath: fileDest,
         fileInitializationVector,
         thumbnail: {
-          thumbnailPath: '',
-          thumbnailSize: '',
-          thumbnailInitializationVector: '',
+          thumbnailPath: thumbnailDest,
+          thumbnailSize: thumbnailFileSize,
+          thumbnailInitializationVector: thumbnailInitializationVector,
         },
       };
+
       next();
     } catch (error) {
       if (error instanceof Error) {

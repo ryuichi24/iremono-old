@@ -17,6 +17,9 @@ interface StorageItemRow {
   lastViewedAt: Date;
   initializationVector: string;
   isRootFolder: boolean;
+  thumbnailPath?: string;
+  thumbnailSize?: string;
+  thumbnailInitializationVector?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -51,6 +54,9 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     itemRowToUpdate.isFolder = entity.isFolder;
     itemRowToUpdate.isInTrash = entity.isInTrash!;
     itemRowToUpdate.lastViewedAt = entity.lastViewedAt!;
+    itemRowToUpdate.thumbnailPath = entity.thumbnailPath;
+    itemRowToUpdate.thumbnailSize = entity.thumbnailSize;
+    itemRowToUpdate.thumbnailInitializationVector = entity.thumbnailInitializationVector;
     itemRowToUpdate.createdAt = entity.createdAt!;
     itemRowToUpdate.updatedAt = entity.updatedAt!;
 
@@ -132,6 +138,9 @@ const makeStorageItemEntityFromRow = (row: StorageItemRow) =>
       lastViewedAt: row.lastViewedAt,
       initializationVector: row.initializationVector,
       isRootFolder: row.isRootFolder,
+      thumbnailPath: row.thumbnailPath,
+      thumbnailSize: row.thumbnailSize,
+      thumbnailInitializationVector: row.thumbnailInitializationVector,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
     },
@@ -153,6 +162,9 @@ const makeStorageItemRowFromEntity = (entity: StorageItem, ancestors: (string | 
   lastViewedAt: entity.lastViewedAt!,
   initializationVector: entity.initializationVector!,
   isRootFolder: entity.isRootFolder!,
+  thumbnailPath: entity.thumbnailPath,
+  thumbnailSize: entity.thumbnailSize,
+  thumbnailInitializationVector: entity.thumbnailInitializationVector,
   createdAt: entity.createdAt!,
   updatedAt: entity.updatedAt!,
 });

@@ -12,6 +12,8 @@ export interface StorageItemDTO {
   isFolder: boolean;
   isInTrash?: boolean;
   lastViewedAt?: Date;
+  thumbnailPath?: string;
+  thumbnailSize?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -28,6 +30,7 @@ export const makeStorageItemDTO = (storageItem: StorageItem): StorageItemDTO => 
   isFolder: storageItem.isFolder,
   isInTrash: storageItem.isInTrash,
   lastViewedAt: storageItem.lastViewedAt,
+  thumbnailPath: storageItem.thumbnailPath,
   createdAt: storageItem.createdAt,
   updatedAt: storageItem.updatedAt,
 });

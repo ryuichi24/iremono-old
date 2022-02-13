@@ -6,4 +6,7 @@ export interface UploadFileRequestDTO {
   fileSize: string;
   mimeType: string;
   fileInitializationVector: string;
+  thumbnailPath: string;
+  thumbnailSize: string;
+  thumbnailInitializationVector: string;
 }

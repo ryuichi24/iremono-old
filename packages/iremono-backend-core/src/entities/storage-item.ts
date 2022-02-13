@@ -12,6 +12,9 @@ interface Props extends EntityProps {
   isInTrash?: boolean;
   isRootFolder?: boolean;
   initializationVector?: string;
+  thumbnailPath?: string;
+  thumbnailSize?: string;
+  thumbnailInitializationVector?: string;
   lastViewedAt?: Date;
 }
 
@@ -100,5 +103,17 @@ export class StorageItem extends Entity<Props> {
 
   get lastViewedAt() {
     return this._props.lastViewedAt;
+  }
+
+  get thumbnailPath() {
+    return this._props.thumbnailPath;
+  }
+
+  get thumbnailSize() {
+    return this._props.thumbnailSize;
+  }
+
+  get thumbnailInitializationVector() {
+    return this._props.thumbnailInitializationVector;
   }
 }
