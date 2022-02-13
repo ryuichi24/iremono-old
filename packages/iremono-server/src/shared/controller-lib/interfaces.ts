@@ -1,3 +1,4 @@
+import { Readable } from 'stream';
 export interface HttpRequest {
   body: any;
   query: { [key: string]: string };
@@ -16,4 +17,7 @@ export interface HttpRequest {
 export interface HttpResponse {
   statusCode: number;
   body: any;
+  readableStream: Readable | null;
+  headers: { [key: string]: string };
+  hasHeaders: boolean;
 }

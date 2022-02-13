@@ -2,12 +2,17 @@ import {
   constructMockIdentityRepository,
   constructMockStorageItemRepository,
 } from '@iremono/backend-core/src/infra/data-access';
-import { constructBcryptService, constructCryptoService, constructJwtService } from '@iremono/backend-core/src/infra/services';
+import {
+  constructBcryptService,
+  constructCryptoService,
+  constructJwtService,
+} from '@iremono/backend-core/src/infra/services';
 import {
   CheckIdentityUseCase,
   CreateFolderUseCase,
   DeleteFileInTrashUseCase,
   DeleteFolderInTrashUseCase,
+  DownloadFileUseCase,
   ListItemsInFolderUseCase,
   RemoveFileUseCase,
   RemoveFolderUseCase,
@@ -27,6 +32,7 @@ import {
   UpdateFileController,
   UploadFileController,
 } from '../controllers/files';
+import { DownloadFileController } from '../controllers/files/download-file';
 import {
   CreateFolderController,
   DeleteFolderInTrashController,
@@ -75,12 +81,14 @@ export const deleteFolderInTrashController = new DeleteFolderInTrashController(
 );
 
 const uploadFileUseCase = new UploadFileUseCase(storageItemRepository);
+const downloadFileUseCase = new DownloadFileUseCase(storageItemRepository);
 const updateFileUseCase = new UpdateFileUseCase(storageItemRepository);
 const removeFileUseCase = new RemoveFileUseCase(storageItemRepository);
 const restoreFileUseCase = new RestoreFileUseCase(storageItemRepository);
 const deleteFileInTrashUseCase = new DeleteFileInTrashUseCase(storageItemRepository);
 
 export const uploadFileController = new UploadFileController(uploadFileUseCase, loggerFactory);
+export const downloadFileController = new DownloadFileController(downloadFileUseCase, cryptoService, loggerFactory);
 export const updateFileController = new UpdateFileController(updateFileUseCase, loggerFactory);
 export const removeFileController = new RemoveFileController(removeFileUseCase, loggerFactory);
 export const restoreFileController = new RestoreFileController(restoreFileUseCase, loggerFactory);

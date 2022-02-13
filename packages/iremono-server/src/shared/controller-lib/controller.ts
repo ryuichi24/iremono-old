@@ -1,4 +1,4 @@
-import { UseCase } from '@iremono/backend-core/src/shared/use-case-lib';
+import { Readable } from 'stream';
 import { HttpRequest, HttpResponse } from '.';
 import { HttpStatusCode } from '../utils/http';
 
@@ -11,24 +11,39 @@ export abstract class Controller<TUseCase = any> {
 
   abstract handle(request: HttpRequest): Promise<HttpResponse>;
 
-  protected _ok(body: any = null) {
-    return {
-      body,
-      statusCode: HttpStatusCode.OK,
-    };
+  protected _ok(body: any = null, headers = {}) {
+    return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.OK, body, headers });
   }
 
-  protected _created(body: any = null) {
-    return {
-      body,
-      statusCode: HttpStatusCode.CREATED,
-    };
+  protected _created(body: any = null, headers = {}) {
+    return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.CREATED, body, headers });
   }
 
-  protected _noContent(body: any = null) {
+  protected _noContent(body: any = null, headers = {}) {
+    return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.NO_CONTENT, body, headers });
+  }
+
+  protected _download(readableStream: Readable, headers = {}) {
+    return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.OK, readableStream, headers });
+  }
+
+  private _makeHttpResponse({
+    httpStatusCode,
+    body = null,
+    readableStream = null,
+    headers = {},
+  }: {
+    httpStatusCode: HttpStatusCode;
+    body?: any;
+    readableStream?: Readable | null;
+    headers: {};
+  }): HttpResponse {
     return {
-      body: null,
-      statusCode: HttpStatusCode.NO_CONTENT,
+      body,
+      statusCode: httpStatusCode,
+      headers,
+      hasHeaders: Object.keys(headers).length > 0,
+      readableStream,
     };
   }
 }

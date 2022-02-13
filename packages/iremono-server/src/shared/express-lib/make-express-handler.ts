@@ -26,6 +26,12 @@ export const makeExpressHandler = (controller: Controller) =>
   expressAsyncHandlerWrapper(async (req: express.Request, res: express.Response) => {
     const httpRequest = makeHttpRequestFromExpressRequest(req);
     const httpResponse = await controller.handle(httpRequest);
+
+    if (httpResponse.hasHeaders)
+      Object.entries(httpResponse.headers).forEach(([key, value]) => res.setHeader(key, value));
+
+    if (httpResponse.readableStream) return httpResponse.readableStream.pipe(res);
+
     const expressResponseAction = isObject(httpResponse.body) ? 'json' : 'send';
     return res.status(httpResponse.statusCode)[expressResponseAction](httpResponse.body || '');
   });
