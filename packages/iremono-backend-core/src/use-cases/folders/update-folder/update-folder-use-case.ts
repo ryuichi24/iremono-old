@@ -18,6 +18,8 @@ export class UpdateFolderUseCase implements UseCase<UpdateFolderRequestDTO, Upda
 
     if (folderToUpdate.isInTrash) throw new Error('the folder is in a trash.');
 
+    if (folderToUpdate.isRootFolder) throw new Error('the root folder cannot be updated.');
+
     if (dto.name) folderToUpdate.rename(dto.name);
 
     if (dto.parentId) {

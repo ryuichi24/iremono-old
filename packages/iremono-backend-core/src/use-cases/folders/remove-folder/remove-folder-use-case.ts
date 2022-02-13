@@ -14,6 +14,8 @@ export class RemoveFolderUseCase implements UseCase<RemoveFolderRequestDTO, Remo
     const folderToRemove = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
     if (!folderToRemove || !folderToRemove.isFolder) throw new Error('the folder does not exist.');
 
+    if (folderToRemove.isRootFolder) throw new Error('the root folder cannot be removed.');
+
     const allDescendants = await this._storageItemRepository.findAllDescendantsById(dto.id, dto.ownerId, false);
 
     await Promise.all(
