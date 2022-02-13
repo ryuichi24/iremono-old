@@ -12,7 +12,7 @@ export class RemoveFolderUseCase implements UseCase<RemoveFolderRequestDTO, Remo
 
   public async handle(dto: RemoveFolderRequestDTO): Promise<RemoveFolderResponseDTO> {
     const folderToRemove = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
-    if (!folderToRemove) throw new Error('the folder does not exist.');
+    if (!folderToRemove || !folderToRemove.isFolder) throw new Error('the folder does not exist.');
 
     const allDescendants = await this._storageItemRepository.findAllDescendantsById(dto.id, dto.ownerId, false);
 

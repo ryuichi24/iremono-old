@@ -18,6 +18,10 @@ export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, Down
       throw new Error('the file does not exist.');
     }
 
+    if (fileToDownload.isInTrash) {
+      throw new Error('the file is in a trash.');
+    }
+
     return {
       name: fileToDownload.name,
       mimeType: fileToDownload.mimeType!,

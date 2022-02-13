@@ -12,7 +12,7 @@ export class RestoreFolderUseCase implements UseCase<RestoreFolderRequestDTO, Re
 
   public async handle(dto: RestoreFolderRequestDTO): Promise<RestoreFolderResponseDTO> {
     const folderToRestore = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
-    if (!folderToRestore) throw new Error('the folder does not exist.');
+    if (!folderToRestore || !folderToRestore.isFolder) throw new Error('the folder does not exist.');
 
     const allDescendants = await this._storageItemRepository.findAllDescendantsById(dto.id, dto.ownerId, true);
 

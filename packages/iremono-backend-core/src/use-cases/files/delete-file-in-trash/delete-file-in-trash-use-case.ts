@@ -13,7 +13,7 @@ export class DeleteFileInTrashUseCase implements UseCase<DeleteFileInTrashReques
 
   public async handle(dto: DeleteFileInTrashRequestDTO): Promise<DeleteFileInTrashResponseDTO> {
     const fileToRemove = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
-    if (!fileToRemove) throw new Error('the file does not exist in trash.');
+    if (!fileToRemove || fileToRemove.isFolder) throw new Error('the file does not exist in trash.');
 
     await this._storageItemRepository.remove(fileToRemove);
 

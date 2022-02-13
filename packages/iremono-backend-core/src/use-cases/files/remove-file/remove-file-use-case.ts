@@ -12,7 +12,7 @@ export class RemoveFileUseCase implements UseCase<RemoveFileRequestDTO, RemoveFi
 
   public async handle(dto: RemoveFileRequestDTO): Promise<RemoveFileResponseDTO> {
     const fileToRemove = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
-    if (!fileToRemove) throw new Error('the file does not exist.');
+    if (!fileToRemove || fileToRemove.isFolder) throw new Error('the file does not exist.');
 
     fileToRemove.remove();
     await this._storageItemRepository.save(fileToRemove);

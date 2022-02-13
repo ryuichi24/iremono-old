@@ -15,7 +15,7 @@ export class UploadFileUseCase implements UseCase<UploadFileRequestDTO, UploadFi
   public async handle(dto: UploadFileRequestDTO): Promise<UploadFileResponseDTO> {
     const parentFolder = await this._storageItemRepository.findOneById(dto.parentId, dto.ownerId);
 
-    if (!parentFolder) {
+    if (!parentFolder || !parentFolder.isFolder) {
       throw new Error('the parent folder does not exist.');
     }
 
