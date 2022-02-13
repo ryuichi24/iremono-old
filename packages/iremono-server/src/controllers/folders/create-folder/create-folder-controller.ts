@@ -20,6 +20,6 @@ export class CreateFolderController extends Controller<CreateFolderUseCase> {
       `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has created a new folder"]`,
     );
 
-    return this._ok(result);
+    return this._created(result);
   }
 }

@@ -20,6 +20,6 @@ export class UploadFileController extends Controller<UploadFileUseCase> {
       `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has uploaded a file"]`,
     );
 
-    return this._ok(result);
+    return this._created(result);
   }
 }

@@ -20,6 +20,6 @@ export class SignUpController extends Controller<SignUpUseCase> {
       `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="new user has signed up"]`,
     );
 
-    return this._ok(result);
+    return this._created(result);
   }
 }
