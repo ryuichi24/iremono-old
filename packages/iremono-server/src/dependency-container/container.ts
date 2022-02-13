@@ -1,3 +1,4 @@
+import { config } from '../config';
 import {
   constructMockIdentityRepository,
   constructMockStorageItemRepository,
@@ -24,24 +25,23 @@ import {
   UpdateFolderUseCase,
   UploadFileUseCase,
 } from '@iremono/backend-core/src/use-cases';
-import { config } from '../config';
-import {
-  DeleteFileInTrashController,
-  RemoveFileController,
-  RestoreFileController,
-  UpdateFileController,
-  UploadFileController,
-} from '../controllers/files';
-import { DownloadFileController } from '../controllers/files/download-file';
 import {
   CreateFolderController,
-  DeleteFolderInTrashController,
   ListItemsInFolderController,
   RemoveFolderController,
   RestoreFolderController,
   UpdateFolderController,
-} from '../controllers/folders';
-import { CheckIdentityController, SignInController, SignUpController } from '../controllers/identity';
+  RemoveFileController,
+  RestoreFileController,
+  UpdateFileController,
+  UploadFileController,
+  DownloadFileController,
+  CheckIdentityController,
+  SignInController,
+  SignUpController,
+  DeleteFileInTrashController,
+  DeleteFolderInTrashController,
+} from '../controllers';
 import { loggerFactory } from '../shared/utils/logger';
 
 // TODO: replace it once the real repository gets ready
@@ -55,6 +55,7 @@ export const jwtService = constructJwtService({
 });
 export const cryptoService = constructCryptoService();
 
+// identity
 const signUpUseCase = new SignUpUseCase(identityRepository, storageItemRepository, jwtService, bcryptService);
 const signInUseCase = new SignInUseCase(identityRepository, jwtService, bcryptService);
 const checkIdentityUseCase = new CheckIdentityUseCase(identityRepository);
@@ -63,33 +64,38 @@ export const signUpController = new SignUpController(signUpUseCase, loggerFactor
 export const signInController = new SignInController(signInUseCase, loggerFactory);
 export const checkIdentityController = new CheckIdentityController(checkIdentityUseCase, loggerFactory);
 
+// folders
 const createFolderUseCase = new CreateFolderUseCase(storageItemRepository);
 const updateFolderUseCase = new UpdateFolderUseCase(storageItemRepository);
 const removeFolderUseCase = new RemoveFolderUseCase(storageItemRepository);
 const restoreFolderUseCase = new RestoreFolderUseCase(storageItemRepository);
 const listItemsInFolderUserCase = new ListItemsInFolderUseCase(storageItemRepository);
-const deleteFolderInTrashUseCase = new DeleteFolderInTrashUseCase(storageItemRepository);
 
 export const createFolderController = new CreateFolderController(createFolderUseCase, loggerFactory);
 export const updateFolderController = new UpdateFolderController(updateFolderUseCase, loggerFactory);
 export const removeFolderController = new RemoveFolderController(removeFolderUseCase, loggerFactory);
 export const restoreFolderController = new RestoreFolderController(restoreFolderUseCase, loggerFactory);
 export const listItemsInFolderController = new ListItemsInFolderController(listItemsInFolderUserCase, loggerFactory);
-export const deleteFolderInTrashController = new DeleteFolderInTrashController(
-  deleteFolderInTrashUseCase,
-  loggerFactory,
-);
 
+// files
 const uploadFileUseCase = new UploadFileUseCase(storageItemRepository);
 const downloadFileUseCase = new DownloadFileUseCase(storageItemRepository);
 const updateFileUseCase = new UpdateFileUseCase(storageItemRepository);
 const removeFileUseCase = new RemoveFileUseCase(storageItemRepository);
 const restoreFileUseCase = new RestoreFileUseCase(storageItemRepository);
-const deleteFileInTrashUseCase = new DeleteFileInTrashUseCase(storageItemRepository);
 
 export const uploadFileController = new UploadFileController(uploadFileUseCase, loggerFactory);
 export const downloadFileController = new DownloadFileController(downloadFileUseCase, cryptoService, loggerFactory);
 export const updateFileController = new UpdateFileController(updateFileUseCase, loggerFactory);
 export const removeFileController = new RemoveFileController(removeFileUseCase, loggerFactory);
 export const restoreFileController = new RestoreFileController(restoreFileUseCase, loggerFactory);
+
+// trash
+const deleteFileInTrashUseCase = new DeleteFileInTrashUseCase(storageItemRepository);
+const deleteFolderInTrashUseCase = new DeleteFolderInTrashUseCase(storageItemRepository);
+
 export const deleteFileInTrashController = new DeleteFileInTrashController(deleteFileInTrashUseCase, loggerFactory);
+export const deleteFolderInTrashController = new DeleteFolderInTrashController(
+  deleteFolderInTrashUseCase,
+  loggerFactory,
+);
