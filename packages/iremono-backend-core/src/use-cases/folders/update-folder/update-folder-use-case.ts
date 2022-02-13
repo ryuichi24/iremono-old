@@ -16,6 +16,8 @@ export class UpdateFolderUseCase implements UseCase<UpdateFolderRequestDTO, Upda
 
     if (!folderToUpdate || !folderToUpdate.isFolder) throw new Error('the folder does not exist.');
 
+    if (folderToUpdate.isInTrash) throw new Error('the folder is in a trash.');
+
     if (dto.name) folderToUpdate.rename(dto.name);
 
     if (dto.parentId) {

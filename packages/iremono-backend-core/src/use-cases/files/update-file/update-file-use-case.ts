@@ -16,6 +16,8 @@ export class UpdateFileUseCase implements UseCase<UpdateFileRequestDTO, UpdateFi
 
     if (!fileToUpdate || fileToUpdate.isFolder) throw new Error('the file does not exist.');
 
+    if (fileToUpdate.isInTrash) throw new Error('the file is in a trash.');
+
     if (dto.name) fileToUpdate.rename(dto.name);
 
     if (dto.parentId) {
