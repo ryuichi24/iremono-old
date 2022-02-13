@@ -14,6 +14,9 @@ export class RestoreFolderUseCase implements UseCase<RestoreFolderRequestDTO, Re
     const folderToRestore = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
     if (!folderToRestore || !folderToRestore.isFolder) throw new Error('the folder does not exist.');
 
+    const parentFolder = await this._storageItemRepository.findOneById(folderToRestore.parentId!, dto.ownerId);
+    if (parentFolder?.isInTrash) throw new Error('the parent folder is in a trash.');
+
     const allDescendants = await this._storageItemRepository.findAllDescendantsById(dto.id, dto.ownerId, true);
 
     await Promise.all(
