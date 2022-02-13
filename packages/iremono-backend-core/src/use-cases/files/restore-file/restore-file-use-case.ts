@@ -12,7 +12,7 @@ export class RestoreFileUseCase implements UseCase<RestoreFileRequestDTO, Restor
 
   public async handle(dto: RestoreFileRequestDTO): Promise<RestoreFileResponseDTO> {
     const fileToRestore = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
-    if (!fileToRestore || fileToRestore.isFolder) throw new Error('the file does not exist.');
+    if (!fileToRestore ||  fileToRestore.isInTrash) throw new Error('the file does not exist.');
 
     fileToRestore.restore();
     await this._storageItemRepository.save(fileToRestore);
