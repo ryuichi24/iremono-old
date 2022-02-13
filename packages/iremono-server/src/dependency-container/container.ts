@@ -11,6 +11,7 @@ import {
 import {
   CheckIdentityUseCase,
   CreateFolderUseCase,
+  DeleteAllInTrashUseCase,
   DeleteFileInTrashUseCase,
   DeleteFolderInTrashUseCase,
   DownloadFileUseCase,
@@ -43,6 +44,7 @@ import {
   DeleteFileInTrashController,
   DeleteFolderInTrashController,
   ListItemsInTrashController,
+  DeleteAllInTrashController,
 } from '../controllers';
 import { loggerFactory } from '../shared/utils/logger';
 
@@ -96,6 +98,7 @@ export const restoreFileController = new RestoreFileController(restoreFileUseCas
 const deleteFileInTrashUseCase = new DeleteFileInTrashUseCase(storageItemRepository);
 const deleteFolderInTrashUseCase = new DeleteFolderInTrashUseCase(storageItemRepository);
 const listItemsInTrashUseCase = new ListItemsInTrashUseCase(storageItemRepository);
+const deleteAllInTrashUseCase = new DeleteAllInTrashUseCase(storageItemRepository);
 
 export const deleteFileInTrashController = new DeleteFileInTrashController(deleteFileInTrashUseCase, loggerFactory);
 export const deleteFolderInTrashController = new DeleteFolderInTrashController(
@@ -103,3 +106,4 @@ export const deleteFolderInTrashController = new DeleteFolderInTrashController(
   loggerFactory,
 );
 export const listItemsInTrashController = new ListItemsInTrashController(listItemsInTrashUseCase, loggerFactory);
+export const deleteAllInTrashController = new DeleteAllInTrashController(deleteAllInTrashUseCase, loggerFactory);
