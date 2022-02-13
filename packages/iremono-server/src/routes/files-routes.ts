@@ -3,6 +3,7 @@ import { config } from '../config';
 import {
   cryptoService,
   downloadFileController,
+  downloadFileThumbnailController,
   jwtService,
   removeFileController,
   restoreFileController,
@@ -23,6 +24,7 @@ export const filesRouter = express
     makeExpressHandler(uploadFileController),
   )
   .get('/:id/content', authHandler(jwtService), makeExpressHandler(downloadFileController))
+  .get('/:id/thumbnail', authHandler(jwtService), makeExpressHandler(downloadFileThumbnailController))
   .patch('/:id', authHandler(jwtService), makeExpressHandler(updateFileController))
   .post('/:id/remove', authHandler(jwtService), makeExpressHandler(removeFileController))
   .post('/:id/restore', authHandler(jwtService), makeExpressHandler(restoreFileController));

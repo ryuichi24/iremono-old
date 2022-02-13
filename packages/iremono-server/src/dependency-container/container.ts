@@ -14,6 +14,7 @@ import {
   DeleteAllInTrashUseCase,
   DeleteFileInTrashUseCase,
   DeleteFolderInTrashUseCase,
+  DownloadFileThumbnailUseCase,
   DownloadFileUseCase,
   ListItemsInFolderUseCase,
   ListItemsInTrashUseCase,
@@ -45,6 +46,7 @@ import {
   DeleteFolderInTrashController,
   ListItemsInTrashController,
   DeleteAllInTrashController,
+  DownloadFileThumbnailController,
 } from '../controllers';
 import { loggerFactory } from '../shared/utils/logger';
 
@@ -84,12 +86,18 @@ export const listItemsInFolderController = new ListItemsInFolderController(listI
 // files
 const uploadFileUseCase = new UploadFileUseCase(storageItemRepository);
 const downloadFileUseCase = new DownloadFileUseCase(storageItemRepository);
+const downloadFileThumbnailUseCase = new DownloadFileThumbnailUseCase(storageItemRepository);
 const updateFileUseCase = new UpdateFileUseCase(storageItemRepository);
 const removeFileUseCase = new RemoveFileUseCase(storageItemRepository);
 const restoreFileUseCase = new RestoreFileUseCase(storageItemRepository);
 
 export const uploadFileController = new UploadFileController(uploadFileUseCase, loggerFactory);
 export const downloadFileController = new DownloadFileController(downloadFileUseCase, cryptoService, loggerFactory);
+export const downloadFileThumbnailController = new DownloadFileThumbnailController(
+  downloadFileThumbnailUseCase,
+  cryptoService,
+  loggerFactory,
+);
 export const updateFileController = new UpdateFileController(updateFileUseCase, loggerFactory);
 export const removeFileController = new RemoveFileController(removeFileUseCase, loggerFactory);
 export const restoreFileController = new RestoreFileController(restoreFileUseCase, loggerFactory);
