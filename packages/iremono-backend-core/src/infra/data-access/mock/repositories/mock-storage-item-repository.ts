@@ -15,6 +15,8 @@ interface StorageItemRow {
   isFolder: boolean;
   isInTrash: boolean;
   lastViewedAt: Date;
+  initializationVector: string;
+  isRootFolder: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -128,6 +130,8 @@ const makeStorageItemEntityFromRow = (row: StorageItemRow) =>
       fileExtension: row.fileExtension,
       isInTrash: row.isInTrash,
       lastViewedAt: row.lastViewedAt,
+      initializationVector: row.initializationVector,
+      isRootFolder: row.isRootFolder,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
     },
@@ -147,6 +151,8 @@ const makeStorageItemRowFromEntity = (entity: StorageItem, ancestors: (string | 
   isFolder: entity.isFolder,
   isInTrash: entity.isInTrash!,
   lastViewedAt: entity.lastViewedAt!,
+  initializationVector: entity.initializationVector!,
+  isRootFolder: entity.isRootFolder!,
   createdAt: entity.createdAt!,
   updatedAt: entity.updatedAt!,
 });

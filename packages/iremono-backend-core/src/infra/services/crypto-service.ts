@@ -1,6 +1,7 @@
 import crypto from 'crypto';
+import { CryptoService } from '../../services/crypto-service';
 
-export const constructCryptoService = () => {
+export const constructCryptoService = (): CryptoService => {
   const generateInitializeVector = () => {
     return crypto.randomBytes(16).toString('hex');
   };

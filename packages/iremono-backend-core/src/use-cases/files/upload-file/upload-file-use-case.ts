@@ -27,6 +27,7 @@ export class UploadFileUseCase implements UseCase<UploadFileRequestDTO, UploadFi
       filePath: dto.filePath,
       fileSize: dto.fileSize,
       mimeType: dto.mimeType,
+      initializationVector: dto.fileInitializationVector,
     });
 
     const saved = await this._storageItemRepository.save(file);

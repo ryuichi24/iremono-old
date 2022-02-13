@@ -11,6 +11,7 @@ interface Props extends EntityProps {
   isFolder: boolean;
   isInTrash?: boolean;
   isRootFolder?: boolean;
+  initializationVector?: string;
   lastViewedAt?: Date;
 }
 
@@ -66,6 +67,10 @@ export class StorageItem extends Entity<Props> {
 
   get fileSize() {
     return this._props.fileSize;
+  }
+
+  get initializationVector() {
+    return this._props.initializationVector;
   }
 
   get mimeType() {

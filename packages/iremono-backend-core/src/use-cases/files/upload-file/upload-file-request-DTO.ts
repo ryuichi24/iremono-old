@@ -5,4 +5,5 @@ export interface UploadFileRequestDTO {
   filePath: string;
   fileSize: string;
   mimeType: string;
+  fileInitializationVector: string;
 }

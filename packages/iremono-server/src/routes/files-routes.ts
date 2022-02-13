@@ -1,6 +1,7 @@
 import express from 'express';
 import { config } from '../config';
 import {
+  cryptoService,
   deleteFileInTrashController,
   jwtService,
   removeFileController,
@@ -15,7 +16,10 @@ export const filesRouter = express
   .post(
     '/content',
     authHandler(jwtService),
-    uploadHandler({ folderPath: config.mediaConfig.PATH_TO_MEDIA_DIR }),
+    uploadHandler(
+      { folderPath: config.mediaConfig.PATH_TO_MEDIA_DIR, encryptionKey: config.mediaConfig.ENCRYPTION_KEY },
+      cryptoService,
+    ),
     makeExpressHandler(uploadFileController),
   )
   .patch('/:id', authHandler(jwtService), makeExpressHandler(updateFileController))

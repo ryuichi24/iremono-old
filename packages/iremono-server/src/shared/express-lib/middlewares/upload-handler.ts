@@ -5,11 +5,12 @@ import express from 'express';
 import { createFolderIfNotExists } from '@iremono/util';
 import { parseMultipart } from '../../multipart-parser';
 import { loggerFactory } from '../../utils/logger';
+import { CryptoService } from '@iremono/backend-core/src/services/crypto-service';
 
 const logger = loggerFactory.createLogger('uploadHandler');
 
 export const uploadHandler =
-  ({ folderPath }: { folderPath: string }) =>
+  ({ folderPath, encryptionKey }: { folderPath: string; encryptionKey: string }, cryptoService: CryptoService) =>
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       const userMediaDir = path.join(folderPath, 'iremono_media', req.user.id);
@@ -21,11 +22,25 @@ export const uploadHandler =
       const fileDest = path.join(filesDir, crypto.randomUUID());
       const writeStream = fs.createWriteStream(fileDest);
 
+      const fileInitializationVector = cryptoService.generateInitializeVector();
+      const cipherStreamForFile = cryptoService.generateCipherStreamInCBC(encryptionKey, fileInitializationVector);
+
       const { fileName, mimeType, formData } = await parseMultipart(req, req.headers, (file) => {
-        file.pipe(writeStream);
+        file.pipe(cipherStreamForFile).pipe(writeStream);
       });
 
-      req.uploadedFile = { fileName, mimeType, formData, filePath: fileDest };
+      req.uploadedFile = {
+        fileName,
+        mimeType,
+        formData,
+        filePath: fileDest,
+        fileInitializationVector,
+        thumbnail: {
+          thumbnailPath: '',
+          thumbnailSize: '',
+          thumbnailInitializationVector: '',
+        },
+      };
       next();
     } catch (error) {
       if (error instanceof Error) {

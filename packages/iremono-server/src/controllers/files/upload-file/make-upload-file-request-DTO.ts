@@ -7,7 +7,9 @@ export const makeUploadFileRequestDTO = ({
     fileName,
     filePath,
     mimeType,
+    fileInitializationVector,
     formData: { parentId, fileSize },
+    thumbnail: { thumbnailPath, thumbnailSize, thumbnailInitializationVector },
   },
 }: HttpRequest): UploadFileRequestDTO => ({
   name: fileName,
@@ -15,5 +17,6 @@ export const makeUploadFileRequestDTO = ({
   filePath,
   fileSize,
   mimeType,
+  fileInitializationVector,
   ownerId: user.id,
 });

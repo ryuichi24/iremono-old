@@ -2,7 +2,7 @@ import {
   constructMockIdentityRepository,
   constructMockStorageItemRepository,
 } from '@iremono/backend-core/src/infra/data-access';
-import { constructBcryptService, constructJwtService } from '@iremono/backend-core/src/infra/services';
+import { constructBcryptService, constructCryptoService, constructJwtService } from '@iremono/backend-core/src/infra/services';
 import {
   CheckIdentityUseCase,
   CreateFolderUseCase,
@@ -47,6 +47,7 @@ export const jwtService = constructJwtService({
   jwtSecret: config.jwtConfig.JWT_SECRET,
   jwtExpiresIn: config.jwtConfig.JWT_EXPIRE_IN,
 });
+export const cryptoService = constructCryptoService();
 
 const signUpUseCase = new SignUpUseCase(identityRepository, storageItemRepository, jwtService, bcryptService);
 const signInUseCase = new SignInUseCase(identityRepository, jwtService, bcryptService);
