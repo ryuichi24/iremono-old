@@ -9,7 +9,7 @@ interface StorageItemRow {
   ancestors: (string | null)[];
   ownerId: string;
   filePath?: string;
-  fileSize?: string;
+  fileSize?: number;
   mimeType?: string;
   fileExtension?: string;
   isFolder: boolean;
@@ -18,7 +18,7 @@ interface StorageItemRow {
   initializationVector: string;
   isRootFolder: boolean;
   thumbnailPath?: string;
-  thumbnailSize?: string;
+  thumbnailSize?: number;
   thumbnailInitializationVector?: string;
   createdAt: Date;
   updatedAt: Date;

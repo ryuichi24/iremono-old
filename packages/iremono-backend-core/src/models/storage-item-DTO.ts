@@ -6,14 +6,14 @@ export interface StorageItemDTO {
   parentId: string | null;
   ownerId: string;
   filePath?: string;
-  fileSize?: string;
+  fileSize?: number;
   mimeType?: string;
   fileExtension?: string;
   isFolder: boolean;
   isInTrash?: boolean;
   lastViewedAt?: Date;
   thumbnailPath?: string;
-  thumbnailSize?: string;
+  thumbnailSize?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -31,6 +31,7 @@ export const makeStorageItemDTO = (storageItem: StorageItem): StorageItemDTO => 
   isInTrash: storageItem.isInTrash,
   lastViewedAt: storageItem.lastViewedAt,
   thumbnailPath: storageItem.thumbnailPath,
+  thumbnailSize: storageItem.thumbnailSize,
   createdAt: storageItem.createdAt,
   updatedAt: storageItem.updatedAt,
 });

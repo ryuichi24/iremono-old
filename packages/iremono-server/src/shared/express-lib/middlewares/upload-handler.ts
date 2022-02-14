@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import fs from 'fs';
-import { pipeline } from 'stream/promises';
+import stream from 'stream';
 import path from 'path';
 import express from 'express';
 import sharp from 'sharp';
@@ -8,6 +8,7 @@ import { createFolderIfNotExists } from '@iremono/util';
 import { parseMultipart } from '../../multipart-parser';
 import { loggerFactory } from '../../utils/logger';
 import { CryptoService } from '@iremono/backend-core/src/services/crypto-service';
+import { deleteFromFileSystem } from '@iremono/util/src/file-system';
 
 const logger = loggerFactory.createLogger('uploadHandler');
 
@@ -15,32 +16,39 @@ export const uploadHandler =
   ({ folderPath, encryptionKey }: { folderPath: string; encryptionKey: string }, cryptoService: CryptoService) =>
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
+      // base dir initialization
       const userMediaDir = path.join(folderPath, 'iremono_media', req.user.id);
+
       const filesDir = path.join(userMediaDir, 'files');
       const thumbnailsDir = path.join(userMediaDir, 'thumbnails');
+      const uploadsDir = path.join(userMediaDir, 'uploads');
+
       await createFolderIfNotExists(filesDir);
       await createFolderIfNotExists(thumbnailsDir);
+      await createFolderIfNotExists(uploadsDir);
 
-      const fileDest = path.join(filesDir, crypto.randomUUID());
-      const writeStream = fs.createWriteStream(fileDest);
-
-      const fileInitializationVector = cryptoService.generateInitializeVector();
-      const fileCipherStream = cryptoService.generateCipherStreamInCBC(encryptionKey, fileInitializationVector);
+      // uploading file
+      const uploadingFileDest = path.join(uploadsDir, crypto.randomUUID());
+      const uploadingFileWriteStream = fs.createWriteStream(uploadingFileDest);
 
       const { fileName, mimeType, formData } = await parseMultipart(req, req.headers, (file) => {
-        file.pipe(fileCipherStream).pipe(writeStream);
+        file.pipe(uploadingFileWriteStream);
       });
 
+      // get file size of the uploaded file
+      const uploadedFileSize = (await fs.promises.stat(uploadingFileDest)).size;
+
+      // thumbnail generation
       const thumbnailDest = path.join(thumbnailsDir, crypto.randomUUID());
 
       const thumbnailWriteStream = fs.createWriteStream(thumbnailDest);
-      const encryptedFileReadStream = fs.createReadStream(fileDest);
+      const uploadedFileReadStream = fs.createReadStream(uploadingFileDest);
 
       let thumbnailFileSize;
       const imageResizeStream = sharp()
         .resize(300)
         .png()
-        .on('info', (info) => (thumbnailFileSize = info.size.toString()))
+        .on('info', (info) => (thumbnailFileSize = info.size))
         .on('error', (err: Error) => console.log(err));
 
       const thumbnailInitializationVector = cryptoService.generateInitializeVector();
@@ -49,19 +57,30 @@ export const uploadHandler =
         thumbnailInitializationVector,
       );
 
-      const fileDecipherStream = cryptoService.generateDecipherStreamInCBC(encryptionKey, fileInitializationVector);
-
-      await pipeline(
-        encryptedFileReadStream,
-        fileDecipherStream,
+      await stream.promises.pipeline(
+        uploadedFileReadStream,
         imageResizeStream,
         thumbnailCipherStream,
         thumbnailWriteStream,
       );
 
+      // encrypt uploaded file
+      const fileDest = path.join(filesDir, crypto.randomUUID());
+      const encryptedFileWriteStream = fs.createWriteStream(fileDest);
+      const uploadedFileReadStream2 = fs.createReadStream(uploadingFileDest);
+
+      const fileInitializationVector = cryptoService.generateInitializeVector();
+      const fileCipherStream = cryptoService.generateCipherStreamInCBC(encryptionKey, fileInitializationVector);
+
+      await stream.promises.pipeline(uploadedFileReadStream2, fileCipherStream, encryptedFileWriteStream);
+
+      // delete uploaded file
+      await deleteFromFileSystem(uploadingFileDest);
+
       req.uploadedFile = {
         fileName,
         mimeType,
+        fileSize: uploadedFileSize,
         formData,
         filePath: fileDest,
         fileInitializationVector,

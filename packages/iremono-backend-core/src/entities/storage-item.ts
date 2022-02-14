@@ -5,7 +5,7 @@ interface Props extends EntityProps {
   parentId: string | null;
   ownerId: string;
   filePath?: string;
-  fileSize?: string;
+  fileSize?: number;
   mimeType?: string;
   fileExtension?: string;
   isFolder: boolean;
@@ -13,7 +13,7 @@ interface Props extends EntityProps {
   isRootFolder?: boolean;
   initializationVector?: string;
   thumbnailPath?: string;
-  thumbnailSize?: string;
+  thumbnailSize?: number;
   thumbnailInitializationVector?: string;
   lastViewedAt?: Date;
 }

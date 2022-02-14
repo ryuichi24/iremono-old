@@ -1,6 +1,6 @@
 export interface DownloadFileThumbnailResponseDTO {
   name: string;
   thumbnailPath: string;
-  thumbnailSize: string;
+  thumbnailSize: number;
   thumbnailInitializationVector: string;
 }

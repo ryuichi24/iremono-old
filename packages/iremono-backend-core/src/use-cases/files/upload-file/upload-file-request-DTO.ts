@@ -3,10 +3,10 @@ export interface UploadFileRequestDTO {
   parentId: string;
   ownerId: string;
   filePath: string;
-  fileSize: string;
+  fileSize: number;
   mimeType: string;
   fileInitializationVector: string;
   thumbnailPath: string;
-  thumbnailSize: string;
+  thumbnailSize: number;
   thumbnailInitializationVector: string;
 }
