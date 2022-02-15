@@ -2,6 +2,13 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "declaration": true
-  }
+    "rootDir": "./src",
+    "declaration": true,
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../iremono-util"
+    }
+  ]
 }

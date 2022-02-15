@@ -8,5 +8,16 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "resolveJsonModule": true
-  }
+  },
+  "references": [
+    {
+       "path": "./packages/iremono-backend-core"
+    },
+    {
+       "path": "./packages/iremono-server"
+    },
+    {
+       "path": "./packages/iremono-util"
+    }
+  ]
 }

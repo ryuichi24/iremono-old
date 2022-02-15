@@ -5,9 +5,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "export NODE_ENV=production && node dist/index.js",
-    "build": "rm -rf dist && tsc",
-    "dev": "export $(cat .env.dev | grep -v \"#\" | xargs) && export NODE_ENV=development && concurrently \"tsc -w\" \"nodemon dist/index.js\""
+    "start": "export $(cat .env.prod | grep -v \"#\" | xargs) && export NODE_ENV=production && node dist/index.js",
+    "build": "tsc --build",
+    "dev": "export $(cat .env.dev | grep -v \"#\" | xargs) && concurrently \"tsc --build --watch\" \"nodemon dist/index.js\""
   },
   "dependencies": {
     "@iremono/backend-core": "1.0.0",
@@ -25,5 +25,8 @@
     "nodemon": "^2.0.15",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.5"
+  },
+  "nodemonConfig": {
+    "delay": 1
   }
 }
