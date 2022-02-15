@@ -1,6 +1,6 @@
-import { DeleteAllInTrashUseCase } from '@iremono/backend-core/src/use-cases';
-import { Logger, LoggerFactory } from '@iremono/util/src/logger';
-import { deleteFromFileSystem } from '@iremono/util/src/file-system';
+import { DeleteAllInTrashUseCase } from '@iremono/backend-core/dist/use-cases';
+import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
+import { deleteFromFileSystem } from '@iremono/util/dist/file-system';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeDeleteAllInTrashRequestDTO } from './make-delete-all-in-trash-request-DTO';
 

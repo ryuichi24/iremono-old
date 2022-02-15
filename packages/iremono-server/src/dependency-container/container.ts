@@ -2,12 +2,12 @@ import { config } from '../config';
 import {
   constructMockIdentityRepository,
   constructMockStorageItemRepository,
-} from '@iremono/backend-core/src/infra/data-access';
+} from '@iremono/backend-core/dist/infra/data-access';
 import {
   constructBcryptService,
   constructCryptoService,
   constructJwtService,
-} from '@iremono/backend-core/src/infra/services';
+} from '@iremono/backend-core/dist/infra/services';
 import {
   CheckIdentityUseCase,
   CreateFolderUseCase,
@@ -27,7 +27,7 @@ import {
   UpdateFileUseCase,
   UpdateFolderUseCase,
   UploadFileUseCase,
-} from '@iremono/backend-core/src/use-cases';
+} from '@iremono/backend-core/dist/use-cases';
 import {
   CreateFolderController,
   ListItemsInFolderController,

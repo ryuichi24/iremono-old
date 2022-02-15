@@ -1,4 +1,4 @@
-import { CustomError } from '@iremono/util/src/errors';
+import { CustomError } from '@iremono/util/dist/errors';
 import { HttpStatusCode } from '../../http';
 
 export class HttpError extends CustomError {

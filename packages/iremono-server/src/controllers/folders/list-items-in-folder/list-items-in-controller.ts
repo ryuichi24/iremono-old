@@ -1,5 +1,5 @@
-import { ListItemsInFolderUseCase } from '@iremono/backend-core/src/use-cases';
-import { Logger, LoggerFactory } from '@iremono/util/src/logger';
+import { ListItemsInFolderUseCase } from '@iremono/backend-core/dist/use-cases';
+import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeListItemsInFolderRequestDTO } from './make-list-items-in-controller-request-DTO';
 

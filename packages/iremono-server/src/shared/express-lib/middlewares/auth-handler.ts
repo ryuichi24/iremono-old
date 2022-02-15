@@ -1,5 +1,5 @@
 import express from 'express';
-import { TokenService } from '@iremono/backend-core/src/services';
+import { TokenService } from '@iremono/backend-core/dist/services';
 import { UnauthorizedError } from '../../utils/errors';
 import { loggerFactory } from '../../utils/logger';
 

@@ -67,7 +67,7 @@ export class Logger {
       case LoggingLevel.Info: {
         console.info(
           stringColorChanger.toDARK_GRAY(loggingEntry.dateTime),
-          stringColorChanger.toCYAN('[INFO]'),
+          stringColorChanger.toCYAN('[INFOsss]'),
           ` (${loggingEntry.moduleName})`,
           stringColorChanger.toDARK_GRAY(`${loggingEntry.location}`),
         );

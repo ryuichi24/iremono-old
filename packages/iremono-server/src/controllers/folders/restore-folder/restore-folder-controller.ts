@@ -1,5 +1,5 @@
-import { RestoreFolderUseCase } from '@iremono/backend-core/src/use-cases';
-import { Logger, LoggerFactory } from '@iremono/util/src/logger';
+import { RestoreFolderUseCase } from '@iremono/backend-core/dist/use-cases';
+import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeRestoreFolderRequestDTO } from './make-restore-folder-request-DTO';
 

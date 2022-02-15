@@ -1,4 +1,4 @@
-import { LoggerFactory } from '@iremono/util/src/logger';
+import { LoggerFactory } from '@iremono/util/dist/logger';
 import { Identity } from '../../../../entities';
 import { IdentityRepository } from '../../../../repositories';
 

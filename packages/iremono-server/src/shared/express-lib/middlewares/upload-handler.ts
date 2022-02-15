@@ -7,8 +7,8 @@ import sharp from 'sharp';
 import { createFolderIfNotExists } from '@iremono/util';
 import { parseMultipart } from '../../multipart-parser';
 import { loggerFactory } from '../../utils/logger';
-import { CryptoService } from '@iremono/backend-core/src/services/crypto-service';
-import { deleteFromFileSystem } from '@iremono/util/src/file-system';
+import { CryptoService } from '@iremono/backend-core/dist/services/crypto-service';
+import { deleteFromFileSystem } from '@iremono/util/dist/file-system';
 
 const logger = loggerFactory.createLogger('uploadHandler');
 

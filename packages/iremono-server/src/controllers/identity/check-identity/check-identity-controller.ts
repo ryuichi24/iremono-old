@@ -1,5 +1,5 @@
-import { CheckIdentityUseCase } from '@iremono/backend-core/src/use-cases/identity/check-identity';
-import { Logger, LoggerFactory } from '@iremono/util/src/logger';
+import { CheckIdentityUseCase } from '@iremono/backend-core/dist/use-cases/identity/check-identity';
+import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeCheckIdentityRequestDTO } from './make-check-identity-DTO';
 

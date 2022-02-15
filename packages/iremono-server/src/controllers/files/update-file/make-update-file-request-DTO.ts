@@ -1,4 +1,4 @@
-import { UpdateFileRequestDTO } from '@iremono/backend-core/src/use-cases/files/update-file';
+import { UpdateFileRequestDTO } from '@iremono/backend-core/dist/use-cases/files/update-file';
 import { HttpRequest } from '../../../shared/controller-lib';
 
 export const makeUpdateFileRequestDTO = ({

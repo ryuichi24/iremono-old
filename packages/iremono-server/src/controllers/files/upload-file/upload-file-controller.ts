@@ -1,5 +1,5 @@
-import { UploadFileUseCase } from '@iremono/backend-core/src/use-cases';
-import { Logger, LoggerFactory } from '@iremono/util/src/logger';
+import { UploadFileUseCase } from '@iremono/backend-core/dist/use-cases';
+import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeUploadFileRequestDTO } from './make-upload-file-request-DTO';
 

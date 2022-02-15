@@ -18,3 +18,5 @@ lerna-debug.log*
 .vscode
 
 iremono_media
+
+dist

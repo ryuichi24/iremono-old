@@ -1,5 +1,5 @@
-import { SignUpUseCase } from '@iremono/backend-core/src/use-cases/identity';
-import { LoggerFactory, Logger } from '@iremono/util/src/logger';
+import { SignUpUseCase } from '@iremono/backend-core/dist/use-cases/identity';
+import { LoggerFactory, Logger } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeSignUpRequestDTO } from './make-sign-up-request-DTO';
 

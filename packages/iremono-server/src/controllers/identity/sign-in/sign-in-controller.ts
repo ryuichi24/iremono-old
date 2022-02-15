@@ -1,5 +1,5 @@
-import { SignInUseCase } from '@iremono/backend-core/src/use-cases/identity/sign-in';
-import { Logger, LoggerFactory } from '@iremono/util/src/logger';
+import { SignInUseCase } from '@iremono/backend-core/dist/use-cases/identity/sign-in';
+import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeSignInRequestDTO } from './make-sign-in-request-DTO';
 
