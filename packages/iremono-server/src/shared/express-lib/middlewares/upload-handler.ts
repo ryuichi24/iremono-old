@@ -8,7 +8,7 @@ import { createFolderIfNotExists } from '@iremono/util';
 import { parseMultipart } from '../../multipart-parser';
 import { loggerFactory } from '../../utils/logger';
 import { CryptoService } from '@iremono/backend-core/dist/services/crypto-service';
-import { deleteFromFileSystem } from '@iremono/util/dist/file-system';
+import { deleteFromFileSystem, fileTypeChecker, getFileType } from '@iremono/util/dist/file-system';
 
 const logger = loggerFactory.createLogger('uploadHandler');
 
@@ -31,38 +31,50 @@ export const uploadHandler =
       const uploadingFileDest = path.join(uploadsDir, crypto.randomUUID());
       const uploadingFileWriteStream = fs.createWriteStream(uploadingFileDest);
 
-      const { fileName, mimeType, formData } = await parseMultipart(req, req.headers, (file) => {
+      const { fileName, formData } = await parseMultipart(req, req.headers, (file) => {
         file.pipe(uploadingFileWriteStream);
       });
 
       // get file size of the uploaded file
       const uploadedFileSize = (await fs.promises.stat(uploadingFileDest)).size;
 
-      // thumbnail generation
-      const thumbnailDest = path.join(thumbnailsDir, crypto.randomUUID());
+      // get file type of the uploaded file
+      const fileType = await getFileType(uploadingFileDest);
 
-      const thumbnailWriteStream = fs.createWriteStream(thumbnailDest);
-      const uploadedFileReadStream = fs.createReadStream(uploadingFileDest);
-
+      // generate thumbnail
+      let thumbnailDest;
       let thumbnailFileSize;
-      const imageResizeStream = sharp()
-        .resize(300)
-        .png()
-        .on('info', (info) => (thumbnailFileSize = info.size))
-        .on('error', (err: Error) => console.log(err));
+      let thumbnailInitializationVector;
 
-      const thumbnailInitializationVector = cryptoService.generateInitializeVector();
-      const thumbnailCipherStream = cryptoService.generateCipherStreamInCBC(
-        encryptionKey,
-        thumbnailInitializationVector,
-      );
+      if (fileTypeChecker.isImage(fileType.fileExtension)) {
+        thumbnailDest = path.join(thumbnailsDir, crypto.randomUUID());
 
-      await stream.promises.pipeline(
-        uploadedFileReadStream,
-        imageResizeStream,
-        thumbnailCipherStream,
-        thumbnailWriteStream,
-      );
+        const thumbnailWriteStream = fs.createWriteStream(thumbnailDest);
+        const uploadedFileReadStream = fs.createReadStream(uploadingFileDest);
+
+        const imageResizeStream = sharp()
+          .resize(300)
+          .png()
+          .on('info', (info) => (thumbnailFileSize = info.size))
+          .on('error', (err: Error) => console.log(err));
+
+        thumbnailInitializationVector = cryptoService.generateInitializeVector();
+        const thumbnailCipherStream = cryptoService.generateCipherStreamInCBC(
+          encryptionKey,
+          thumbnailInitializationVector,
+        );
+
+        await stream.promises.pipeline(
+          uploadedFileReadStream,
+          imageResizeStream,
+          thumbnailCipherStream,
+          thumbnailWriteStream,
+        );
+      }
+
+      if (fileTypeChecker.isVideo(fileType.fileExtension)) {
+        // TODO: add video thumbnail generation
+      }
 
       // encrypt uploaded file
       const fileDest = path.join(filesDir, crypto.randomUUID());
@@ -79,7 +91,8 @@ export const uploadHandler =
 
       req.uploadedFile = {
         fileName,
-        mimeType,
+        mimeType: fileType.mimeType,
+        fileExtension: fileType.fileExtension,
         fileSize: uploadedFileSize,
         formData,
         filePath: fileDest,
