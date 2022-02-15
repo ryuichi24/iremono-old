@@ -26,7 +26,7 @@ import {
   SignUpUseCase,
   UpdateFileUseCase,
   UpdateFolderUseCase,
-  UploadFileUseCase,
+  UploadFileUseCase
 } from '@iremono/backend-core/dist/use-cases';
 import {
   CreateFolderController,

@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "main": "index.js",
+  "type": "module",
   "license": "MIT",
   "scripts": {
-    "start": "export $(cat .env.prod | grep -v \"#\" | xargs) && export NODE_ENV=production && node dist/index.js",
+    "start": "export $(cat .env.prod | grep -v \"#\" | xargs) && export NODE_ENV=production && node --experimental-specifier-resolution=node dist/index.js",
     "build": "tsc --build",
     "dev": "export $(cat .env.dev | grep -v \"#\" | xargs) && concurrently \"tsc --build --watch\" \"nodemon dist/index.js\""
   },

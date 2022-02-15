@@ -9,6 +9,9 @@
   "env": {
     "NODE_ENV": "development"
   },
+  "execMap": {
+    "js": "node --experimental-specifier-resolution=node"
+  },
   "ext": "js,json",
   "delay": 1
 }
