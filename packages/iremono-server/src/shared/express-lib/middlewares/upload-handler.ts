@@ -42,20 +42,20 @@ export const uploadHandler =
       const fileType = await getFileType(uploadingFileDest);
 
       // generate thumbnail
-      let thumbnailDest;
-      let thumbnailFileSize;
+      let thumbnailPath;
+      let thumbnailSize;
       let thumbnailInitializationVector;
 
       if (fileTypeChecker.isImage(fileType.fileExtension)) {
-        thumbnailDest = path.join(thumbnailsDir, crypto.randomUUID());
+        thumbnailPath = path.join(thumbnailsDir, crypto.randomUUID());
 
-        const thumbnailWriteStream = fs.createWriteStream(thumbnailDest);
+        const thumbnailWriteStream = fs.createWriteStream(thumbnailPath);
         const uploadedFileReadStream = fs.createReadStream(uploadingFileDest);
 
         const imageResizeStream = sharp()
           .resize(300)
           .png()
-          .on('info', (info) => (thumbnailFileSize = info.size))
+          .on('info', (info) => (thumbnailSize = info.size))
           .on('error', (err: Error) => console.log(err));
 
         thumbnailInitializationVector = cryptoService.generateInitializeVector();
@@ -98,9 +98,9 @@ export const uploadHandler =
         filePath: fileDest,
         fileInitializationVector,
         thumbnail: {
-          thumbnailPath: thumbnailDest,
-          thumbnailSize: thumbnailFileSize,
-          thumbnailInitializationVector: thumbnailInitializationVector,
+          thumbnailPath,
+          thumbnailSize,
+          thumbnailInitializationVector,
         },
       };
 

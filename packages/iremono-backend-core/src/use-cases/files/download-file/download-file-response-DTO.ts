@@ -4,4 +4,5 @@ export interface DownloadFileResponseDTO {
   fileSize: number;
   filePath: string;
   fileInitializationVector: string;
+  clientEncryptionKeyInitializationVector?: string;
 }

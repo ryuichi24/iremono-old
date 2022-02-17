@@ -9,3 +9,5 @@ export const config = Object.freeze({
   jwtConfig,
   mediaConfig,
 });
+
+export type Config = typeof config;

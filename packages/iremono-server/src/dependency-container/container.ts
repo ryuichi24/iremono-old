@@ -53,7 +53,7 @@ import {
 import { loggerFactory } from '../shared/utils/logger';
 
 // TODO: replace it once the real repository gets ready
-const userRepository = constructMockUserRepository(loggerFactory);
+export const userRepository = constructMockUserRepository(loggerFactory);
 const storageItemRepository = constructMockStorageItemRepository(loggerFactory);
 
 const bcryptService = constructBcryptService();
@@ -87,8 +87,8 @@ export const listItemsInFolderController = new ListItemsInFolderController(listI
 
 // files
 const uploadFileUseCase = new UploadFileUseCase(storageItemRepository);
-const downloadFileUseCase = new DownloadFileUseCase(storageItemRepository);
-const downloadFileThumbnailUseCase = new DownloadFileThumbnailUseCase(storageItemRepository);
+const downloadFileUseCase = new DownloadFileUseCase(storageItemRepository, userRepository);
+const downloadFileThumbnailUseCase = new DownloadFileThumbnailUseCase(storageItemRepository, userRepository);
 const updateFileUseCase = new UpdateFileUseCase(storageItemRepository);
 const removeFileUseCase = new RemoveFileUseCase(storageItemRepository);
 const restoreFileUseCase = new RestoreFileUseCase(storageItemRepository);
@@ -119,9 +119,10 @@ export const listItemsInTrashController = new ListItemsInTrashController(listIte
 export const deleteAllInTrashController = new DeleteAllInTrashController(deleteAllInTrashUseCase, loggerFactory);
 
 // security
-const registerEncryptionKeyUseCase = new RegisterEncryptionKeyUseCase(userRepository, cryptoService);
+const registerEncryptionKeyUseCase = new RegisterEncryptionKeyUseCase(userRepository);
 
 export const registerEncryptionKeyController = new RegisterEncryptionKeyController(
   registerEncryptionKeyUseCase,
+  cryptoService,
   loggerFactory,
 );

@@ -1,4 +1,4 @@
-import { CheckAuthUseCase } from '@iremono/backend-core/dist/use-cases/auth/check-auth';
+import { CheckAuthUseCase } from '@iremono/backend-core/src/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeCheckAuthRequestDTO } from './make-check-auth-DTO';

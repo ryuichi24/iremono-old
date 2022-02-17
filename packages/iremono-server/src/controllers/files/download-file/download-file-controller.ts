@@ -5,6 +5,7 @@ import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeDownloadFileRequestDTO } from './make-download-file-request-DTO';
 import { config } from '../../../config';
+import { BadRequestError } from '../../../shared/utils/errors';
 
 export class DownloadFileController extends Controller<DownloadFileUseCase> {
   private readonly _logger: Logger;
@@ -25,7 +26,27 @@ export class DownloadFileController extends Controller<DownloadFileUseCase> {
       config.mediaConfig.ENCRYPTION_KEY,
       result.fileInitializationVector,
     );
-    const decryptedFileReadStream = readStream.pipe(decipherStream);
+
+    let decryptedFileReadStream;
+
+    if (result.clientEncryptionKeyInitializationVector) {
+      const clientEncryptedEncryptionKey = request.query?.ceek || request.cookies?.ceek;
+      if (!clientEncryptedEncryptionKey) throw new BadRequestError('the encryption key is not provided.');
+      const decryptedClientEncryptionKey = this._cryptoService.decryptInCBC(
+        clientEncryptedEncryptionKey,
+        config.mediaConfig.ENCRYPTION_KEY_FOR_CLIENT_ENCRYPTION_KEY,
+        result.clientEncryptionKeyInitializationVector,
+      );
+
+      const decipherWithClientKeyStream = this._cryptoService.generateDecipherStreamInCBC(
+        decryptedClientEncryptionKey,
+        result.fileInitializationVector,
+      );
+
+      decryptedFileReadStream = readStream.pipe(decipherWithClientKeyStream).pipe(decipherStream);
+    } else {
+      decryptedFileReadStream = readStream.pipe(decipherStream);
+    }
 
     this._logger.info(
       'user has downloaded the file',

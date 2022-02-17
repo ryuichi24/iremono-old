@@ -3,6 +3,7 @@ export interface HttpRequest {
   body: any;
   query: { [key: string]: string };
   params: { [key: string]: string };
+  cookies: { [key: string]: string };
   ip?: string;
   ips?: string[];
   method: string;

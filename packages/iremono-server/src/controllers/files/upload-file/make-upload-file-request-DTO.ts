@@ -11,6 +11,7 @@ export const makeUploadFileRequestDTO = ({
     fileInitializationVector,
     formData: { parentId },
     thumbnail: { thumbnailPath, thumbnailSize, thumbnailInitializationVector },
+    isEncryptedWithClientKey,
   },
 }: HttpRequest): UploadFileRequestDTO => ({
   name: fileName,
@@ -23,4 +24,5 @@ export const makeUploadFileRequestDTO = ({
   thumbnailPath,
   thumbnailSize,
   thumbnailInitializationVector,
+  isEncryptedWithClientKey,
 });

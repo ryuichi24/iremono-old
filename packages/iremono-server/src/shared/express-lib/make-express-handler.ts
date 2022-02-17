@@ -11,6 +11,7 @@ const makeHttpRequestFromExpressRequest = (req: express.Request): HttpRequest =>
   body: req.body,
   query: req.query as { [key: string]: string },
   params: req.params,
+  cookies: req.cookies,
   ip: req.ip,
   ips: req.ips,
   method: req.method,

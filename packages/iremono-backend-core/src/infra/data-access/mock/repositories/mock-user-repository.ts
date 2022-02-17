@@ -65,7 +65,15 @@ export const constructMockUserRepository = (loggerFactory: LoggerFactory): UserR
   };
 };
 
-const makeUserEntityFromRow = (row: UserRow): User => new User({ email: row.email, password: row.password }, row.id);
+const makeUserEntityFromRow = (row: UserRow): User =>
+  new User(
+    {
+      email: row.email,
+      password: row.password,
+      encryptionKeyInitializationVector: row.encryptionKeyInitializationVector,
+    },
+    row.id,
+  );
 
 const makeUserRowFromEntity = (entity: User): UserRow => ({
   id: entity.id,

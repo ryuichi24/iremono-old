@@ -3,4 +3,5 @@ export interface DownloadFileThumbnailResponseDTO {
   thumbnailPath: string;
   thumbnailSize: number;
   thumbnailInitializationVector: string;
+  clientEncryptionKeyInitializationVector?: string;
 }

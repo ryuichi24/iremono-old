@@ -11,6 +11,7 @@ interface Props extends EntityProps {
   isFolder: boolean;
   isInTrash?: boolean;
   isRootFolder?: boolean;
+  isEncryptedWithClientKey?: boolean;
   initializationVector?: string;
   thumbnailPath?: string;
   thumbnailSize?: number;
@@ -21,7 +22,15 @@ interface Props extends EntityProps {
 export class StorageItem extends Entity<Props> {
   public constructor(props: Props, id?: string) {
     const isNew = id === undefined;
-    super({ ...props, isRootFolder: props.isRootFolder || false, isInTrash: isNew ? false : props.isInTrash }, id);
+    super(
+      {
+        ...props,
+        isRootFolder: props.isRootFolder || false,
+        isInTrash: props.isInTrash || false,
+        isEncryptedWithClientKey: props.isEncryptedWithClientKey || false,
+      },
+      id,
+    );
 
     if (isNew) {
       //
@@ -99,6 +108,10 @@ export class StorageItem extends Entity<Props> {
 
   get isRootFolder() {
     return this._props.isRootFolder;
+  }
+
+  get isEncryptedWithClientKey() {
+    return this._props.isEncryptedWithClientKey;
   }
 
   get lastViewedAt() {

@@ -1,7 +1,7 @@
 import express from 'express';
 import { config } from './config';
 import { filesRouter, foldersRouter, authRouter, trashRouter, securityRouter } from './routes';
-import { errorHandler } from './shared/express-lib';
+import { cookieHandler, errorHandler } from './shared/express-lib';
 import { loggerFactory } from './shared/utils/logger';
 
 const logger = loggerFactory.createLogger('main');
@@ -11,7 +11,7 @@ const PORT = config.serverConfig.PORT;
 
 const app = express();
 
-app.use([express.json()]);
+app.use([express.json(), cookieHandler()]);
 
 app.use('/api/auth', authRouter);
 app.use('/api/folders', foldersRouter);

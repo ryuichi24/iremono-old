@@ -1,3 +1,1 @@
-export interface RegisterEncryptionKeyResponseDTO {
-  encryptedClientEncryptionKey: string;
-}
+export interface RegisterEncryptionKeyResponseDTO {}

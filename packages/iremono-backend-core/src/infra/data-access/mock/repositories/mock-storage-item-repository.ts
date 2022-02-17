@@ -17,6 +17,7 @@ interface StorageItemRow {
   lastViewedAt: Date;
   initializationVector: string;
   isRootFolder: boolean;
+  isEncryptedWithClientKey: boolean;
   thumbnailPath?: string;
   thumbnailSize?: number;
   thumbnailInitializationVector?: string;
@@ -53,6 +54,8 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     itemRowToUpdate.fileExtension = entity.fileExtension;
     itemRowToUpdate.isFolder = entity.isFolder;
     itemRowToUpdate.isInTrash = entity.isInTrash!;
+    itemRowToUpdate.isEncryptedWithClientKey = entity.isEncryptedWithClientKey!;
+    itemRowToUpdate.isRootFolder = entity.isRootFolder!;
     itemRowToUpdate.lastViewedAt = entity.lastViewedAt!;
     itemRowToUpdate.thumbnailPath = entity.thumbnailPath;
     itemRowToUpdate.thumbnailSize = entity.thumbnailSize;
@@ -123,7 +126,7 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
   };
 };
 
-const makeStorageItemEntityFromRow = (row: StorageItemRow) =>
+const makeStorageItemEntityFromRow = (row: StorageItemRow): StorageItem =>
   new StorageItem(
     {
       name: row.name,
@@ -138,6 +141,7 @@ const makeStorageItemEntityFromRow = (row: StorageItemRow) =>
       lastViewedAt: row.lastViewedAt,
       initializationVector: row.initializationVector,
       isRootFolder: row.isRootFolder,
+      isEncryptedWithClientKey: row.isEncryptedWithClientKey,
       thumbnailPath: row.thumbnailPath,
       thumbnailSize: row.thumbnailSize,
       thumbnailInitializationVector: row.thumbnailInitializationVector,
@@ -147,7 +151,7 @@ const makeStorageItemEntityFromRow = (row: StorageItemRow) =>
     row.id,
   );
 
-const makeStorageItemRowFromEntity = (entity: StorageItem, ancestors: (string | null)[]) => ({
+const makeStorageItemRowFromEntity = (entity: StorageItem, ancestors: (string | null)[]): StorageItemRow => ({
   id: entity.id!,
   name: entity.name,
   parentId: entity.parentId!,
@@ -162,6 +166,7 @@ const makeStorageItemRowFromEntity = (entity: StorageItem, ancestors: (string | 
   lastViewedAt: entity.lastViewedAt!,
   initializationVector: entity.initializationVector!,
   isRootFolder: entity.isRootFolder!,
+  isEncryptedWithClientKey: entity.isEncryptedWithClientKey!,
   thumbnailPath: entity.thumbnailPath,
   thumbnailSize: entity.thumbnailSize,
   thumbnailInitializationVector: entity.thumbnailInitializationVector,

@@ -5,6 +5,7 @@ import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeDownloadFileThumbnailRequestDTO } from './make-download-file-thumbnail-request-DTO';
 import { config } from '../../../config';
+import { BadRequestError } from '../../../shared/utils/errors';
 
 export class DownloadFileThumbnailController extends Controller<DownloadFileThumbnailUseCase> {
   private readonly _logger: Logger;
@@ -20,12 +21,32 @@ export class DownloadFileThumbnailController extends Controller<DownloadFileThum
     const dto = makeDownloadFileThumbnailRequestDTO(request);
     const result = await this._useCase.handle(dto);
 
-    const readStream = fs.createReadStream(result.thumbnailPath).on('error', (err) => this._logger.error(err));
+    const readStream = fs.createReadStream(result.thumbnailPath);
     const decipherStream = this._cryptoService.generateDecipherStreamInCBC(
       config.mediaConfig.ENCRYPTION_KEY,
-      result.thumbnailInitializationVector
+      result.thumbnailInitializationVector,
     );
-    const decryptedFileReadStream = readStream.pipe(decipherStream);
+
+    let decryptedFileReadStream;
+
+    if (result.clientEncryptionKeyInitializationVector) {
+      const clientEncryptedEncryptionKey = request.query?.ceek || request.cookies?.ceek;
+      if (!clientEncryptedEncryptionKey) throw new BadRequestError('the encryption key is not provided.');
+      const decryptedClientEncryptionKey = this._cryptoService.decryptInCBC(
+        clientEncryptedEncryptionKey,
+        config.mediaConfig.ENCRYPTION_KEY_FOR_CLIENT_ENCRYPTION_KEY,
+        result.clientEncryptionKeyInitializationVector,
+      );
+
+      const decipherWithClientKeyStream = this._cryptoService.generateDecipherStreamInCBC(
+        decryptedClientEncryptionKey,
+        result.thumbnailInitializationVector,
+      );
+
+      decryptedFileReadStream = readStream.pipe(decipherWithClientKeyStream).pipe(decipherStream);
+    } else {
+      decryptedFileReadStream = readStream.pipe(decipherStream);
+    }
 
     this._logger.info(
       'user has downloaded the file',
