@@ -1,2 +1,2 @@
-export * from './identity-repository';
+export * from './user-repository';
 export * from './storage-item-repository';

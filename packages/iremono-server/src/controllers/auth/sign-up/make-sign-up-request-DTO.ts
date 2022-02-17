@@ -1,4 +1,4 @@
-import { SignUpRequestDTO } from '@iremono/backend-core/dist/use-cases/identity/sign-up';
+import { SignUpRequestDTO } from '@iremono/backend-core/dist/use-cases/auth/sign-up';
 import { HttpRequest } from '../../../shared/controller-lib';
 
 export const makeSignUpRequestDTO = ({ body: { email, password } }: HttpRequest): SignUpRequestDTO => ({

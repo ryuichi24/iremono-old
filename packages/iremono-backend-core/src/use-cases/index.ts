@@ -1,4 +1,4 @@
-export * from './identity';
+export * from './auth';
 export * from './folders';
 export * from './files';
 export * from './trash';

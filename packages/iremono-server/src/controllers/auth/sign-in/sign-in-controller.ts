@@ -1,11 +1,11 @@
-import { SignInUseCase } from '@iremono/backend-core/dist/use-cases/identity/sign-in';
+import { SignInUseCase } from '@iremono/backend-core/dist/use-cases/auth/sign-in';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeSignInRequestDTO } from './make-sign-in-request-DTO';
 
 export class SignInController extends Controller<SignInUseCase> {
   private readonly _logger: Logger;
-  
+
   constructor(useCase: SignInUseCase, loggerFactory: LoggerFactory) {
     super(useCase);
     this._logger = loggerFactory.createLogger(this.constructor.name);

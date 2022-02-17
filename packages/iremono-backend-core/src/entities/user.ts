@@ -6,7 +6,7 @@ interface Props extends EntityProps {
   encryptionKeyInitializationVector?: string;
 }
 
-export class Identity extends Entity<Props> {
+export class User extends Entity<Props> {
   private _isPasswordHashed: boolean;
 
   public constructor(props: Props, id?: string) {

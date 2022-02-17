@@ -1,6 +1,6 @@
 import { config } from '../config';
 import {
-  constructMockIdentityRepository,
+  constructMockUserRepository,
   constructMockStorageItemRepository,
 } from '@iremono/backend-core/dist/infra/data-access';
 import {
@@ -9,7 +9,7 @@ import {
   constructJwtService,
 } from '@iremono/backend-core/dist/infra/services';
 import {
-  CheckIdentityUseCase,
+  CheckAuthUseCase,
   CreateFolderUseCase,
   DeleteAllInTrashUseCase,
   DeleteFileInTrashUseCase,
@@ -26,7 +26,7 @@ import {
   SignUpUseCase,
   UpdateFileUseCase,
   UpdateFolderUseCase,
-  UploadFileUseCase
+  UploadFileUseCase,
 } from '@iremono/backend-core/dist/use-cases';
 import {
   CreateFolderController,
@@ -39,7 +39,7 @@ import {
   UpdateFileController,
   UploadFileController,
   DownloadFileController,
-  CheckIdentityController,
+  CheckAuthController,
   SignInController,
   SignUpController,
   DeleteFileInTrashController,
@@ -51,7 +51,7 @@ import {
 import { loggerFactory } from '../shared/utils/logger';
 
 // TODO: replace it once the real repository gets ready
-const identityRepository = constructMockIdentityRepository(loggerFactory);
+const UserRepository = constructMockUserRepository(loggerFactory);
 const storageItemRepository = constructMockStorageItemRepository(loggerFactory);
 
 const bcryptService = constructBcryptService();
@@ -61,14 +61,14 @@ export const jwtService = constructJwtService({
 });
 export const cryptoService = constructCryptoService();
 
-// identity
-const signUpUseCase = new SignUpUseCase(identityRepository, storageItemRepository, jwtService, bcryptService);
-const signInUseCase = new SignInUseCase(identityRepository, jwtService, bcryptService);
-const checkIdentityUseCase = new CheckIdentityUseCase(identityRepository);
+// User
+const signUpUseCase = new SignUpUseCase(UserRepository, storageItemRepository, jwtService, bcryptService);
+const signInUseCase = new SignInUseCase(UserRepository, jwtService, bcryptService);
+const checkAuthUseCase = new CheckAuthUseCase(UserRepository);
 
 export const signUpController = new SignUpController(signUpUseCase, loggerFactory);
 export const signInController = new SignInController(signInUseCase, loggerFactory);
-export const checkIdentityController = new CheckIdentityController(checkIdentityUseCase, loggerFactory);
+export const checkAuthController = new CheckAuthController(checkAuthUseCase, loggerFactory);
 
 // folders
 const createFolderUseCase = new CreateFolderUseCase(storageItemRepository);
