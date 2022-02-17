@@ -1,7 +1,10 @@
 import React from 'react';
 
-function App() {
-  return <div>App</div>;
-}
-
-export default App;
+export const App = () => {
+  return (
+    <>
+      <h1>App</h1>
+      <p>{process.env.API_URL}</p>
+    </>
+  );
+};

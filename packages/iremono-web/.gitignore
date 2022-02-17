@@ -1,8 +1,7 @@
-/.pnp
-.pnp.js
+dist
 
-# testing
-/coverage
+.DS_*
+*.log
+logs
 
-# production
-/build
+node_modules
