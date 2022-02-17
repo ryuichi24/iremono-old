@@ -6,6 +6,7 @@ interface UserRow {
   id: string;
   email: string;
   password: string;
+  encryptionKeyInitializationVector: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,6 +26,7 @@ export const constructMockUserRepository = (loggerFactory: LoggerFactory): UserR
 
     entityRowToUpdate.email = entity.email;
     entityRowToUpdate.password = entity.hashedPassword;
+    entityRowToUpdate.encryptionKeyInitializationVector = entity.encryptionKeyInitializationVector!;
     entityRowToUpdate.createdAt = entity.createdAt!;
     entityRowToUpdate.updatedAt = entity.updatedAt!;
 
@@ -69,6 +71,7 @@ const makeUserRowFromEntity = (entity: User): UserRow => ({
   id: entity.id,
   email: entity.email,
   password: entity.hashedPassword,
+  encryptionKeyInitializationVector: entity.encryptionKeyInitializationVector!,
   createdAt: entity.createdAt!,
   updatedAt: entity.updatedAt!,
 });

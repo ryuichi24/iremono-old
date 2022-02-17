@@ -18,6 +18,7 @@ import {
   DownloadFileUseCase,
   ListItemsInFolderUseCase,
   ListItemsInTrashUseCase,
+  RegisterEncryptionKeyUseCase,
   RemoveFileUseCase,
   RemoveFolderUseCase,
   RestoreFileUseCase,
@@ -47,11 +48,12 @@ import {
   ListItemsInTrashController,
   DeleteAllInTrashController,
   DownloadFileThumbnailController,
+  RegisterEncryptionKeyController,
 } from '../controllers';
 import { loggerFactory } from '../shared/utils/logger';
 
 // TODO: replace it once the real repository gets ready
-const UserRepository = constructMockUserRepository(loggerFactory);
+const userRepository = constructMockUserRepository(loggerFactory);
 const storageItemRepository = constructMockStorageItemRepository(loggerFactory);
 
 const bcryptService = constructBcryptService();
@@ -62,9 +64,9 @@ export const jwtService = constructJwtService({
 export const cryptoService = constructCryptoService();
 
 // User
-const signUpUseCase = new SignUpUseCase(UserRepository, storageItemRepository, jwtService, bcryptService);
-const signInUseCase = new SignInUseCase(UserRepository, jwtService, bcryptService);
-const checkAuthUseCase = new CheckAuthUseCase(UserRepository);
+const signUpUseCase = new SignUpUseCase(userRepository, storageItemRepository, jwtService, bcryptService);
+const signInUseCase = new SignInUseCase(userRepository, jwtService, bcryptService);
+const checkAuthUseCase = new CheckAuthUseCase(userRepository);
 
 export const signUpController = new SignUpController(signUpUseCase, loggerFactory);
 export const signInController = new SignInController(signInUseCase, loggerFactory);
@@ -115,3 +117,11 @@ export const deleteFolderInTrashController = new DeleteFolderInTrashController(
 );
 export const listItemsInTrashController = new ListItemsInTrashController(listItemsInTrashUseCase, loggerFactory);
 export const deleteAllInTrashController = new DeleteAllInTrashController(deleteAllInTrashUseCase, loggerFactory);
+
+// security
+const registerEncryptionKeyUseCase = new RegisterEncryptionKeyUseCase(userRepository, cryptoService);
+
+export const registerEncryptionKeyController = new RegisterEncryptionKeyController(
+  registerEncryptionKeyUseCase,
+  loggerFactory,
+);

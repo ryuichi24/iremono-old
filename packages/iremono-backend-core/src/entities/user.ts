@@ -3,16 +3,16 @@ import { Entity, EntityProps } from '../shared/entities';
 interface Props extends EntityProps {
   email: string;
   password: string;
-  encryptionKeyInitializationVector?: string;
+  encryptionKeyInitializationVector?: string | null;
 }
 
 export class User extends Entity<Props> {
   private _isPasswordHashed: boolean;
 
   public constructor(props: Props, id?: string) {
-    super(props, id);
-
     const isNew = id === undefined;
+    super({ ...props, encryptionKeyInitializationVector: isNew ? null : props.encryptionKeyInitializationVector }, id);
+
     this._isPasswordHashed = isNew ? false : true;
 
     if (isNew) {
@@ -24,6 +24,11 @@ export class User extends Entity<Props> {
   public updateEmail(newEmail: string) {
     this._validateEmail(newEmail);
     this._props.email = newEmail;
+    this._props.updatedAt = new Date();
+  }
+
+  public updateEncryptionKeyInitializationVector(encryptionKeyInitializationVector: string) {
+    this._props.encryptionKeyInitializationVector = encryptionKeyInitializationVector;
     this._props.updatedAt = new Date();
   }
 
