@@ -3,6 +3,7 @@ import { Entity, EntityProps } from '../shared/entities';
 interface Props extends EntityProps {
   email: string;
   password: string;
+  encryptionKeyInitializationVector?: string;
 }
 
 export class Identity extends Entity<Props> {
@@ -38,6 +39,10 @@ export class Identity extends Entity<Props> {
   get hashedPassword() {
     if (!this._isPasswordHashed) throw new Error('password is not hashed.');
     return this._props.password;
+  }
+
+  get encryptionKeyInitializationVector() {
+    return this._props.encryptionKeyInitializationVector;
   }
 
   private _validateEmail(email: string) {
