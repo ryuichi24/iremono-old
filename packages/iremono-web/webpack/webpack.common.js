@@ -5,6 +5,9 @@ module.exports = {
   entry: path.resolve(__dirname, '..', './src/index.tsx'),
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      '@mui/styled-engine': '@mui/styled-engine-sc',
+    },
   },
   module: {
     rules: [
