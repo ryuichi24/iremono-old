@@ -12,17 +12,22 @@ const retryAxios = axios.create({ baseURL: process.env.API_URL, withCredentials:
 
 apiClient.interceptors.response.use(
   (response) => {
+    const { accessToken, refreshToken } = response.data;
+
+    if (accessToken) tokenManager.accessToken.set(accessToken);
+    if (refreshToken) tokenManager.refreshToken.set(refreshToken);
+
     return response;
   },
   async (err: AxiosError) => {
     const { config, response } = err;
 
-    if (response?.status !== 401) return err;
+    if (response?.status !== 401) throw err;
 
-    if (config.url === refreshTokenEndpoint) return err;
+    if (config.url === refreshTokenEndpoint) throw err;
 
     const refreshToken = tokenManager.refreshToken.get();
-    if (!refreshToken) return err;
+    if (!refreshToken) throw err;
 
     const res = await retryAxios.post(refreshTokenEndpoint, { refreshToken });
     const result = res.data;
