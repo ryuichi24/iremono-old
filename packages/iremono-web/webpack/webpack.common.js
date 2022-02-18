@@ -7,6 +7,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
     alias: {
       '@mui/styled-engine': '@mui/styled-engine-sc',
+      '@': path.resolve(__dirname, '..', './src'),
     },
   },
   module: {

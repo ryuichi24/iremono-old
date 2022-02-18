@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ProtectedRoute } from '../components/ProtectedRoute';
-import { SignInPage } from '../containers/SignInPage';
-import { SignUpPage } from '../containers/SignUpPage';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { SignUpPage } from '@/containers/SignUpPage';
+import { SignInPage } from '@/containers/SignInPage';
 
 export const App = () => {
   return (
