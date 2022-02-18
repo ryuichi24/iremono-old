@@ -43,6 +43,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "@mui/icons-material": "^5.4.2",
     "@mui/material": "^5.4.2",
     "@mui/styled-engine-sc": "^5.4.2",
     "react": "^17.0.2",
