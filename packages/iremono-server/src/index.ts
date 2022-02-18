@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { config } from './config';
 import { filesRouter, foldersRouter, authRouter, trashRouter, securityRouter } from './routes';
 import { cookieHandler, errorHandler } from './shared/express-lib';
@@ -11,7 +12,7 @@ const PORT = config.serverConfig.PORT;
 
 const app = express();
 
-app.use([express.json(), cookieHandler()]);
+app.use([express.json(), cookieHandler(), cors({ credentials: true, origin: true })]);
 
 app.use('/api/auth', authRouter);
 app.use('/api/folders', foldersRouter);
