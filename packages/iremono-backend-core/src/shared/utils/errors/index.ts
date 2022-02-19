@@ -1,3 +1,4 @@
 export * from './validation-error';
 export * from './auth-error';
-export * from './does-not-exist-error';
+export * from './not-exist-error';
+export * from './invalid-request-error';

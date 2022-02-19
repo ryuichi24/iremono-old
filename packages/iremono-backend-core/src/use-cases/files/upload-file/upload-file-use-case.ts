@@ -2,6 +2,7 @@ import { StorageItem } from '../../../entities';
 import { makeStorageItemDTO } from '../../../models';
 import { StorageItemRepository } from '../../../repositories';
 import { UseCase } from '../../../shared/use-case-lib';
+import { InvalidRequestError } from '../../../shared/utils/errors';
 import { UploadFileRequestDTO } from './upload-file-request-DTO';
 import { UploadFileResponseDTO } from './upload-file-response-DTO';
 
@@ -15,9 +16,9 @@ export class UploadFileUseCase implements UseCase<UploadFileRequestDTO, UploadFi
   public async handle(dto: UploadFileRequestDTO): Promise<UploadFileResponseDTO> {
     const parentFolder = await this._storageItemRepository.findOneById(dto.parentId, dto.ownerId);
 
-    if (!parentFolder || !parentFolder.isFolder) throw new Error('the parent folder does not exist.');
+    if (!parentFolder || !parentFolder.isFolder) throw new InvalidRequestError('the parent folder does not exist.');
 
-    if (parentFolder.isInTrash) throw new Error('the parent folder is in a trash.');
+    if (parentFolder.isInTrash) throw new InvalidRequestError('the parent folder is in a trash.');
 
     const file = new StorageItem({
       name: dto.name,
@@ -31,7 +32,7 @@ export class UploadFileUseCase implements UseCase<UploadFileRequestDTO, UploadFi
       thumbnailPath: dto.thumbnailPath,
       thumbnailSize: dto.thumbnailSize,
       thumbnailInitializationVector: dto.thumbnailInitializationVector,
-      isEncryptedWithClientKey: dto.isEncryptedWithClientKey
+      isEncryptedWithClientKey: dto.isEncryptedWithClientKey,
     });
 
     const saved = await this._storageItemRepository.save(file);

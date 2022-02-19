@@ -1,5 +1,6 @@
 import { StorageItemRepository, UserRepository } from '../../../repositories';
 import { UseCase } from '../../../shared/use-case-lib';
+import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
 import { DownloadFileRequestDTO } from './download-file-request-DTO';
 import { DownloadFileResponseDTO } from './download-file-response-DTO';
 
@@ -16,11 +17,11 @@ export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, Down
     const fileToDownload = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
 
     if (!fileToDownload) {
-      throw new Error('the file does not exist.');
+      throw new NotExistError('the file does not exist.');
     }
 
     if (fileToDownload.isInTrash) {
-      throw new Error('the file is in a trash.');
+      throw new InvalidRequestError('the file is in a trash.');
     }
 
     const responseDto: DownloadFileResponseDTO = {
@@ -33,7 +34,7 @@ export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, Down
 
     if (fileToDownload.isEncryptedWithClientKey) {
       const user = await this._userRepository.findOneById(dto.ownerId);
-      if (!user) throw new Error('the user is not found');
+      if (!user) throw new InvalidRequestError('the owner is not found');
 
       responseDto.clientEncryptionKeyInitializationVector = user.encryptionKeyInitializationVector!;
     }

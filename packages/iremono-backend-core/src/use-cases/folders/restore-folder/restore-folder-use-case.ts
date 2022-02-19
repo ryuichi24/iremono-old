@@ -1,5 +1,6 @@
 import { StorageItemRepository } from '../../../repositories';
 import { UseCase } from '../../../shared/use-case-lib';
+import { InvalidRequestError } from '../../../shared/utils/errors';
 import { RestoreFolderRequestDTO } from './restore-folder-request-DTO';
 import { RestoreFolderResponseDTO } from './restore-folder-response-DTO';
 
@@ -12,10 +13,10 @@ export class RestoreFolderUseCase implements UseCase<RestoreFolderRequestDTO, Re
 
   public async handle(dto: RestoreFolderRequestDTO): Promise<RestoreFolderResponseDTO> {
     const folderToRestore = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
-    if (!folderToRestore || !folderToRestore.isFolder) throw new Error('the folder does not exist.');
+    if (!folderToRestore || !folderToRestore.isFolder) throw new InvalidRequestError('the folder does not exist.');
 
     const parentFolder = await this._storageItemRepository.findOneById(folderToRestore.parentId!, dto.ownerId);
-    if (parentFolder?.isInTrash) throw new Error('the parent folder is in a trash.');
+    if (parentFolder?.isInTrash) throw new InvalidRequestError('the parent folder is in a trash.');
 
     const allDescendants = await this._storageItemRepository.findAllDescendantsById(dto.id, dto.ownerId, true);
 

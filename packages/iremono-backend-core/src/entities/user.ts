@@ -1,4 +1,5 @@
 import { Entity, EntityProps } from '../shared/entities';
+import { ValidationError } from '../shared/utils/errors';
 
 interface Props extends EntityProps {
   email: string;
@@ -54,16 +55,16 @@ export class User extends Entity<Props> {
     // RFC 3696: https://www.rfc-editor.org/rfc/rfc3696.txt
     const emailMaxLength = 320;
     if (email.length > emailMaxLength)
-      throw new Error(`Invalid email length: email length must be less than ${emailMaxLength}`);
+      throw new ValidationError(`Invalid email length: email length must be less than ${emailMaxLength}`);
 
     const emailFormatRegex =
       /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
-    if (!emailFormatRegex.test(email)) throw new Error('Invalid email format');
+    if (!emailFormatRegex.test(email)) throw new ValidationError('Invalid email format');
   }
 
   private _validatePassword(password: string) {
     const passwordMinLength = 8;
     if (password.length < passwordMinLength)
-      throw new Error(`Invalid password length: password length must be longer than ${passwordMinLength}`);
+      throw new ValidationError(`Invalid password length: password length must be longer than ${passwordMinLength}`);
   }
 }

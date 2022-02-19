@@ -1,5 +1,6 @@
 import { StorageItemRepository, UserRepository } from '../../../repositories';
 import { UseCase } from '../../../shared/use-case-lib';
+import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
 import { DownloadFileThumbnailRequestDTO } from './download-file-thumbnail-request-DTO';
 import { DownloadFileThumbnailResponseDTO } from './download-file-thumbnail-response-DTO';
 
@@ -18,11 +19,11 @@ export class DownloadFileThumbnailUseCase
     const fileOfThumbnailToDownload = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
 
     if (!fileOfThumbnailToDownload) {
-      throw new Error('the file does not exist.');
+      throw new NotExistError('the file does not exist.');
     }
 
     if (fileOfThumbnailToDownload.isInTrash) {
-      throw new Error('the file is in a trash.');
+      throw new InvalidRequestError('the file is in a trash.');
     }
 
     const responseDto: DownloadFileThumbnailResponseDTO = {
@@ -34,7 +35,7 @@ export class DownloadFileThumbnailUseCase
 
     if (fileOfThumbnailToDownload.isEncryptedWithClientKey) {
       const user = await this._userRepository.findOneById(dto.ownerId);
-      if (!user) throw new Error('the user is not found');
+      if (!user) throw new InvalidRequestError('the owner is not found');
 
       responseDto.clientEncryptionKeyInitializationVector = user.encryptionKeyInitializationVector!;
     }

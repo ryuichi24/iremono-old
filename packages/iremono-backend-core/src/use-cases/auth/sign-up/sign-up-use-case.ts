@@ -3,6 +3,7 @@ import { makeUserDTO } from '../../../models';
 import { UserRepository, StorageItemRepository } from '../../../repositories';
 import { HashService, TokenService } from '../../../services';
 import { UseCase } from '../../../shared/use-case-lib';
+import { InvalidRequestError } from '../../../shared/utils/errors';
 import { SignUpRequestDTO } from './sign-up-request-DTO';
 import { SignUpResponseDTO } from './sign-up-response-DTO';
 
@@ -26,7 +27,7 @@ export class SignUpUseCase implements UseCase<SignUpRequestDTO, SignUpResponseDT
 
   public async handle(dto: SignUpRequestDTO): Promise<SignUpResponseDTO> {
     const isDuplicate = !!(await this._userRepository.findOneByEmail(dto.email));
-    if (isDuplicate) throw new Error('the email is already registered');
+    if (isDuplicate) throw new InvalidRequestError('the email is already registered');
 
     const user = new User({ email: dto.email, password: dto.password });
     await user.hashPassword(this._hashService.hash);

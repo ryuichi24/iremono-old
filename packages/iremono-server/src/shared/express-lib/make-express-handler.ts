@@ -1,7 +1,12 @@
 import express from 'express';
 import { isObject } from '@iremono/util';
 import { Controller, HttpRequest } from '../controller-lib';
-import { AuthError, DoesNotExistError, ValidationError } from '@iremono/backend-core/dist/shared/utils/errors';
+import {
+  AuthError,
+  InvalidRequestError,
+  NotExistError,
+  ValidationError,
+} from '@iremono/backend-core/dist/shared/utils/errors';
 import { BadRequestError, NotFoundError, UnauthorizedError } from '../utils/errors';
 
 const expressAsyncHandlerWrapper =
@@ -10,7 +15,8 @@ const expressAsyncHandlerWrapper =
     Promise.resolve(fn(req, res)).catch((err) => {
       if (err instanceof AuthError) return next(new UnauthorizedError(err.message, err.stack));
       if (err instanceof ValidationError) return next(new BadRequestError(err.message, err.stack));
-      if (err instanceof DoesNotExistError) return next(new NotFoundError(err.message, err.stack));
+      if (err instanceof InvalidRequestError) return next(new BadRequestError(err.message, err.stack));
+      if (err instanceof NotExistError) return next(new NotFoundError(err.message, err.stack));
 
       next(err);
     });

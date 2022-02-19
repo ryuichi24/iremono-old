@@ -1,5 +1,6 @@
 import { StorageItemRepository } from '../../../repositories';
 import { UseCase } from '../../../shared/use-case-lib';
+import { InvalidRequestError } from '../../../shared/utils/errors';
 import { RemoveFolderRequestDTO } from './remove-folder-request-DTO';
 import { RemoveFolderResponseDTO } from './remove-folder-response-DTO';
 
@@ -12,9 +13,9 @@ export class RemoveFolderUseCase implements UseCase<RemoveFolderRequestDTO, Remo
 
   public async handle(dto: RemoveFolderRequestDTO): Promise<RemoveFolderResponseDTO> {
     const folderToRemove = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
-    if (!folderToRemove || !folderToRemove.isFolder) throw new Error('the folder does not exist.');
+    if (!folderToRemove || !folderToRemove.isFolder) throw new InvalidRequestError('the folder does not exist.');
 
-    if (folderToRemove.isRootFolder) throw new Error('the root folder cannot be removed.');
+    if (folderToRemove.isRootFolder) throw new InvalidRequestError('the root folder cannot be removed.');
 
     const allDescendants = await this._storageItemRepository.findAllDescendantsById(dto.id, dto.ownerId, false);
 

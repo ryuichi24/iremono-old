@@ -1,6 +1,7 @@
 import { makeStorageItemDTO } from '../../../models';
 import { StorageItemRepository } from '../../../repositories';
 import { UseCase } from '../../../shared/use-case-lib';
+import { InvalidRequestError } from '../../../shared/utils/errors';
 import { DeleteFolderInTrashRequestDTO } from './delete-folder-in-trash-request-DTO';
 import { DeleteFolderInTrashResponseDTO } from './delete-folder-in-trash-response-DTO';
 
@@ -15,9 +16,9 @@ export class DeleteFolderInTrashUseCase
 
   public async handle(dto: DeleteFolderInTrashRequestDTO): Promise<DeleteFolderInTrashResponseDTO> {
     const folderInTrashToDelete = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
-    
+
     if (!folderInTrashToDelete || !folderInTrashToDelete.isFolder)
-      throw new Error('the folder does not exist in trash.');
+      throw new InvalidRequestError('the folder does not exist in trash.');
 
     const allDescendants = await this._storageItemRepository.findAllDescendantsById(dto.id, dto.ownerId, true);
 
