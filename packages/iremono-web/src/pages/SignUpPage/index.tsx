@@ -33,7 +33,7 @@ export const SignUpPage = () => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 8,
+          paddingTop: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -42,7 +42,7 @@ export const SignUpPage = () => {
         <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" color="text.primary">
           Sign Up
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -73,7 +73,9 @@ export const SignUpPage = () => {
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href="/signin" variant="body2">
-                Already have an account? Sign in
+                <Typography fontSize={14} color="text.primary">
+                  Already have an account? Sign in
+                </Typography>
               </Link>
             </Grid>
           </Grid>

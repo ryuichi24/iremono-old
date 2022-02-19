@@ -33,7 +33,7 @@ export const SignInPage = () => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 8,
+          paddingTop: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -42,7 +42,7 @@ export const SignInPage = () => {
         <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h5" color="text.primary">
           Sign In
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -67,19 +67,30 @@ export const SignInPage = () => {
             autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label={
+              <Typography fontSize={16} color="text.primary">
+                Remember me?
+              </Typography>
+            }
+          />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign In
           </Button>
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
-                Forgot password?
+                <Typography fontSize={14} color="text.primary">
+                  Forgot password?
+                </Typography>
               </Link>
             </Grid>
             <Grid item>
               <Link href="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
+                <Typography fontSize={14} color="text.primary">
+                  {"Don't have an account? Sign Up"}
+                </Typography>
               </Link>
             </Grid>
           </Grid>

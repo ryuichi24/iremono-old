@@ -6,7 +6,11 @@ import { App } from '@/App';
 import { store } from '@/store';
 import '@/styles/reset.css';
 
-const theme = createTheme({});
+const theme = createTheme({
+  palette: {
+    mode: 'light',
+  },
+});
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
