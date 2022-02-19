@@ -1,3 +1,4 @@
+import { makeUserDTO } from '../../../models';
 import { UserRepository } from '../../../repositories';
 import { HashService, TokenService } from '../../../services';
 import { UseCase } from '../../../shared/use-case-lib';
@@ -27,6 +28,7 @@ export class SignInUseCase implements UseCase<SignInRequestDTO, SignInResponseDT
     return {
       accessToken: accessToken.value,
       expiresIn: accessToken.expiresIn,
+      user: makeUserDTO(user),
     };
   }
 }

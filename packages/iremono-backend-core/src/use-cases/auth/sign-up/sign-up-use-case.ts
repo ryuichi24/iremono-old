@@ -1,4 +1,5 @@
 import { User, StorageItem } from '../../../entities';
+import { makeUserDTO } from '../../../models';
 import { UserRepository, StorageItemRepository } from '../../../repositories';
 import { HashService, TokenService } from '../../../services';
 import { UseCase } from '../../../shared/use-case-lib';
@@ -50,6 +51,7 @@ export class SignUpUseCase implements UseCase<SignUpRequestDTO, SignUpResponseDT
     return {
       accessToken: accessToken.value,
       expiresIn: accessToken.expiresIn,
+      user: makeUserDTO(savedUser),
     };
   }
 }

@@ -9,8 +9,8 @@ const signUp = async (request: SignUpRequest) => {
   const res = await apiClient.post('/api/auth/signup', { email: request.email, password: request.password });
   const result = res.data;
   return {
-    accessToken: result.accessToken,
-    expiresIn: result.expiresIn,
+    userId: result.user.id,
+    email: result.user.email,
   };
 };
 
@@ -23,8 +23,8 @@ const signIn = async (request: SignInRequest) => {
   const res = await apiClient.post('/api/auth/signin', { email: request.email, password: request.password });
   const result = res.data;
   return {
-    accessToken: result.accessToken,
-    expiresIn: result.expiresIn,
+    userId: result.user.id,
+    email: result.user.email,
   };
 };
 

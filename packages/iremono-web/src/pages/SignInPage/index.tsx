@@ -24,7 +24,7 @@ export const SignInPage = () => {
     authService
       .signIn({ email, password })
       .then((result) => {
-        dispatch(setAuth({ email, userId: 'd3f83hwf849y' }));
+        dispatch(setAuth(result));
       })
       .catch((err) => console.log(err));
   };
