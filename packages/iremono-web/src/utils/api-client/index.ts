@@ -24,7 +24,12 @@ apiClient.interceptors.response.use(
 
     if (response?.status !== 401) throw err;
 
-    if (config.url === refreshTokenEndpoint) throw err;
+    tokenManager.accessToken.remove();
+
+    if (config.url === refreshTokenEndpoint) {
+      tokenManager.refreshToken.remove();
+      throw err;
+    }
 
     const refreshToken = tokenManager.refreshToken.get();
     if (!refreshToken) throw err;
@@ -43,7 +48,7 @@ apiClient.interceptors.request.use((request) => {
   const accessToken = tokenManager.accessToken.get();
   if (!request.headers) throw new Error('request headers do not exist.');
 
-  request.headers.Authorization = accessToken || '';
+  if (accessToken) request.headers.Authorization = `Bearer ${accessToken}`;
 
   return request;
 });

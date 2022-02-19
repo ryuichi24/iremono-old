@@ -1,5 +1,20 @@
-import { App } from '@/App';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { App } from '@/App';
+import { store } from '@/store';
 import '@/styles/reset.css';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const theme = createTheme({});
+
+ReactDOM.render(
+  <ThemeProvider theme={theme}>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </ThemeProvider>,
+  document.getElementById('root'),
+);
