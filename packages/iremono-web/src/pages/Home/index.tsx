@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import { ResizablePanel } from '@/components/ResizablePanel';
-import { Sidebar } from '@/containers/Sidebar';
 import { useTheme } from '@mui/system';
+import { Sidebar } from '@/components/Sidebar';
+import { Activity } from '@/containers/Activity';
+import { Explore } from '@/containers/Explore';
 
 interface Props {
   user: any;
@@ -18,7 +20,10 @@ export const Home = ({ user }: Props) => {
       <ResizablePanel defaultLeftSizeInRatio={isSidebarPositionLeft ? 15 : 85} resizerColor={muiTheme.palette.divider}>
         {isSidebarPositionLeft && (
           <SidePanel>
-            <Sidebar />
+            <Sidebar>
+              <Activity />
+              <Explore />
+            </Sidebar>
           </SidePanel>
         )}
         <MainPanelContainer>
@@ -34,7 +39,10 @@ export const Home = ({ user }: Props) => {
         </MainPanelContainer>
         {!isSidebarPositionLeft && (
           <SidePanel>
-            <Sidebar />
+            <Sidebar swap={true}>
+              <Activity />
+              <Explore />
+            </Sidebar>
           </SidePanel>
         )}
       </ResizablePanel>
