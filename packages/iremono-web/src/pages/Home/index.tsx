@@ -24,7 +24,7 @@ export const Home = ({ user }: Props) => {
         {isSidebarPositionLeft && (
           <SidePanel>
             <Sidebar>
-              <Activity />
+              <Activity user={user} />
               <Explore />
             </Sidebar>
           </SidePanel>
@@ -42,7 +42,7 @@ export const Home = ({ user }: Props) => {
         {!isSidebarPositionLeft && (
           <SidePanel>
             <Sidebar swap={true}>
-              <Activity />
+              <Activity user={user} />
               <Explore />
             </Sidebar>
           </SidePanel>

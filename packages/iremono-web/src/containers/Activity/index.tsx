@@ -6,9 +6,14 @@ import VideoLibraryOutlinedIcon from '@mui/icons-material/VideoLibraryOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import styled from 'styled-components';
-import { Box, List, ListItem, ListItemButton } from '@mui/material';
+import { Avatar, Box, List, ListItemButton } from '@mui/material';
+import { stringToColor } from '@/utils/string-to-color';
 
-export const Activity = (): JSX.Element => {
+interface Props {
+  user: any;
+}
+
+export const Activity = ({ user }: Props): JSX.Element => {
   const { pathname } = useLocation();
 
   const links = [
@@ -40,9 +45,11 @@ export const Activity = (): JSX.Element => {
             </Link>
           ))}
         </ActivityItemList>
-        {}
       </MainActivity>
       <SubActivity>
+        <ActivityItem>
+          <Avatar sx={{ bgcolor: stringToColor(user.email) }}>{user.email[0].toUpperCase()}</Avatar>
+        </ActivityItem>
         <ActivityItem>
           <SettingsOutlinedIcon color="primary" />
         </ActivityItem>
@@ -91,5 +98,10 @@ const ActivityItem = styled(ListItemButton)`
 
   &.Mui-selected {
     border-left: 4px solid ${(props) => props.theme.palette.primary.main};
+  }
+
+  & svg {
+    width: 28px;
+    height: 28px;
   }
 `;
