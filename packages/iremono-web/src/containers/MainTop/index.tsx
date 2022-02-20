@@ -5,11 +5,7 @@ import { Folders } from './Folders';
 import { Trash } from './Trash';
 import { Videos } from './Videos';
 
-interface Props {
-  user: any;
-}
-
-export const MainTop = ({ user }: Props) => {
+export const MainTop = () => {
   return (
     <>
       <Routes>

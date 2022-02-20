@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
 import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
@@ -6,14 +6,9 @@ import VideoLibraryOutlinedIcon from '@mui/icons-material/VideoLibraryOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import styled from 'styled-components';
-import { Avatar, Box, List, ListItemButton } from '@mui/material';
-import { stringToColor } from '@/utils/string-to-color';
+import { Box, List, ListItemButton } from '@mui/material';
 
-interface Props {
-  user: any;
-}
-
-export const Activity = ({ user }: Props): JSX.Element => {
+export const Activity = (): JSX.Element => {
   const { pathname } = useLocation();
 
   const links = [
@@ -47,11 +42,6 @@ export const Activity = ({ user }: Props): JSX.Element => {
         </ActivityItemList>
       </MainActivity>
       <SubActivity>
-        <ActivityItem>
-          <Avatar sx={{ bgcolor: stringToColor(user.email), color: 'white', width: '36px', height: '36px' }}>
-            {user.email[0].toUpperCase()}
-          </Avatar>
-        </ActivityItem>
         <ActivityItem>
           <SettingsOutlinedIcon color="primary" />
         </ActivityItem>

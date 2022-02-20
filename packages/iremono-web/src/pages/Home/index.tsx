@@ -9,11 +9,7 @@ import { Explore } from '@/containers/Explore';
 import { MainTop } from '@/containers/MainTop';
 import { MainBottom } from '@/containers/MainBottom';
 
-interface Props {
-  user: any;
-}
-
-export const Home = ({ user }: Props) => {
+export const Home = () => {
   const [isSidebarPositionLeft, setsSidebarPositionLeft] = useState(true);
   const muiTheme = useTheme();
 
@@ -23,7 +19,7 @@ export const Home = ({ user }: Props) => {
         {isSidebarPositionLeft && (
           <SidePanel>
             <Sidebar>
-              <Activity user={user} />
+              <Activity />
               <Explore />
             </Sidebar>
           </SidePanel>
@@ -31,7 +27,7 @@ export const Home = ({ user }: Props) => {
         <MainPanelContainer>
           <ResizablePanel defaultLeftSizeInRatio={70} isVertical={true} resizerColor={muiTheme.palette.divider}>
             <MainTopPanel>
-              <MainTop user={user} />
+              <MainTop />
             </MainTopPanel>
             <MainBottomPanel>
               <MainBottom />
@@ -41,7 +37,7 @@ export const Home = ({ user }: Props) => {
         {!isSidebarPositionLeft && (
           <SidePanel>
             <Sidebar swap={true}>
-              <Activity user={user} />
+              <Activity />
               <Explore />
             </Sidebar>
           </SidePanel>
