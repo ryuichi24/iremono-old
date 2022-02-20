@@ -8,7 +8,7 @@ interface Props {
   leftWidth?: string;
 }
 
-export const Sidebar = ({ children, swap = false, leftWidth = '60px' }: Props) => {
+export const Sidebar = ({ children, swap = false, leftWidth = '70px' }: Props) => {
   const [left, right] = React.Children.toArray(children);
 
   return (

@@ -7,6 +7,8 @@ import { useTheme } from '@mui/system';
 import { Sidebar } from '@/components/Sidebar';
 import { Activity } from '@/containers/Activity';
 import { Explore } from '@/containers/Explore';
+import { MainTop } from '@/containers/MainTop';
+import { MainBottom } from '@/containers/MainBottom';
 
 interface Props {
   user: any;
@@ -30,17 +32,10 @@ export const Home = ({ user }: Props) => {
         <MainPanelContainer>
           <ResizablePanel defaultLeftSizeInRatio={70} isVertical={true} resizerColor={muiTheme.palette.divider}>
             <MainTopPanel>
-              <div>main top</div>
-              {user.email}
-              <Routes>
-                <Route path="/folders" element={<div>folders</div>} />
-                <Route path="/books" element={<div>books</div>} />
-                <Route path="/videos" element={<div>videos</div>} />
-                <Route path="/trash" element={<div>trash</div>} />
-              </Routes>
+              <MainTop user={user} />
             </MainTopPanel>
             <MainBottomPanel>
-              <div>main bottom</div>
+              <MainBottom />
             </MainBottomPanel>
           </ResizablePanel>
         </MainPanelContainer>
