@@ -1,12 +1,14 @@
 import { apiClient } from '@/utils/api-client';
 
+const BASE_URL = '/api/auth';
+
 interface SignUpRequest {
   email: string;
   password: string;
 }
 
 const signUp = async (request: SignUpRequest) => {
-  const res = await apiClient.post('/api/auth/signup', { email: request.email, password: request.password });
+  const res = await apiClient.post(`${BASE_URL}/signup`, { email: request.email, password: request.password });
   const result = res.data;
   return {
     userId: result.user.id,
@@ -20,7 +22,7 @@ interface SignInRequest {
 }
 
 const signIn = async (request: SignInRequest) => {
-  const res = await apiClient.post('/api/auth/signin', { email: request.email, password: request.password });
+  const res = await apiClient.post(`${BASE_URL}/signin`, { email: request.email, password: request.password });
   const result = res.data;
   return {
     userId: result.user.id,
@@ -29,7 +31,7 @@ const signIn = async (request: SignInRequest) => {
 };
 
 const checkAuth = async () => {
-  const res = await apiClient.get('/api/auth/check');
+  const res = await apiClient.get(`${BASE_URL}/check`);
   const result = res.data;
   return {
     userId: result.id,
