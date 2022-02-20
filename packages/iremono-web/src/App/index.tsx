@@ -15,7 +15,7 @@ export const App = () => {
     <AppContainer>
       <Routes>
         <Route element={<ProtectedRoute isAllowed={isAuthenticated} redirectPath="/signin" />}>
-          <Route path="/" element={<Home user={user} />} />
+          <Route path="/*" element={<Home user={user} />} />
         </Route>
         <Route element={<ProtectedRoute isAllowed={!isAuthenticated} redirectPath="/" />}>
           <Route path="/signin" element={<SignInPage />} />

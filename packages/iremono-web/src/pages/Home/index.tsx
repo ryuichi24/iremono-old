@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import { ResizablePanel } from '@/components/ResizablePanel';
@@ -31,6 +32,12 @@ export const Home = ({ user }: Props) => {
             <MainTopPanel>
               <div>main top</div>
               {user.email}
+              <Routes>
+                <Route path="/folders" element={<div>folders</div>} />
+                <Route path="/books" element={<div>books</div>} />
+                <Route path="/videos" element={<div>videos</div>} />
+                <Route path="/trash" element={<div>trash</div>} />
+              </Routes>
             </MainTopPanel>
             <MainBottomPanel>
               <div>main bottom</div>
