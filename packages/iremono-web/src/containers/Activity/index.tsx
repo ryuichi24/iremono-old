@@ -48,7 +48,9 @@ export const Activity = ({ user }: Props): JSX.Element => {
       </MainActivity>
       <SubActivity>
         <ActivityItem>
-          <Avatar sx={{ bgcolor: stringToColor(user.email), color: 'white' }}>{user.email[0].toUpperCase()}</Avatar>
+          <Avatar sx={{ bgcolor: stringToColor(user.email), color: 'white', width: '36px', height: '36px' }}>
+            {user.email[0].toUpperCase()}
+          </Avatar>
         </ActivityItem>
         <ActivityItem>
           <SettingsOutlinedIcon color="primary" />
