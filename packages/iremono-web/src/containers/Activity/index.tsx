@@ -58,7 +58,6 @@ const ColumnFlexBase = styled(Box)`
 
 const Container = styled(ColumnFlexBase)`
   justify-content: space-between;
-  padding-top: 1rem;
   height: 100%;
 `;
 
@@ -79,7 +78,7 @@ const ActivityItemList = styled(List)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 0;
+  padding-top: 1rem;
   padding-bottom: 0;
 `;
 
