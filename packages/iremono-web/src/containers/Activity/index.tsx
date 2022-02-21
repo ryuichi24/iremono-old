@@ -36,7 +36,7 @@ export const Activity = (): JSX.Element => {
         <ActivityItemList>
           {links.map((link, index) => (
             <Link to={link.path} key={index} style={{ width: '100%' }}>
-              <ActivityItem selected={pathname === link.path}>{link.icon}</ActivityItem>
+              <ActivityItem selected={pathname.includes(link.path)}>{link.icon}</ActivityItem>
             </Link>
           ))}
         </ActivityItemList>

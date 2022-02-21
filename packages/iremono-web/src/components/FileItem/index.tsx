@@ -10,7 +10,7 @@ interface Props {
 export const FileItem = ({ file }: Props) => {
   return (
     <Container>
-      <Typography>{file.name}</Typography>
+      <Typography sx={{ color: 'text.primary' }}>{file.name}</Typography>
     </Container>
   );
 };
@@ -26,6 +26,6 @@ const Container = styled(Box)`
   border: 1px solid ${(props) => props.theme.palette.grey[300]};
   cursor: pointer;
   &:hover {
-    background-color: ${(props) => props.theme.palette.grey[100]};
+    background-color: ${(props) => props.theme.palette.action.hover};
   }
 `;

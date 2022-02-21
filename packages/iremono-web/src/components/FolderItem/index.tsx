@@ -11,8 +11,8 @@ interface Props {
 export const FolderItem = ({ folder }: Props) => {
   return (
     <Container to={`/folders/${folder.id}`}>
-      <FolderIcon />
-      <Typography>{folder.name}</Typography>
+      <FolderIcon sx={{ color: 'text.primary' }} />
+      <Typography sx={{ color: 'text.primary' }}>{folder.name}</Typography>
     </Container>
   );
 };
@@ -30,7 +30,7 @@ const Container = styled(Link)`
   color: ${(props) => props.theme.palette.grey[900]};
 
   &:hover {
-    background-color: ${(props) => props.theme.palette.grey[100]};
+    background-color: ${(props) => props.theme.palette.action.hover};
   }
   text-decoration: none;
   &:visited {

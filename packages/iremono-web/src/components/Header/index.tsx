@@ -5,27 +5,27 @@ import styled from 'styled-components';
 
 interface Props {
   children: React.ReactNode;
-  user: any;
+  isSubHeader?: boolean;
 }
 
-export const Header = ({ children, user }: Props) => {
+export const Header = ({ children, isSubHeader = false }: Props) => {
   const [left, right] = React.Children.toArray(children);
 
   return (
     <>
-      <Navbar position="static">
+      {isSubHeader ? (
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <HeaderItemsContainer>{left}</HeaderItemsContainer>
-
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <HeaderItemsContainer>{right}</HeaderItemsContainer>
-
-            <Avatar sx={{ bgcolor: stringToColor(user.email), color: 'white', width: '36px', height: '36px' }}>
-              {user.email[0].toUpperCase()}
-            </Avatar>
-          </Box>
+          <HeaderItemsContainer>{right}</HeaderItemsContainer>
         </Toolbar>
-      </Navbar>
+      ) : (
+        <Navbar position="static">
+          <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <HeaderItemsContainer>{left}</HeaderItemsContainer>
+            <HeaderItemsContainer>{right}</HeaderItemsContainer>
+          </Toolbar>
+        </Navbar>
+      )}
     </>
   );
 };
@@ -35,7 +35,7 @@ const Navbar = styled(AppBar)`
   box-shadow: ${(props) => props.theme.shadows[7]};
 `;
 
-const HeaderItemsContainer = styled(Box)`
+const HeaderItemsContainer = styled('div')`
   display: flex;
   align-items: center;
   gap: 12px;

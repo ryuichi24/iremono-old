@@ -8,10 +8,15 @@ import { Activity } from '@/containers/Activity';
 import { Explore } from '@/containers/Explore';
 import { MainTop } from '@/containers/MainTop';
 import { MainBottom } from '@/containers/MainBottom';
+import { Avatar } from '@mui/material';
+import { stringToColor } from '@/utils/string-to-color';
+import { useAuthStore } from '@/store/auth/use-auth-store';
+import { Header } from '@/components/Header';
 
 export const Home = () => {
   const [isSidebarPositionLeft, setsSidebarPositionLeft] = useState(true);
   const muiTheme = useTheme();
+  const { user } = useAuthStore();
 
   return (
     <HomeContainer>
@@ -27,6 +32,14 @@ export const Home = () => {
         <MainPanelContainer>
           <ResizablePanel defaultLeftSizeInRatio={70} isVertical={true} resizerColor={muiTheme.palette.divider}>
             <MainTopPanel>
+              <Header>
+                <></>
+                <>
+                  <Avatar sx={{ bgcolor: stringToColor(user.email), color: 'white', width: '36px', height: '36px' }}>
+                    {user.email[0].toUpperCase()}
+                  </Avatar>
+                </>
+              </Header>
               <MainTop />
             </MainTopPanel>
             <MainBottomPanel>

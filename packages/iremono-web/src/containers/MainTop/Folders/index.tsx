@@ -13,14 +13,11 @@ import { foldersService } from '@/services/folders-service';
 import { useFoldersStore } from '@/store/folders/use-folders-store';
 import { useFilesStore } from '@/store/files/use-files-store';
 import { PopupMenu } from '@/components/PopupMenu';
-import { useAuthStore } from '@/store/auth/use-auth-store';
 import { usePopupMenu } from '@/hooks/use-popup-menu';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
   const folderId = params.id || '0';
-
-  const { user } = useAuthStore();
 
   const [open, anchorEl, handleNewBtnClick, handleMenuClose] = usePopupMenu();
 
@@ -59,7 +56,7 @@ export const Folders = () => {
 
   return (
     <Box sx={{}}>
-      <Header user={user}>
+      <Header isSubHeader={true}>
         <>
           <div>
             <Button variant="outlined" startIcon={<AddIcon />} onClick={handleNewBtnClick}>
@@ -72,7 +69,7 @@ export const Folders = () => {
         <></>
       </Header>
 
-      <Box sx={{ paddingTop: '1rem' }}>
+      <Box>
         <FolderSection>
           <SectionName>Folders</SectionName>
           <FolderList>
@@ -120,5 +117,5 @@ const FileList = styled(Grid)`
 
 const SectionName = styled(Typography)`
   padding-bottom: 0.5rem;
-  color: ${(props) => props.theme.palette.grey[800]};
+  color: ${(props) => props.theme.palette.text.secondary};
 `;
