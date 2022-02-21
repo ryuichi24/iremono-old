@@ -91,4 +91,4 @@ const downloadThumbnail = async (request: DownloadFileThumbnailRequest) => {
   return imgURL;
 };
 
-export const foldersService = Object.freeze({ upload, update, remove, restore, download, downloadThumbnail });
+export const filesService = Object.freeze({ upload, update, remove, restore, download, downloadThumbnail });

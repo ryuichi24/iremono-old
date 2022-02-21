@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
@@ -23,11 +23,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import styled from 'styled-components';
 import { FolderItem } from '@/components/FolderItem';
 import { FileItem } from '@/components/FileItem';
-import { Link } from 'react-router-dom';
+import { foldersService } from '@/services/folders-service';
+import { useFoldersStore } from '@/store/folders/use-folders-store';
+import { useFilesStore } from '@/store/files/use-files-store';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
-  const folderId = params.id || 'root';
+  const folderId = params.id || '0';
 
   const user = useSelector((state: RootState) => state.authState.user);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -39,27 +41,21 @@ export const Folders = () => {
     setAnchorEl(null);
   };
 
-  const folders = [
-    { id: '1', name: 'folder 1' },
-    { id: '2', name: 'folder 2' },
-    { id: '3', name: 'folder 3' },
-    { id: '4', name: 'folder 4' },
-    { id: '5', name: 'folder 5' },
-    { id: '6', name: 'folder 6' },
-  ];
+  const { addFolderGroup, folderGroupList } = useFoldersStore();
+  const { addFileGroup, fileGroupList } = useFilesStore();
 
-  const files = [
-    { id: '1', name: 'file 1' },
-    { id: '2', name: 'file 2' },
-    { id: '3', name: 'file 3' },
-    { id: '4', name: 'file 4' },
-    { id: '5', name: 'file 5' },
-    { id: '6', name: 'file 6' },
-    { id: '7', name: 'file 7' },
-    { id: '8', name: 'file 8' },
-    { id: '9', name: 'file 9' },
-    { id: '10', name: 'file 10' },
-  ];
+  useEffect(() => {
+    foldersService
+      .listItems({ folderId })
+      .then((result) => {
+        const folders = result.entries.filter((item: any) => item.isFolder);
+        const files = result.entries.filter((item: any) => !item.isFolder);
+        addFolderGroup({ parentId: folderId, folderItems: folders });
+        addFileGroup({ parentId: folderId, fileItems: files });
+      })
+      .catch((err) => console.log(err));
+  }, [folderId]);
+
   return (
     <Box sx={{}}>
       <Header user={user}>
@@ -107,17 +103,21 @@ export const Folders = () => {
         <FolderSection>
           <SectionName>Folders</SectionName>
           <FolderList>
-            {folders.map((folder) => (
-              <FolderItem folder={folder} key={folder.id} />
-            ))}
+            {folderGroupList
+              ?.find((group) => group.parentId === folderId)
+              ?.folderItems?.map((folder: any) => (
+                <FolderItem folder={folder} key={folder.id} />
+              ))}
           </FolderList>
         </FolderSection>
         <FileSection>
           <SectionName>Files</SectionName>
           <FileList container>
-            {files.map((file) => (
-              <FileItem file={file} key={file.id} />
-            ))}
+            {fileGroupList
+              ?.find((group) => group.parentId === folderId)
+              ?.fileItems?.map((file) => (
+                <FileItem file={file} key={file.id} />
+              ))}
           </FileList>
         </FileSection>
       </Box>

@@ -27,6 +27,8 @@ const Container = styled(Link)`
   width: 30%;
   border: 1px solid ${(props) => props.theme.palette.grey[300]};
   cursor: pointer;
+  color: ${(props) => props.theme.palette.grey[900]};
+
   &:hover {
     background-color: ${(props) => props.theme.palette.grey[100]};
   }
