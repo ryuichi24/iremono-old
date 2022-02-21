@@ -6,6 +6,7 @@ import { foldersActions } from './folders-slice';
 interface foldersStore {
   folderGroupList: RootState['foldersState']['folderGroupList'];
   addFolderGroup: (args: { parentId: string; folderItems: any[] }) => void;
+  addOneFolderItem: (args: { parentId: string; folderItem: any }) => void;
 }
 
 export const useFoldersStore = (): foldersStore => {
@@ -19,8 +20,16 @@ export const useFoldersStore = (): foldersStore => {
     [dispatch],
   );
 
+  const addOneFolderItem = useCallback(
+    (args: { parentId: string; folderItem: any }) => {
+      dispatch(foldersActions.addOneFolderItem(args));
+    },
+    [dispatch],
+  );
+
   return {
     folderGroupList,
     addFolderGroup,
+    addOneFolderItem,
   } as const;
 };

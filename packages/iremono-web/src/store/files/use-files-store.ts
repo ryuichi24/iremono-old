@@ -6,6 +6,7 @@ import { filesActions } from './files-slice';
 interface FilesStore {
   fileGroupList: RootState['filesState']['fileGroupList'];
   addFileGroup: (args: { parentId: string; fileItems: any[] }) => void;
+  addOneFileItem: (args: { parentId: string; fileItem: any }) => void;
 }
 
 export const useFilesStore = (): FilesStore => {
@@ -19,8 +20,16 @@ export const useFilesStore = (): FilesStore => {
     [dispatch],
   );
 
+  const addOneFileItem = useCallback(
+    (args: { parentId: string; fileItem: any }) => {
+      dispatch(filesActions.addOneFileItem(args));
+    },
+    [dispatch],
+  );
+
   return {
     fileGroupList,
+    addOneFileItem,
     addFileGroup,
   } as const;
 };

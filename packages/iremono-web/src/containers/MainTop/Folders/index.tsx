@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -16,12 +16,18 @@ import { PopupMenu } from '@/components/PopupMenu';
 import { usePopupMenu } from '@/hooks/use-popup-menu';
 import { NewFolderForm } from './NewFolderForm';
 import { useModal } from '@/hooks/use-modal';
+import { Uploader } from '@/components/Uploader';
+import { filesService } from '@/services/files-service';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
   const folderId = params.id || '0';
 
+  const [openNewFolderForm, handleOpenNewFolderForm, handleCloseNewFolderForm] = useModal();
+  const fileUploaderRef: React.Ref<HTMLInputElement> = useRef(null);
   const [openMenu, anchorEl, handleOpenMenu, handleCloseMenu] = usePopupMenu();
+  const { addFolderGroup, folderGroupList } = useFoldersStore();
+  const { addFileGroup, addOneFileItem, fileGroupList } = useFilesStore();
 
   const menuItems = [
     {
@@ -35,7 +41,10 @@ export const Folders = () => {
     {
       text: 'Upload File',
       icon: <UploadFileIcon fontSize="small" />,
-      action: () => console.log('upload file'),
+      action: () => {
+        handleCloseMenu();
+        fileUploaderRef.current?.click();
+      },
     },
     {
       text: 'Upload Folder',
@@ -43,9 +52,6 @@ export const Folders = () => {
       action: () => console.log('upload folder'),
     },
   ];
-
-  const { addFolderGroup, folderGroupList } = useFoldersStore();
-  const { addFileGroup, fileGroupList } = useFilesStore();
 
   useEffect(() => {
     foldersService
@@ -59,10 +65,8 @@ export const Folders = () => {
       .catch((err) => console.log(err));
   }, [folderId]);
 
-  const [openNewFolderForm, handleOpenNewFolderForm, handleCloseNewFolderForm] = useModal();
-
   return (
-    <Box sx={{}}>
+    <Box>
       <Header isSubHeader={true}>
         <>
           <div>
@@ -77,6 +81,18 @@ export const Folders = () => {
       </Header>
 
       <NewFolderForm open={openNewFolderForm} folderId={folderId} handleClose={handleCloseNewFolderForm} />
+      <Uploader
+        onChange={(e) => {
+          filesService
+            .upload({ parentId: folderId, fileToUpload: e.target.files![0] }) // eslint-disable-line @typescript-eslint/no-non-null-assertion
+            .then((result) => {
+              addOneFileItem({ parentId: folderId, fileItem: result });
+              e.currentTarget.value = '';
+            })
+            .catch((err) => console.log(err));
+        }}
+        ref={fileUploaderRef}
+      />
 
       <Box>
         <FolderSection>
