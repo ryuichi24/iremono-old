@@ -5,6 +5,7 @@ import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
 import VideoLibraryOutlinedIcon from '@mui/icons-material/VideoLibraryOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import styled from 'styled-components';
 import { Box, List, ListItemButton } from '@mui/material';
 
@@ -15,6 +16,10 @@ export const Activity = (): JSX.Element => {
     {
       icon: <FileCopyOutlinedIcon color="primary" />,
       path: '/folders',
+    },
+    {
+      icon: <LockOutlinedIcon color="primary" />,
+      path: '/crypto-folders',
     },
     {
       icon: <MenuBookOutlinedIcon color="primary" />,

@@ -8,6 +8,7 @@ export const Explore = (): JSX.Element => {
       <Routes>
         <Route path="/folders" element={<FolderExplore />} />
         <Route path="/folders/:id" element={<FolderExplore />} />
+        <Route path="/crypto-folders" element={<div>crypto folders</div>} />
         <Route path="/books" element={<div>book tree</div>} />
         <Route path="/videos" element={<div>video tree</div>} />
         <Route path="/trash" element={<div>trash items</div>} />
