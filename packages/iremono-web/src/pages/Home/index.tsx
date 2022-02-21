@@ -15,7 +15,7 @@ export const Home = () => {
 
   return (
     <HomeContainer>
-      <ResizablePanel defaultLeftSizeInRatio={isSidebarPositionLeft ? 15 : 85} resizerColor={muiTheme.palette.divider}>
+      <ResizablePanel defaultLeftSizeInRatio={isSidebarPositionLeft ? 25 : 75} resizerColor={muiTheme.palette.divider}>
         {isSidebarPositionLeft && (
           <SidePanel>
             <Sidebar>

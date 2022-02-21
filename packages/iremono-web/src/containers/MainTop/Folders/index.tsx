@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
   Box,
@@ -22,8 +23,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import styled from 'styled-components';
 import { FolderItem } from '@/components/FolderItem';
 import { FileItem } from '@/components/FileItem';
+import { Link } from 'react-router-dom';
 
 export const Folders = () => {
+  const params = useParams<{ id: string }>();
+  const folderId = params.id || 'root';
+
   const user = useSelector((state: RootState) => state.authState.user);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -107,7 +112,6 @@ export const Folders = () => {
             ))}
           </FolderList>
         </FolderSection>
-
         <FileSection>
           <SectionName>Files</SectionName>
           <FileList container>

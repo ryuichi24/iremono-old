@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 import { Books } from './Books';
 import { Folders } from './Folders';
@@ -11,9 +11,13 @@ export const MainTop = () => {
     <Container>
       <Routes>
         <Route path="/folders" element={<Folders />} />
+        <Route path="/folders/:id" element={<Folders />} />
+
         <Route path="/books" element={<Books />} />
         <Route path="/videos" element={<Videos />} />
         <Route path="/trash" element={<Trash />} />
+
+        <Route path="*" element={<Navigate to="/folders" />} />
       </Routes>
     </Container>
   );
