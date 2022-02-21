@@ -14,18 +14,23 @@ import { useFoldersStore } from '@/store/folders/use-folders-store';
 import { useFilesStore } from '@/store/files/use-files-store';
 import { PopupMenu } from '@/components/PopupMenu';
 import { usePopupMenu } from '@/hooks/use-popup-menu';
+import { NewFolderForm } from './NewFolderForm';
+import { useModal } from '@/hooks/use-modal';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
   const folderId = params.id || '0';
 
-  const [open, anchorEl, handleNewBtnClick, handleMenuClose] = usePopupMenu();
+  const [openMenu, anchorEl, handleOpenMenu, handleCloseMenu] = usePopupMenu();
 
   const menuItems = [
     {
       text: 'New Folder',
       icon: <CreateNewFolderIcon fontSize="small" />,
-      action: () => console.log('new folder'),
+      action: () => {
+        handleCloseMenu();
+        handleOpenNewFolderForm();
+      },
     },
     {
       text: 'Upload File',
@@ -54,20 +59,24 @@ export const Folders = () => {
       .catch((err) => console.log(err));
   }, [folderId]);
 
+  const [openNewFolderForm, handleOpenNewFolderForm, handleCloseNewFolderForm] = useModal();
+
   return (
     <Box sx={{}}>
       <Header isSubHeader={true}>
         <>
           <div>
-            <Button variant="outlined" startIcon={<AddIcon />} onClick={handleNewBtnClick}>
+            <Button variant="outlined" startIcon={<AddIcon />} onClick={handleOpenMenu}>
               New
             </Button>
 
-            <PopupMenu menuItems={menuItems} anchorEl={anchorEl} handleClose={handleMenuClose} open={open} />
+            <PopupMenu menuItems={menuItems} anchorEl={anchorEl} handleClose={handleCloseMenu} open={openMenu} />
           </div>
         </>
         <></>
       </Header>
+
+      <NewFolderForm open={openNewFolderForm} folderId={folderId} handleClose={handleCloseNewFolderForm} />
 
       <Box>
         <FolderSection>

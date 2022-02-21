@@ -28,5 +28,6 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'off',
     'react-hooks/exhaustive-deps': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
+    'jsx-a11y/no-autofocus': 'off',
   },
 };
