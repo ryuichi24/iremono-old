@@ -2,22 +2,24 @@ import React from 'react';
 import styled from 'styled-components';
 import FolderIcon from '@mui/icons-material/Folder';
 import Typography from '@mui/material/Typography';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   folder: any;
 }
 
 export const FolderItem = ({ folder }: Props) => {
+  const navigate = useNavigate();
+
   return (
-    <Container to={`/folders/${folder.id}`}>
+    <Container onDoubleClick={() => navigate(`/folders/${folder.id}`)}>
       <FolderIcon sx={{ color: 'text.primary' }} />
       <Typography sx={{ color: 'text.primary' }}>{folder.name}</Typography>
     </Container>
   );
 };
 
-const Container = styled(Link)`
+const Container = styled('div')`
   padding: 1rem;
   border-radius: 5px;
   display: flex;
