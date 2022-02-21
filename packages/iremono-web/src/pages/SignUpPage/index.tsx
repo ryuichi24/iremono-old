@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -10,13 +9,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { authService } from '@/services/auth-service';
-import { AppDispatch } from '@/store';
-import { setAuth } from '@/store/auth/auth-slice';
+import { useAuthStore } from '@/store/auth/use-auth-store';
 
 export const SignUpPage = () => {
-  const dispatch: AppDispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const { setAuth } = useAuthStore();
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -24,7 +23,7 @@ export const SignUpPage = () => {
     authService
       .signUp({ email, password })
       .then((result) => {
-        dispatch(setAuth(result));
+        setAuth(result);
       })
       .catch((err) => console.log(err));
   };

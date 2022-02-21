@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
-import { ResizablePanel } from '@/components/ResizablePanel';
 import { useTheme } from '@mui/system';
+import { ResizablePanel } from '@/components/ResizablePanel';
 import { Sidebar } from '@/components/Sidebar';
 import { Activity } from '@/containers/Activity';
 import { Explore } from '@/containers/Explore';

@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import { LinearProgress } from '@mui/material';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { Home, SignInPage, SignUpPage } from '@/pages';
-import { useAuth } from '@/store/auth/useAuth';
+import { useAuth } from '@/store/auth/use-auth';
 
 export const App = () => {
-  const [isAuthenticated, user, isLoading, error] = useAuth();
+  const [isAuthenticated, isLoading, error] = useAuth();
 
   if (isLoading) return <LinearProgress />;
 

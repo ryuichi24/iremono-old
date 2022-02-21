@@ -1,45 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  MenuList,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { RootState } from '@/store';
 import { Header } from '@/components/Header';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-import CloseIcon from '@mui/icons-material/Close';
 import styled from 'styled-components';
 import { FolderItem } from '@/components/FolderItem';
 import { FileItem } from '@/components/FileItem';
 import { foldersService } from '@/services/folders-service';
 import { useFoldersStore } from '@/store/folders/use-folders-store';
 import { useFilesStore } from '@/store/files/use-files-store';
+import { PopupMenu } from '@/components/PopupMenu';
+import { useAuthStore } from '@/store/auth/use-auth-store';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
   const folderId = params.id || '0';
 
-  const user = useSelector((state: RootState) => state.authState.user);
+  const { user } = useAuthStore();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+
+  const handleNewBtnClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+
+  const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
+  const menuItems = [
+    {
+      text: 'New Folder',
+      icon: <CreateNewFolderIcon fontSize="small" />,
+      action: () => console.log('new folder'),
+    },
+    {
+      text: 'Upload File',
+      icon: <UploadFileIcon fontSize="small" />,
+      action: () => console.log('upload file'),
+    },
+    {
+      text: 'Upload Folder',
+      icon: <DriveFolderUploadIcon fontSize="small" />,
+      action: () => console.log('upload folder'),
+    },
+  ];
 
   const { addFolderGroup, folderGroupList } = useFoldersStore();
   const { addFileGroup, fileGroupList } = useFilesStore();
@@ -61,39 +71,11 @@ export const Folders = () => {
       <Header user={user}>
         <>
           <div>
-            <Button variant="outlined" startIcon={<AddIcon />} onClick={handleClick}>
+            <Button variant="outlined" startIcon={<AddIcon />} onClick={handleNewBtnClick}>
               New
             </Button>
 
-            <Menu id="basic-menu" open={open} anchorEl={anchorEl} onClose={handleClose}>
-              <MenuList sx={{ width: '180px' }}>
-                <MenuItem>
-                  <ListItemIcon>
-                    <CreateNewFolderIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>New Folder</ListItemText>
-                </MenuItem>
-                <MenuItem>
-                  <ListItemIcon>
-                    <UploadFileIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>Upload File</ListItemText>
-                </MenuItem>
-                <MenuItem>
-                  <ListItemIcon>
-                    <DriveFolderUploadIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>Upload Folder</ListItemText>
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={handleClose}>
-                  <ListItemIcon>
-                    <CloseIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>Close</ListItemText>
-                </MenuItem>
-              </MenuList>
-            </Menu>
+            <PopupMenu menuItems={menuItems} anchorEl={anchorEl} handleClose={handleMenuClose} open={open} />
           </div>
         </>
         <></>
