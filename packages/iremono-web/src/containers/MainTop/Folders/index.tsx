@@ -14,6 +14,7 @@ import { useFoldersStore } from '@/store/folders/use-folders-store';
 import { useFilesStore } from '@/store/files/use-files-store';
 import { PopupMenu } from '@/components/PopupMenu';
 import { useAuthStore } from '@/store/auth/use-auth-store';
+import { usePopupMenu } from '@/hooks/use-popup-menu';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
@@ -21,17 +22,7 @@ export const Folders = () => {
 
   const { user } = useAuthStore();
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const open = Boolean(anchorEl);
-
-  const handleNewBtnClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  const [open, anchorEl, handleNewBtnClick, handleMenuClose] = usePopupMenu();
 
   const menuItems = [
     {
