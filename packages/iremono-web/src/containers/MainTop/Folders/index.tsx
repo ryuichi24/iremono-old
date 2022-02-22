@@ -18,6 +18,7 @@ import { NewFolderForm } from './NewFolderForm';
 import { useModal } from '@/hooks/use-modal';
 import { Uploader } from '@/components/Uploader';
 import { filesService } from '@/services/files-service';
+import { FolderItemContextMenu } from './FolderItemContextMenu';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
@@ -101,7 +102,9 @@ export const Folders = () => {
             {folderGroupList
               ?.find((group) => group.parentId === folderId)
               ?.folderItems?.map((folder: any) => (
-                <FolderItem folder={folder} key={folder.id} />
+                <FolderItemContextMenu key={folder.id}>
+                  <FolderItem folder={folder} />
+                </FolderItemContextMenu>
               ))}
           </FolderList>
         </FolderSection>
@@ -111,7 +114,9 @@ export const Folders = () => {
             {fileGroupList
               ?.find((group) => group.parentId === folderId)
               ?.fileItems?.map((file) => (
-                <FileItem file={file} key={file.id} />
+                <FolderItemContextMenu key={file.id}>
+                  <FileItem file={file} />
+                </FolderItemContextMenu>
               ))}
           </FileList>
         </FileSection>

@@ -21,8 +21,7 @@ const Container = styled(Box)`
   display: flex;
   align-items: center;
   gap: 1rem;
-  max-width: 200px;
-  width: 30%;
+  width: 300px;
   border: 1px solid ${(props) => props.theme.palette.grey[300]};
   cursor: pointer;
   &:hover {
