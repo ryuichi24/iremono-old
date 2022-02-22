@@ -8,7 +8,14 @@ const logger = loggerFactory.createLogger('authHandler');
 export const authHandler =
   (tokenService: TokenService) => async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
-      const token = req.get('authorization')?.slice(7);
+      let token;
+
+      token = req.get('authorization')?.slice(7);
+
+      if (!token) {
+        token = req.cookies.accessToken;
+      }
+
       if (!token) throw new UnauthorizedError('no bearer token provided');
       req.user = tokenService.verifyToken(token);
       next();

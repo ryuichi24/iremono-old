@@ -19,6 +19,18 @@ export interface HttpResponse {
   statusCode: number;
   body: any;
   readableStream: Readable | null;
-  headers: { [key: string]: string };
+  headers: Headers;
   hasHeaders: boolean;
+  cookies: Cookie[];
+  hasCookies: boolean;
+}
+
+export interface Headers {
+  [key: string]: string | number;
+}
+
+export interface Cookie {
+  key: string;
+  value: string;
+  options: { httpOnly: boolean; maxAge: number; sameSite: 'none' | 'strict' | 'lax'; secure: boolean; path?: string };
 }

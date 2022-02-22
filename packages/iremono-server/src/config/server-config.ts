@@ -3,4 +3,5 @@ export const serverConfig = Object.freeze({
   PORT: process.env.PORT || '4000',
   IS_DEVELOPMENT: process.env.NODE_ENV === 'development',
   PRODUCTION_ERROR_MESSAGE: process.env.PRODUCTION_ERROR_MESSAGE || 'an error occurred while processing your request',
+  SECURE_COOKIE: process.env.SECURE_COOKIE === 'true',
 });

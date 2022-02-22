@@ -45,6 +45,9 @@ export const makeExpressHandler = (controller: Controller) =>
     if (httpResponse.hasHeaders)
       Object.entries(httpResponse.headers).forEach(([key, value]) => res.setHeader(key, value));
 
+    if (httpResponse.hasCookies)
+      httpResponse.cookies.forEach((cookie) => res.cookie(cookie.key, cookie.value, cookie.options));
+
     if (httpResponse.readableStream) return httpResponse.readableStream.pipe(res);
 
     const expressResponseAction = isObject(httpResponse.body) ? 'json' : 'send';

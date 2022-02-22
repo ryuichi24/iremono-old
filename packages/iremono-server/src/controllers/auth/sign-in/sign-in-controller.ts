@@ -1,6 +1,7 @@
 import { SignInUseCase } from '@iremono/backend-core/dist/use-cases/auth/sign-in';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
+import { cookieHelper } from '../../../shared/utils/cookie-helper';
 import { makeSignInRequestDTO } from './make-sign-in-request-DTO';
 
 export class SignInController extends Controller<SignInUseCase> {
@@ -20,6 +21,6 @@ export class SignInController extends Controller<SignInUseCase> {
       `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has signed in"]`,
     );
 
-    return this._ok(result);
+    return this._ok(result, {}, [cookieHelper.makeAccessTokenCookie(result.accessToken, result.expiresIn)]);
   }
 }

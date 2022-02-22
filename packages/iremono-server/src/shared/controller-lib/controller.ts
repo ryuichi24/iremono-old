@@ -1,5 +1,5 @@
 import { Readable } from 'stream';
-import { HttpRequest, HttpResponse } from '.';
+import { Headers, Cookie, HttpRequest, HttpResponse } from '.';
 import { HttpStatusCode } from '../utils/http';
 
 export abstract class Controller<TUseCase = any> {
@@ -11,20 +11,20 @@ export abstract class Controller<TUseCase = any> {
 
   abstract handle(request: HttpRequest): Promise<HttpResponse>;
 
-  protected _ok(body: any = null, headers = {}) {
-    return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.OK, body, headers });
+  protected _ok(body: any = null, headers: Headers = {}, cookies: Cookie[] = []) {
+    return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.OK, body, headers, cookies });
   }
 
-  protected _created(body: any = null, headers = {}) {
-    return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.CREATED, body, headers });
+  protected _created(body: any = null, headers: Headers = {}, cookies: Cookie[] = []) {
+    return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.CREATED, body, headers, cookies });
   }
 
-  protected _noContent(body: any = null, headers = {}) {
-    return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.NO_CONTENT, body, headers });
+  protected _noContent(body: any = null, headers: Headers = {}, cookies: Cookie[] = []) {
+    return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.NO_CONTENT, body, headers, cookies });
   }
 
-  protected _download(readableStream: Readable, headers = {}) {
-    return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.OK, readableStream, headers });
+  protected _download(readableStream: Readable, headers: Headers = {}, cookies: Cookie[] = []) {
+    return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.OK, readableStream, headers, cookies });
   }
 
   private _makeHttpResponse({
@@ -32,11 +32,13 @@ export abstract class Controller<TUseCase = any> {
     body = null,
     readableStream = null,
     headers = {},
+    cookies = [],
   }: {
     httpStatusCode: HttpStatusCode;
     body?: any;
     readableStream?: Readable | null;
-    headers: {};
+    headers: Headers;
+    cookies: Cookie[];
   }): HttpResponse {
     return {
       body,
@@ -44,6 +46,8 @@ export abstract class Controller<TUseCase = any> {
       headers,
       hasHeaders: Object.keys(headers).length > 0,
       readableStream,
+      cookies,
+      hasCookies: cookies.length > 0,
     };
   }
 }
