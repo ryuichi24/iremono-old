@@ -1,8 +1,7 @@
 import React from 'react';
 import { ContextMenu, ContextMenuItem } from '@/components/ContextMenu';
 import { useContextMenu } from '@/hooks/use-context-menu';
-import styled from 'styled-components';
-import { MenuList, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
