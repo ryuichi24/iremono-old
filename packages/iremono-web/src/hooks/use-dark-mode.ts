@@ -10,6 +10,10 @@ export const useDarkMode = () => {
     localStorage.setItem('theme', 'dark');
   }
 
+  if (!isDarkMode) {
+    localStorage.setItem('theme', 'light');
+  }
+
   const currentMode = (localStorage.getItem('theme') || 'light') as 'dark' | 'light';
 
   const currentTheme = getTheme(currentMode);
