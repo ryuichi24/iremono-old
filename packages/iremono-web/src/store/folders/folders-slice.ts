@@ -20,6 +20,13 @@ const foldersSlice = createSlice({
       const indexOfGroup = state.folderGroupList.findIndex((group) => group.parentId === payload.parentId);
       state.folderGroupList[indexOfGroup].folderItems.push(payload.folderItem);
     },
+    updateFolderItem: (state, { payload }: PayloadAction<{ folderItem: any; parentId: string }>) => {
+      const indexOfFileGroup = state.folderGroupList.findIndex((group) => group.parentId === payload.parentId);
+      const indexOfFolderItem = state.folderGroupList[indexOfFileGroup].folderItems.findIndex(
+        (item) => item.id === payload.folderItem.id,
+      );
+      state.folderGroupList[indexOfFileGroup].folderItems[indexOfFolderItem] = payload.folderItem;
+    },
   },
 });
 

@@ -7,6 +7,7 @@ interface foldersStore {
   folderGroupList: RootState['foldersState']['folderGroupList'];
   addFolderGroup: (args: { parentId: string; folderItems: any[] }) => void;
   addOneFolderItem: (args: { parentId: string; folderItem: any }) => void;
+  updateFolderItem: (args: { parentId: string; folderItem: any }) => void;
 }
 
 export const useFoldersStore = (): foldersStore => {
@@ -27,9 +28,17 @@ export const useFoldersStore = (): foldersStore => {
     [dispatch],
   );
 
+  const updateFolderItem = useCallback(
+    (args: { parentId: string; folderItem: any }) => {
+      dispatch(foldersActions.updateFolderItem(args));
+    },
+    [dispatch],
+  );
+
   return {
     folderGroupList,
     addFolderGroup,
     addOneFolderItem,
+    updateFolderItem,
   } as const;
 };

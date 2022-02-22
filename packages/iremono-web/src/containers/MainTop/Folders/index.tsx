@@ -102,7 +102,7 @@ export const Folders = () => {
             {folderGroupList
               ?.find((group) => group.parentId === folderId)
               ?.folderItems?.map((folder: any) => (
-                <FolderItemContextMenu key={folder.id}>
+                <FolderItemContextMenu folderItem={folder} key={folder.id}>
                   <FolderItem folder={folder} />
                 </FolderItemContextMenu>
               ))}
@@ -114,7 +114,7 @@ export const Folders = () => {
             {fileGroupList
               ?.find((group) => group.parentId === folderId)
               ?.fileItems?.map((file) => (
-                <FolderItemContextMenu key={file.id}>
+                <FolderItemContextMenu folderItem={file} key={file.id}>
                   <FileItem file={file} />
                 </FolderItemContextMenu>
               ))}

@@ -7,6 +7,7 @@ interface FilesStore {
   fileGroupList: RootState['filesState']['fileGroupList'];
   addFileGroup: (args: { parentId: string; fileItems: any[] }) => void;
   addOneFileItem: (args: { parentId: string; fileItem: any }) => void;
+  updateFileItem: (args: { parentId: string; fileItem: any }) => void;
 }
 
 export const useFilesStore = (): FilesStore => {
@@ -27,9 +28,17 @@ export const useFilesStore = (): FilesStore => {
     [dispatch],
   );
 
+  const updateFileItem = useCallback(
+    (args: { parentId: string; fileItem: any }) => {
+      dispatch(filesActions.updateFileItem(args));
+    },
+    [dispatch],
+  );
+
   return {
     fileGroupList,
     addOneFileItem,
     addFileGroup,
+    updateFileItem,
   } as const;
 };
