@@ -42,8 +42,10 @@ export const RenameStorageItemForm = ({ storageItem, open, handleClose }: Props)
   };
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Rename {storageItem.isFolder ? 'Folder' : 'File'}</DialogTitle>
-      <DialogContent sx={{ width: '300px' }}>
+      <DialogTitle sx={{ backgroundColor: 'background.secondary' }}>
+        Rename {storageItem.isFolder ? 'Folder' : 'File'}
+      </DialogTitle>
+      <DialogContent sx={{ width: '300px', backgroundColor: 'background.secondary' }}>
         <TextField
           autoFocus
           margin="dense"
@@ -55,7 +57,7 @@ export const RenameStorageItemForm = ({ storageItem, open, handleClose }: Props)
           onChange={(e) => setStorageItemName(e.target.value)}
         />
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ backgroundColor: 'background.secondary' }}>
         <Button onClick={handleClose}>Cancel</Button>
         <Button onClick={handleSubmit}>Rename</Button>
       </DialogActions>

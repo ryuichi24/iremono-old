@@ -25,13 +25,14 @@ export const NewFolderForm = ({ folderId, open, handleClose }: Props) => {
       .create({ parentId: folderId, name: folderName })
       .then((result) => {
         addOneFolderItem({ folderItem: result });
+        setFolderName('Untitled folder');
       })
       .catch((err) => console.log(err));
   };
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>New Folder</DialogTitle>
-      <DialogContent sx={{ width: '300px' }}>
+      <DialogTitle sx={{ backgroundColor: 'background.secondary' }}>New Folder</DialogTitle>
+      <DialogContent sx={{ width: '300px', backgroundColor: 'background.secondary' }}>
         <TextField
           autoFocus
           margin="dense"
@@ -43,7 +44,7 @@ export const NewFolderForm = ({ folderId, open, handleClose }: Props) => {
           onChange={(e) => setFolderName(e.target.value)}
         />
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ backgroundColor: 'background.secondary' }}>
         <Button onClick={handleClose}>Cancel</Button>
         <Button onClick={handleSubmit}>Create</Button>
       </DialogActions>
