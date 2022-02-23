@@ -7,7 +7,7 @@ export const ContextMenu = styled.div<{ xPos: string; yPos: string }>`
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   z-index: 99999;
-  background-color: ${(props) => props.theme.palette.background.paper};
+  background-color: ${(props) => props.theme.palette.background.secondary};
   box-shadow: 0 4px 12px 0 rgb(0 0 0 / 10%);
   width: 20rem;
   border-radius: 6px;

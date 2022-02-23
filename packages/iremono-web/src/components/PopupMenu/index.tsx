@@ -6,6 +6,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import CloseIcon from '@mui/icons-material/Close';
 import Divider from '@mui/material/Divider';
+import styled from 'styled-components';
 
 interface PopupMenuItem {
   text: string;
@@ -22,8 +23,14 @@ interface Props {
 
 export const PopupMenu = ({ menuItems, anchorEl, handleClose, open }: Props) => {
   return (
-    <Menu id="basic-menu" open={open} anchorEl={anchorEl} onClose={handleClose}>
-      <MenuList sx={{ width: '180px' }}>
+    <Menu
+      id="basic-menu"
+      open={open}
+      anchorEl={anchorEl}
+      onClose={handleClose}
+      MenuListProps={{ disablePadding: true }}
+    >
+      <MenuList sx={{ width: '180px', backgroundColor: 'background.secondary' }}>
         {menuItems.map((item, index) => (
           <MenuItem key={index} onClick={item.action}>
             <ListItemIcon>{item.icon}</ListItemIcon>
@@ -43,3 +50,5 @@ export const PopupMenu = ({ menuItems, anchorEl, handleClose, open }: Props) => 
     </Menu>
   );
 };
+
+const Menun = styled(Menu);

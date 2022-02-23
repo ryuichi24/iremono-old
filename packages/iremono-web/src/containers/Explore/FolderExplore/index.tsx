@@ -19,13 +19,13 @@ export const FolderExplore = () => {
         defaultExpandIcon={<ChevronRightIcon />}
         sx={{ height: 240, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
       >
-        <TreeItem nodeId="1" label="Applications">
-          <TreeItem nodeId="2" label="Calendar" />
+        <TreeItem nodeId="1" label="Applications" sx={{ color: 'text.primary' }}>
+          <TreeItem nodeId="2" label="Calendar" sx={{ color: 'text.primary' }} />
         </TreeItem>
-        <TreeItem nodeId="5" label="Documents">
-          <TreeItem nodeId="10" label="OSS" />
-          <TreeItem nodeId="6" label="MUI">
-            <TreeItem nodeId="8" label="index.js" />
+        <TreeItem nodeId="5" label="Documents" sx={{ color: 'text.primary' }}>
+          <TreeItem nodeId="10" label="OSS" sx={{ color: 'text.primary' }} />
+          <TreeItem nodeId="6" label="MUI" sx={{ color: 'text.primary' }}>
+            <TreeItem nodeId="8" label="index.js" sx={{ color: 'text.primary' }} />
           </TreeItem>
         </TreeItem>
       </TreeView>

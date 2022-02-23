@@ -21,14 +21,15 @@ export const FolderItem = ({ folder }: Props) => {
 
 const Container = styled('div')`
   padding: 1rem;
-  border-radius: 5px;
+  border-radius: ${(props) => props.theme.shape.borderRadius};
   display: flex;
   align-items: center;
   gap: 1rem;
-  width: 300px;
+  width: 250px;
   border: 1px solid ${(props) => props.theme.palette.grey[300]};
   cursor: pointer;
   color: ${(props) => props.theme.palette.grey[900]};
+  background-color: ${(props) => props.theme.palette.background.secondary};
 
   &:hover {
     background-color: ${(props) => props.theme.palette.action.hover};

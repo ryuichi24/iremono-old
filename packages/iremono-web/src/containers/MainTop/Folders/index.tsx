@@ -67,7 +67,7 @@ export const Folders = () => {
   }, [currentFolderId]);
 
   return (
-    <Box>
+    <Box sx={{ height: '100%' }}>
       <Header isSubHeader={true}>
         <>
           <div>
@@ -95,7 +95,7 @@ export const Folders = () => {
         ref={fileUploaderRef}
       />
 
-      <Box>
+      <Box sx={{ overflow: 'scroll', height: '80%' }}>
         <FolderSection>
           <SectionName>Folders</SectionName>
           <FolderList>

@@ -32,7 +32,7 @@ export const App = () => {
 };
 
 const AppContainer = styled('div')(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: theme.palette.background.primary,
   height: '100vh',
   width: '100vw',
 }));

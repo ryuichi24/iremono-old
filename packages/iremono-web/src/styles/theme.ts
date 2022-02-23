@@ -9,9 +9,21 @@ export const getTheme = (currentMode: 'dark' | 'light' = 'light') =>
             background: {
               default: '#F9FAFC',
               paper: '#FFFFFF',
+              primary: '#fbfbfb',
+              secondary: '#FFFFFF',
             },
           }
-        : {}),
+        : {
+            background: {
+              default: '#F9FAFC',
+              paper: '#FFFFFF',
+              primary: '#222831',
+              secondary: '#393E46',
+            },
+          }),
+    },
+    shape: {
+      borderRadius: '5px',
     },
     shadows: [
       'none',
