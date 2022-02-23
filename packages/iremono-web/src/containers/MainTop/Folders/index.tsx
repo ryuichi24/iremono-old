@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { Header } from '@/components/Header';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-import styled from 'styled-components';
 import { FolderItem } from '@/components/FolderItem';
 import { FileItem } from '@/components/FileItem';
 import { foldersService } from '@/services/folders-service';
@@ -22,7 +22,7 @@ import { StorageItemContextMenu } from './StorageItemContextMenu';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
-  const folderId = params.id || '0';
+  const currentFolderId = params.id || '0';
 
   const [openNewFolderForm, handleOpenNewFolderForm, handleCloseNewFolderForm] = useModal();
   const fileUploaderRef: React.Ref<HTMLInputElement> = useRef(null);
@@ -56,15 +56,15 @@ export const Folders = () => {
 
   useEffect(() => {
     foldersService
-      .listItems({ folderId })
+      .listItems({ folderId: currentFolderId })
       .then((result) => {
         const folders = result.entries.filter((item: any) => item.isFolder);
         const files = result.entries.filter((item: any) => !item.isFolder);
-        addFolderGroup({ parentId: folderId, folderItems: folders });
-        addFileGroup({ parentId: folderId, fileItems: files });
+        addFolderGroup({ folderItems: folders, parentId: currentFolderId });
+        addFileGroup({ fileItems: files, parentId: currentFolderId });
       })
       .catch((err) => console.log(err));
-  }, [folderId]);
+  }, [currentFolderId]);
 
   return (
     <Box>
@@ -81,13 +81,13 @@ export const Folders = () => {
         <></>
       </Header>
 
-      <NewFolderForm open={openNewFolderForm} folderId={folderId} handleClose={handleCloseNewFolderForm} />
+      <NewFolderForm open={openNewFolderForm} folderId={currentFolderId} handleClose={handleCloseNewFolderForm} />
       <Uploader
         onChange={(e) => {
           filesService
-            .upload({ parentId: folderId, fileToUpload: e.target.files![0] }) // eslint-disable-line @typescript-eslint/no-non-null-assertion
+            .upload({ parentId: currentFolderId, fileToUpload: e.target.files![0] }) // eslint-disable-line @typescript-eslint/no-non-null-assertion
             .then((result) => {
-              addOneFileItem({ parentId: folderId, fileItem: result });
+              addOneFileItem({ fileItem: result });
               e.currentTarget.value = '';
             })
             .catch((err) => console.log(err));
@@ -100,7 +100,7 @@ export const Folders = () => {
           <SectionName>Folders</SectionName>
           <FolderList>
             {folderGroupList
-              ?.find((group) => group.parentId === folderId)
+              ?.find((group) => group.parentId === currentFolderId)
               ?.folderItems?.map((folder: any) => (
                 <StorageItemContextMenu storageItem={folder} key={folder.id}>
                   <FolderItem folder={folder} />
@@ -112,7 +112,7 @@ export const Folders = () => {
           <SectionName>Files</SectionName>
           <FileList container>
             {fileGroupList
-              ?.find((group) => group.parentId === folderId)
+              ?.find((group) => group.parentId === currentFolderId)
               ?.fileItems?.map((file) => (
                 <StorageItemContextMenu storageItem={file} key={file.id}>
                   <FileItem file={file} />

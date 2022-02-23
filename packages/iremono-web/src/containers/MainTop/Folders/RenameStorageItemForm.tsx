@@ -30,13 +30,13 @@ export const RenameStorageItemForm = ({ storageItem, open, handleClose }: Props)
       ? foldersService
           .update({ folderId: storageItem.id, folderProperties: { name: storageItemName } })
           .then((result) => {
-            updateFolderItem({ parentId: storageItem.parentId, folderItem: result });
+            updateFolderItem({ folderItem: result });
           })
           .catch((err) => console.log(err))
       : filesService
           .update({ fileId: storageItem.id, fileProperties: { name: storageItemName } })
           .then((result) => {
-            updateFileItem({ parentId: storageItem.parentId, fileItem: result });
+            updateFileItem({ fileItem: result });
           })
           .catch((err) => console.log(err));
   };

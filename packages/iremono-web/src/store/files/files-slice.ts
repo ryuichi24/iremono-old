@@ -16,12 +16,12 @@ const filesSlice = createSlice({
       const fileGroup = { parentId: payload.parentId, fileItems: payload.fileItems };
       state.fileGroupList.push(fileGroup);
     },
-    addOneFileItem: (state, { payload }: PayloadAction<{ fileItem: any; parentId: string }>) => {
-      const indexOfFileGroup = state.fileGroupList.findIndex((group) => group.parentId === payload.parentId);
+    addOneFileItem: (state, { payload }: PayloadAction<{ fileItem: any }>) => {
+      const indexOfFileGroup = state.fileGroupList.findIndex((group) => group.parentId === payload.fileItem.parentId);
       state.fileGroupList[indexOfFileGroup].fileItems.push(payload.fileItem);
     },
-    updateFileItem: (state, { payload }: PayloadAction<{ fileItem: any; parentId: string }>) => {
-      const indexOfFileGroup = state.fileGroupList.findIndex((group) => group.parentId === payload.parentId);
+    updateFileItem: (state, { payload }: PayloadAction<{ fileItem: any }>) => {
+      const indexOfFileGroup = state.fileGroupList.findIndex((group) => group.parentId === payload.fileItem.parentId);
       const indexOfFileItem = state.fileGroupList[indexOfFileGroup].fileItems.findIndex(
         (item) => item.id === payload.fileItem.id,
       );

@@ -24,7 +24,7 @@ export const NewFolderForm = ({ folderId, open, handleClose }: Props) => {
     foldersService
       .create({ parentId: folderId, name: folderName })
       .then((result) => {
-        addOneFolderItem({ parentId: folderId, folderItem: result });
+        addOneFolderItem({ folderItem: result });
       })
       .catch((err) => console.log(err));
   };

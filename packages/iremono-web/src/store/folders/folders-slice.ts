@@ -16,12 +16,14 @@ const foldersSlice = createSlice({
       const folderGroup = { parentId: payload.parentId, folderItems: payload.folderItems };
       state.folderGroupList.push(folderGroup);
     },
-    addOneFolderItem: (state, { payload }: PayloadAction<{ folderItem: any; parentId: string }>) => {
-      const indexOfGroup = state.folderGroupList.findIndex((group) => group.parentId === payload.parentId);
+    addOneFolderItem: (state, { payload }: PayloadAction<{ folderItem: any }>) => {
+      const indexOfGroup = state.folderGroupList.findIndex((group) => group.parentId === payload.folderItem.parentId);
       state.folderGroupList[indexOfGroup].folderItems.push(payload.folderItem);
     },
-    updateFolderItem: (state, { payload }: PayloadAction<{ folderItem: any; parentId: string }>) => {
-      const indexOfFileGroup = state.folderGroupList.findIndex((group) => group.parentId === payload.parentId);
+    updateFolderItem: (state, { payload }: PayloadAction<{ folderItem: any }>) => {
+      const indexOfFileGroup = state.folderGroupList.findIndex(
+        (group) => group.parentId === payload.folderItem.parentId,
+      );
       const indexOfFolderItem = state.folderGroupList[indexOfFileGroup].folderItems.findIndex(
         (item) => item.id === payload.folderItem.id,
       );

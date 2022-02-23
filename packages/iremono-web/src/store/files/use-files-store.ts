@@ -5,9 +5,9 @@ import { filesActions } from './files-slice';
 
 interface FilesStore {
   fileGroupList: RootState['filesState']['fileGroupList'];
-  addFileGroup: (args: { parentId: string; fileItems: any[] }) => void;
-  addOneFileItem: (args: { parentId: string; fileItem: any }) => void;
-  updateFileItem: (args: { parentId: string; fileItem: any }) => void;
+  addFileGroup: (args: { fileItems: any[]; parentId: string }) => void;
+  addOneFileItem: (args: { fileItem: any }) => void;
+  updateFileItem: (args: { fileItem: any }) => void;
 }
 
 export const useFilesStore = (): FilesStore => {
@@ -15,21 +15,21 @@ export const useFilesStore = (): FilesStore => {
   const fileGroupList = useSelector((state: RootState) => state.filesState.fileGroupList);
 
   const addFileGroup = useCallback(
-    (args: { parentId: string; fileItems: any[] }) => {
+    (args: { fileItems: any[]; parentId: string }) => {
       dispatch(filesActions.addFileGroup(args));
     },
     [dispatch],
   );
 
   const addOneFileItem = useCallback(
-    (args: { parentId: string; fileItem: any }) => {
+    (args: { fileItem: any }) => {
       dispatch(filesActions.addOneFileItem(args));
     },
     [dispatch],
   );
 
   const updateFileItem = useCallback(
-    (args: { parentId: string; fileItem: any }) => {
+    (args: { fileItem: any }) => {
       dispatch(filesActions.updateFileItem(args));
     },
     [dispatch],
