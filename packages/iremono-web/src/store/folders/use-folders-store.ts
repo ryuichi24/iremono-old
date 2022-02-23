@@ -8,6 +8,7 @@ interface foldersStore {
   addFolderGroup: (args: { folderItems: any[]; parentId: string }) => void;
   addOneFolderItem: (args: { folderItem: any }) => void;
   updateFolderItem: (args: { folderItem: any }) => void;
+  removeFolderItem: (args: { folderItem: any }) => void;
 }
 
 export const useFoldersStore = (): foldersStore => {
@@ -35,10 +36,18 @@ export const useFoldersStore = (): foldersStore => {
     [dispatch],
   );
 
+  const removeFolderItem = useCallback(
+    (args: { folderItem: any }) => {
+      dispatch(foldersActions.removeFolderItem(args));
+    },
+    [dispatch],
+  );
+
   return {
     folderGroupList,
     addFolderGroup,
     addOneFolderItem,
     updateFolderItem,
+    removeFolderItem,
   } as const;
 };

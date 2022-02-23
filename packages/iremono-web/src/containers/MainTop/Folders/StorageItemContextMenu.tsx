@@ -9,6 +9,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import { filesService } from '@/services/files-service';
 import { RenameStorageItemForm } from './RenameStorageItemForm';
 import { useModal } from '@/hooks/use-modal';
+import { RemoveStorageItemForm } from './RemoveStorageItemForm';
 
 interface Props {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ interface Props {
 export const StorageItemContextMenu = ({ children, storageItem }: Props) => {
   const { xPos, yPos, showMenu, handleContextMenu } = useContextMenu();
   const [openRenameStorageItemForm, handleOpenRenameStorageItemForm, handleCloseRenameStorageItemForm] = useModal();
+  const [openRemoveStorageItemForm, handleOpenRemoveStorageItemForm, handleCloseRemoveStorageItemForm] = useModal();
   return (
     <>
       <div style={{ width: 'auto' }} onContextMenu={handleContextMenu}>
@@ -40,7 +42,7 @@ export const StorageItemContextMenu = ({ children, storageItem }: Props) => {
             <DriveFileRenameOutlineOutlinedIcon />
             <Typography>Rename</Typography>
           </ContextMenuItem>
-          <ContextMenuItem style={{ color: 'red' }} onClick={() => console.log('remove')}>
+          <ContextMenuItem style={{ color: 'red' }} onClick={() => handleOpenRemoveStorageItemForm()}>
             <DeleteOutlineOutlinedIcon />
             <Typography>Remove</Typography>
           </ContextMenuItem>
@@ -51,6 +53,12 @@ export const StorageItemContextMenu = ({ children, storageItem }: Props) => {
         storageItem={storageItem}
         open={openRenameStorageItemForm}
         handleClose={handleCloseRenameStorageItemForm}
+      />
+
+      <RemoveStorageItemForm
+        storageItem={storageItem}
+        open={openRemoveStorageItemForm}
+        handleClose={handleCloseRemoveStorageItemForm}
       />
     </>
   );

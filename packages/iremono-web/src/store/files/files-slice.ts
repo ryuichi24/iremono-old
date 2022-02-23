@@ -27,6 +27,13 @@ const filesSlice = createSlice({
       );
       state.fileGroupList[indexOfFileGroup].fileItems[indexOfFileItem] = payload.fileItem;
     },
+    removeFileItem: (state, { payload }: PayloadAction<{ fileItem: any }>) => {
+      const indexOfFileGroup = state.fileGroupList.findIndex((group) => group.parentId === payload.fileItem.parentId);
+      const indexOfFileItem = state.fileGroupList[indexOfFileGroup].fileItems.findIndex(
+        (item) => item.id === payload.fileItem.id,
+      );
+      state.fileGroupList[indexOfFileGroup].fileItems.splice(indexOfFileItem, 1);
+    },
   },
 });
 

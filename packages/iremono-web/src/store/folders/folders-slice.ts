@@ -29,6 +29,15 @@ const foldersSlice = createSlice({
       );
       state.folderGroupList[indexOfFileGroup].folderItems[indexOfFolderItem] = payload.folderItem;
     },
+    removeFolderItem: (state, { payload }: PayloadAction<{ folderItem: any }>) => {
+      const indexOfFileGroup = state.folderGroupList.findIndex(
+        (group) => group.parentId === payload.folderItem.parentId,
+      );
+      const indexOfFolderItem = state.folderGroupList[indexOfFileGroup].folderItems.findIndex(
+        (item) => item.id === payload.folderItem.id,
+      );
+      state.folderGroupList[indexOfFileGroup].folderItems.splice(indexOfFolderItem, 1);
+    },
   },
 });
 

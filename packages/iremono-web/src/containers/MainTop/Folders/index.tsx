@@ -84,11 +84,12 @@ export const Folders = () => {
       <NewFolderForm open={openNewFolderForm} folderId={currentFolderId} handleClose={handleCloseNewFolderForm} />
       <Uploader
         onChange={(e) => {
+          if (!e.currentTarget.value) return;
+
           filesService
             .upload({ parentId: currentFolderId, fileToUpload: e.target.files![0] }) // eslint-disable-line @typescript-eslint/no-non-null-assertion
             .then((result) => {
               addOneFileItem({ fileItem: result });
-              e.currentTarget.value = '';
             })
             .catch((err) => console.log(err));
         }}

@@ -8,6 +8,7 @@ interface FilesStore {
   addFileGroup: (args: { fileItems: any[]; parentId: string }) => void;
   addOneFileItem: (args: { fileItem: any }) => void;
   updateFileItem: (args: { fileItem: any }) => void;
+  removeFileItem: (args: { fileItem: any }) => void;
 }
 
 export const useFilesStore = (): FilesStore => {
@@ -35,10 +36,18 @@ export const useFilesStore = (): FilesStore => {
     [dispatch],
   );
 
+  const removeFileItem = useCallback(
+    (args: { fileItem: any }) => {
+      dispatch(filesActions.removeFileItem(args));
+    },
+    [dispatch],
+  );
+
   return {
     fileGroupList,
     addOneFileItem,
     addFileGroup,
     updateFileItem,
+    removeFileItem,
   } as const;
 };
