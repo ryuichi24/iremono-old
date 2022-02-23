@@ -1,5 +1,5 @@
 import React from 'react';
 
 export const Videos = () => {
-  return <div>Videos</div>;
+  return <div></div>;
 };
