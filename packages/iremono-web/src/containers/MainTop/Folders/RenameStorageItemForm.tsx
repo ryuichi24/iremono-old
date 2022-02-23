@@ -11,13 +11,13 @@ import { filesService } from '@/services/files-service';
 import { useFilesStore } from '@/store/files/use-files-store';
 
 interface Props {
-  folderItem: any;
+  storageItem: any;
   open: boolean;
   handleClose: () => void;
 }
 
-export const RenameFolderItemForm = ({ folderItem, open, handleClose }: Props) => {
-  const [folderItemName, setFolderItemName] = useState(folderItem.name);
+export const RenameStorageItemForm = ({ storageItem, open, handleClose }: Props) => {
+  const [storageItemName, setStorageItemName] = useState(storageItem.name);
 
   const { updateFolderItem } = useFoldersStore();
   const { updateFileItem } = useFilesStore();
@@ -26,23 +26,23 @@ export const RenameFolderItemForm = ({ folderItem, open, handleClose }: Props) =
     e.preventDefault();
     handleClose();
 
-    folderItem.isFolder
+    storageItem.isFolder
       ? foldersService
-          .update({ folderId: folderItem.id, folderProperties: { name: folderItemName } })
+          .update({ folderId: storageItem.id, folderProperties: { name: storageItemName } })
           .then((result) => {
-            updateFolderItem({ parentId: folderItem.parentId, folderItem: result });
+            updateFolderItem({ parentId: storageItem.parentId, folderItem: result });
           })
           .catch((err) => console.log(err))
       : filesService
-          .update({ fileId: folderItem.id, fileProperties: { name: folderItemName } })
+          .update({ fileId: storageItem.id, fileProperties: { name: storageItemName } })
           .then((result) => {
-            updateFileItem({ parentId: folderItem.parentId, fileItem: result });
+            updateFileItem({ parentId: storageItem.parentId, fileItem: result });
           })
           .catch((err) => console.log(err));
   };
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Rename {folderItem.isFolder ? 'Folder' : 'File'}</DialogTitle>
+      <DialogTitle>Rename {storageItem.isFolder ? 'Folder' : 'File'}</DialogTitle>
       <DialogContent sx={{ width: '300px' }}>
         <TextField
           autoFocus
@@ -51,8 +51,8 @@ export const RenameFolderItemForm = ({ folderItem, open, handleClose }: Props) =
           type="text"
           fullWidth
           variant="standard"
-          value={folderItemName}
-          onChange={(e) => setFolderItemName(e.target.value)}
+          value={storageItemName}
+          onChange={(e) => setStorageItemName(e.target.value)}
         />
       </DialogContent>
       <DialogActions>
