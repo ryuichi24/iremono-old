@@ -18,6 +18,7 @@ interface StorageItemRow {
   initializationVector: string;
   isRootFolder: boolean;
   isEncryptedWithClientKey: boolean;
+  hasThumbnail: boolean;
   thumbnailPath?: string;
   thumbnailSize?: number;
   thumbnailInitializationVector?: string;
@@ -142,6 +143,7 @@ const makeStorageItemEntityFromRow = (row: StorageItemRow): StorageItem =>
       initializationVector: row.initializationVector,
       isRootFolder: row.isRootFolder,
       isEncryptedWithClientKey: row.isEncryptedWithClientKey,
+      hasThumbnail: row.hasThumbnail,
       thumbnailPath: row.thumbnailPath,
       thumbnailSize: row.thumbnailSize,
       thumbnailInitializationVector: row.thumbnailInitializationVector,
@@ -167,6 +169,7 @@ const makeStorageItemRowFromEntity = (entity: StorageItem, ancestors: (string | 
   initializationVector: entity.initializationVector!,
   isRootFolder: entity.isRootFolder!,
   isEncryptedWithClientKey: entity.isEncryptedWithClientKey!,
+  hasThumbnail: entity.hasThumbnail,
   thumbnailPath: entity.thumbnailPath,
   thumbnailSize: entity.thumbnailSize,
   thumbnailInitializationVector: entity.thumbnailInitializationVector,

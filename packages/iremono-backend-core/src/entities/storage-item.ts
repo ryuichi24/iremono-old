@@ -13,6 +13,7 @@ interface Props extends EntityProps {
   isRootFolder?: boolean;
   isEncryptedWithClientKey?: boolean;
   initializationVector?: string;
+  hasThumbnail?: boolean;
   thumbnailPath?: string;
   thumbnailSize?: number;
   thumbnailInitializationVector?: string;
@@ -116,6 +117,11 @@ export class StorageItem extends Entity<Props> {
 
   get lastViewedAt() {
     return this._props.lastViewedAt;
+  }
+
+  get hasThumbnail() {
+    if (this._props.hasThumbnail) return this._props.hasThumbnail;
+    return !!this._props.thumbnailPath;
   }
 
   get thumbnailPath() {
