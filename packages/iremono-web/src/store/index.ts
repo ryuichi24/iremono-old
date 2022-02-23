@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authReducer } from '@/store/auth/auth-slice';
 import { filesReducer } from './files/files-slice';
 import { foldersReducer } from './folders/folders-slice';
+import { trashReducer } from './trash/trash-slice';
 
 export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
@@ -10,6 +11,7 @@ export const store = configureStore({
     authState: authReducer,
     filesState: filesReducer,
     foldersState: foldersReducer,
+    trashState: trashReducer,
   },
 });
 

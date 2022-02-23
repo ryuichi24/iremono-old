@@ -6,11 +6,12 @@ import { ThumbnailAlt } from '../AltThumbnail';
 interface Props {
   file: any;
   thumbnailURL?: string;
+  handleDoubleClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-export const FileItemCard = ({ file, thumbnailURL }: Props) => {
+export const FileItemCard = ({ file, thumbnailURL, handleDoubleClick }: Props) => {
   return (
-    <Container>
+    <Container onDoubleClick={handleDoubleClick}>
       <ThumbnailSection>
         {thumbnailURL ? (
           <Thumbnail src={thumbnailURL} />

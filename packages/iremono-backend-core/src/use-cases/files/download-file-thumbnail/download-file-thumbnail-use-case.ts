@@ -22,10 +22,6 @@ export class DownloadFileThumbnailUseCase
       throw new NotExistError('the file does not exist.');
     }
 
-    if (fileOfThumbnailToDownload.isInTrash) {
-      throw new InvalidRequestError('the file is in a trash.');
-    }
-
     const responseDto: DownloadFileThumbnailResponseDTO = {
       name: `thumbnail.png`,
       thumbnailPath: fileOfThumbnailToDownload.thumbnailPath!,

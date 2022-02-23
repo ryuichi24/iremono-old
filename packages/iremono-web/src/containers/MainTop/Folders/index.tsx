@@ -7,7 +7,6 @@ import { Header } from '@/components/Header';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-import { FolderItem } from '@/components/FolderItem';
 import { foldersService } from '@/services/folders-service';
 import { useFoldersStore } from '@/store/folders/use-folders-store';
 import { useFilesStore } from '@/store/files/use-files-store';
@@ -19,6 +18,7 @@ import { Uploader } from '@/components/Uploader';
 import { filesService } from '@/services/files-service';
 import { StorageItemContextMenu } from './StorageItemContextMenu';
 import { FileItem } from './FileItem';
+import { FolderItem } from './FolderItem';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
@@ -67,7 +67,7 @@ export const Folders = () => {
   }, [currentFolderId]);
 
   return (
-    <Box sx={{ height: '100%' }}>
+    <Container>
       <Header isSubHeader={true}>
         <>
           <div>
@@ -96,7 +96,7 @@ export const Folders = () => {
         ref={fileUploaderRef}
       />
 
-      <Box sx={{ overflow: 'scroll', height: '80%' }}>
+      <StorageItemsContainer>
         <FolderSection>
           <SectionName>Folders</SectionName>
           <FolderList>
@@ -121,10 +121,19 @@ export const Folders = () => {
               ))}
           </FileList>
         </FileSection>
-      </Box>
-    </Box>
+      </StorageItemsContainer>
+    </Container>
   );
 };
+
+const Container = styled('div')`
+  height: 100%;
+`;
+
+const StorageItemsContainer = styled('div')`
+  overflow: scroll;
+  height: 80%;
+`;
 
 const FolderSection = styled(Box)`
   padding: 1rem;

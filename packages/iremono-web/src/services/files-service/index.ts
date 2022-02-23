@@ -59,7 +59,7 @@ interface RestoreFileRequest {
 }
 
 const restore = async (request: RestoreFileRequest) => {
-  const res = await apiClient.post(`${BASE_URL}/${request}/restore`);
+  const res = await apiClient.post(`${BASE_URL}/${request.fileId}/restore`);
   const result = res.data;
   return result;
 };

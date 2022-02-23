@@ -2,17 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import FolderIcon from '@mui/icons-material/Folder';
 import Typography from '@mui/material/Typography';
-import { useNavigate } from 'react-router-dom';
 
 interface Props {
   folder: any;
+  handleDoubleClick: React.MouseEventHandler<HTMLDivElement>;
 }
 
-export const FolderItem = ({ folder }: Props) => {
-  const navigate = useNavigate();
-
+export const FolderItemCard = ({ folder, handleDoubleClick }: Props) => {
   return (
-    <Container onDoubleClick={() => navigate(`/folders/${folder.id}`)}>
+    <Container onDoubleClick={handleDoubleClick}>
       <FolderIcon sx={{ color: 'text.primary' }} />
       <Typography sx={{ color: 'text.primary' }}>{folder.name}</Typography>
     </Container>
