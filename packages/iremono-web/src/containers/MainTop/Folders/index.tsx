@@ -8,7 +8,6 @@ import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { FolderItem } from '@/components/FolderItem';
-import { FileItem } from '@/components/FileItem';
 import { foldersService } from '@/services/folders-service';
 import { useFoldersStore } from '@/store/folders/use-folders-store';
 import { useFilesStore } from '@/store/files/use-files-store';
@@ -19,6 +18,7 @@ import { useModal } from '@/hooks/use-modal';
 import { Uploader } from '@/components/Uploader';
 import { filesService } from '@/services/files-service';
 import { StorageItemContextMenu } from './StorageItemContextMenu';
+import { FileItem } from './FileItem';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();

@@ -5,13 +5,18 @@ import { ThumbnailAlt } from '../AltThumbnail';
 
 interface Props {
   file: any;
+  thumbnailURL?: string;
 }
 
-export const FileItem = ({ file }: Props) => {
+export const FileItemCard = ({ file, thumbnailURL }: Props) => {
   return (
     <Container>
       <ThumbnailSection>
-        <ThumbnailAlt fileExtension={file.fileExtension} extensionTextSize={'40px'} />
+        {thumbnailURL ? (
+          <Thumbnail src={thumbnailURL} />
+        ) : (
+          <ThumbnailAlt fileExtension={file.fileExtension} extensionTextSize={'40px'} />
+        )}
       </ThumbnailSection>
       <FileNameSection>
         <Typography sx={{ color: 'text.primary' }}>{file.name}</Typography>
@@ -44,7 +49,18 @@ const ThumbnailSection = styled('div')`
   align-items: center;
 `;
 
+const Thumbnail = styled.img`
+  border-radius: ${(props) => props.theme.shape.borderRadius} ${(props) => props.theme.shape.borderRadius} 0px 0px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+`;
+
 const FileNameSection = styled('div')`
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
   height: 30%;
   border-radius: 0px 0px ${(props) => props.theme.shape.borderRadius} ${(props) => props.theme.shape.borderRadius};
 `;
