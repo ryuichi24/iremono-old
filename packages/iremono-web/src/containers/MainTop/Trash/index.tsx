@@ -24,7 +24,9 @@ export const Trash = () => {
     <Container>
       <Header isSubHeader={true}>
         <>
-          <div></div>
+          <Typography sx={{ color: 'text.primary' }} variant="h4" component="h2">
+            Trash
+          </Typography>
         </>
         <></>
       </Header>

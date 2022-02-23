@@ -70,15 +70,24 @@ export const Folders = () => {
     <Container>
       <Header isSubHeader={true}>
         <>
+          <Typography sx={{ color: 'text.primary' }} variant="h4" component="h2">
+            All files
+          </Typography>
+        </>
+        <>
           <div>
-            <Button variant="outlined" startIcon={<AddIcon />} onClick={handleOpenMenu}>
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={handleOpenMenu}
+              sx={{ maxWidth: '110px', maxHeight: '50px', minWidth: '110px', minHeight: '50px' }}
+            >
               New
             </Button>
 
             <PopupMenu menuItems={menuItems} anchorEl={anchorEl} handleClose={handleCloseMenu} open={openMenu} />
           </div>
         </>
-        <></>
       </Header>
 
       <NewFolderForm open={openNewFolderForm} folderId={currentFolderId} handleClose={handleCloseNewFolderForm} />

@@ -14,7 +14,7 @@ export const Header = ({ children, isSubHeader = false }: Props) => {
   return (
     <>
       {isSubHeader ? (
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', padding: '1rem' }}>
           <HeaderItemsContainer>{left}</HeaderItemsContainer>
           <HeaderItemsContainer>{right}</HeaderItemsContainer>
         </Toolbar>
