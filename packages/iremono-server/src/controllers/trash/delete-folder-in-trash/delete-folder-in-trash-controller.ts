@@ -16,7 +16,12 @@ export class DeleteFolderInTrashController extends Controller<DeleteFolderInTras
     const dto = makeDeleteFolderInTrashRequestDTO(request);
     const result = await this._useCase.handle(dto);
 
-    await Promise.all(result.deletedFiles.map((file) => deleteFromFileSystem(file.filePath!)));
+    await Promise.all(
+      result.deletedFiles.map((file) => {
+        deleteFromFileSystem(file.filePath!);
+        if (file.hasThumbnail) deleteFromFileSystem(file.thumbnailPath!);
+      }),
+    );
 
     this._logger.info(
       'user has deleted a folder in trash',
