@@ -8,7 +8,9 @@
   "type": "module",
   "scripts": {
     "build": "yarn tsc --build",
-    "postinstall": "yarn build"
+    "postinstall": "yarn build",
+    "init-mysql-db": "node scripts/mysql/initialize-db.js",
+    "init-mysql-tables": "node scripts/mysql/initialize-tables.js"
   },
   "dependencies": {
     "@iremono/util": "1.0.0",
