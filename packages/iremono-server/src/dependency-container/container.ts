@@ -2,6 +2,7 @@ import { config } from '../config';
 import {
   constructMockUserRepository,
   constructMockStorageItemRepository,
+  MysqlUserRepository,
 } from '@iremono/backend-core/dist/infra/data-access';
 import {
   constructBcryptService,
@@ -53,7 +54,8 @@ import {
 import { loggerFactory } from '../shared/utils/logger';
 
 // TODO: replace it once the real repository gets ready
-export const userRepository = constructMockUserRepository(loggerFactory);
+// export const userRepository = constructMockUserRepository(loggerFactory);
+export const userRepository = new MysqlUserRepository(loggerFactory);
 const storageItemRepository = constructMockStorageItemRepository(loggerFactory);
 
 const bcryptService = constructBcryptService();

@@ -1,3 +1,4 @@
+import { dbConfig } from './db-config';
 import { jwtConfig } from './jwt-config';
 import { loggerConfig } from './logger-config';
 import { mediaConfig } from './media-config';
@@ -8,6 +9,7 @@ export const config = Object.freeze({
   loggerConfig,
   jwtConfig,
   mediaConfig,
+  dbConfig,
 });
 
 export type Config = typeof config;

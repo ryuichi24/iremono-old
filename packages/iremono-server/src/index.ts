@@ -4,24 +4,36 @@ import { config } from './config';
 import { filesRouter, foldersRouter, authRouter, trashRouter, securityRouter } from './routes';
 import { cookieHandler, errorHandler } from './shared/express-lib';
 import { loggerFactory } from './shared/utils/logger';
+import { MysqlDatabase } from '@iremono/backend-core/dist/infra/data-access';
 
 const logger = loggerFactory.createLogger('main');
 
-const HOST = config.serverConfig.HOST;
-const PORT = config.serverConfig.PORT;
+const init = async () => {
+  await MysqlDatabase.initConnectionPool({
+    host: config.dbConfig.DB_HOST,
+    user: config.dbConfig.DB_USERNAME,
+    password: config.dbConfig.DB_PASSWORD,
+    database: config.dbConfig.DB_NAME,
+  });
 
-const app = express();
+  const HOST = config.serverConfig.HOST;
+  const PORT = config.serverConfig.PORT;
 
-app.use([express.json(), cookieHandler(), cors({ credentials: true, origin: true })]);
+  const app = express();
 
-app.use('/api/auth', authRouter);
-app.use('/api/folders', foldersRouter);
-app.use('/api/files', filesRouter);
-app.use('/api/trash', trashRouter);
-app.use('/api/security', securityRouter);
+  app.use([express.json(), cookieHandler(), cors({ credentials: true, origin: true })]);
 
-app.get('/api/health', async (_, res) => res.send('API is running'));
+  app.use('/api/auth', authRouter);
+  app.use('/api/folders', foldersRouter);
+  app.use('/api/files', filesRouter);
+  app.use('/api/trash', trashRouter);
+  app.use('/api/security', securityRouter);
 
-app.use(errorHandler());
+  app.get('/api/health', async (_, res) => res.send('API is running'));
 
-app.listen(PORT, () => logger.info(`Server is running at http://${HOST}:${PORT}`));
+  app.use(errorHandler());
+
+  app.listen(PORT, () => logger.info(`Server is running at http://${HOST}:${PORT}`));
+};
+
+init();
