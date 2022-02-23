@@ -42,7 +42,7 @@ interface RestoreFolderRequest {
 }
 
 const restore = async (request: RestoreFolderRequest) => {
-  const res = await apiClient.post(`${BASE_URL}/${request}/restore`);
+  const res = await apiClient.post(`${BASE_URL}/${request.folderId}/restore`);
   const result = res.data;
   return result;
 };

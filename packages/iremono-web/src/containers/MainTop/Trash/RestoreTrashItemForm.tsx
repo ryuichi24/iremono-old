@@ -9,6 +9,7 @@ import { filesService } from '@/services/files-service';
 import { useFilesStore } from '@/store/files/use-files-store';
 import { Typography } from '@mui/material';
 import { useTrashStore } from '@/store/trash/use-trash-store';
+import { foldersService } from '@/services/folders-service';
 
 interface Props {
   trashItem: any;
@@ -25,13 +26,21 @@ export const RestoreTrashItemForm = ({ trashItem, open, handleClose }: Props) =>
     e.preventDefault();
     handleClose();
 
-    filesService
-      .restore({ fileId: trashItem.id })
-      .then((result) => {
-        removeTrashItem({ trashItem: trashItem });
-        trashItem.isFolder ? addOneFolderItem({ folderItem: trashItem }) : addOneFileItem({ fileItem: trashItem });
-      })
-      .catch((err) => console.log(err));
+    trashItem.isFolder
+      ? foldersService
+          .restore({ folderId: trashItem.id })
+          .then((result) => {
+            removeTrashItem({ trashItem: trashItem });
+            addOneFolderItem({ folderItem: trashItem });
+          })
+          .catch((err) => console.log(err))
+      : filesService
+          .restore({ fileId: trashItem.id })
+          .then((result) => {
+            removeTrashItem({ trashItem: trashItem });
+            addOneFileItem({ fileItem: trashItem });
+          })
+          .catch((err) => console.log(err));
   };
   return (
     <Dialog open={open} onClose={handleClose}>
