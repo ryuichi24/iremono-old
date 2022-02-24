@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS storage_items (
-    id VARCHAR(36) PRIMARY KEY,
+    id VARCHAR(36),
     name VARCHAR(255) NOT NULL,
     parent_id VARCHAR(36),
     owner_id VARCHAR(36) NOT NULL,
@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS storage_items (
     thumbnail_initialization_vector VARCHAR(32),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT pk__id__owner_id PRIMARY KEY (id, owner_id),
     CONSTRAINT fk__storage_items__users__owner_id FOREIGN KEY (owner_id) REFERENCES users (id),
     CONSTRAINT fk__storage_items__myself__parent_id FOREIGN KEY (parent_id) REFERENCES storage_items (id)
 );
