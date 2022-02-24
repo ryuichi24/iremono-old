@@ -22,7 +22,7 @@ export abstract class MysqlRepository<TEntity extends { id: string }> {
     this._logger.debug(
       `[query="${query}", \nvalues="[${values}]", \nresult="${JSON.stringify(result[0], null, '\t')}"]`,
     );
-    return result;
+    return result[0] as any[];
   }
 
   public abstract findOneById(id: string): Promise<TEntity | null>;

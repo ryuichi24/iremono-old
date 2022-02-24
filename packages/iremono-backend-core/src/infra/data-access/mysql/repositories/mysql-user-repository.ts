@@ -12,7 +12,7 @@ export class MysqlUserRepository extends MysqlRepository<User> implements UserRe
     const query = 'SELECT * FROM users WHERE email = ?;';
     const values = [email];
     const result = await this._query(query, values);
-    const user = (result[0] as any)[0];
+    const user = result[0];
     if (!user) return null;
 
     return this._toEntity(user);
@@ -23,15 +23,15 @@ export class MysqlUserRepository extends MysqlRepository<User> implements UserRe
     const values = [id];
     const result = await this._query(query, values);
 
-    const user = (result[0] as any)[0];
+    const user = result[0];
     if (!user) return null;
 
     return this._toEntity(user);
   }
 
   protected async _insert(entity: User) {
-    const query = 'INSERT INTO users (id, email, password) VALUES (?, ?, ?);';
-    const values = [entity.id, entity.email, entity.hashedPassword];
+    const query = 'INSERT INTO users (id, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?);';
+    const values = [entity.id, entity.email, entity.hashedPassword, entity.createdAt, entity.updatedAt];
     await this._query(query, values);
 
     return entity;

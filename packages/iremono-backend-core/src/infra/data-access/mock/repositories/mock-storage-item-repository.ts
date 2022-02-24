@@ -98,22 +98,16 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     return makeStorageItemEntityFromRow(foundItemRow);
   };
 
-  const findByParentId = async (parentId: string, ownerId: string, inTrash: boolean) => {
+  const findByParentId = async (parentId: string, inTrash: boolean) => {
     const foundItemRows = storageItemTable.filter(
-      (itemRow) =>
-        itemRow.parentId === parentId &&
-        itemRow.ownerId === ownerId &&
-        (inTrash ? itemRow.isInTrash : !itemRow.isInTrash),
+      (itemRow) => itemRow.parentId === parentId && (inTrash ? itemRow.isInTrash : !itemRow.isInTrash),
     );
     return foundItemRows.map((itemRow) => makeStorageItemEntityFromRow(itemRow));
   };
 
-  const findAllDescendantsById = async (id: string, ownerId: string, inTrash: boolean) => {
+  const findAllDescendantsById = async (id: string, inTrash: boolean) => {
     const descendants = storageItemTable.filter(
-      (itemRow) =>
-        itemRow.ancestors.includes(id) &&
-        itemRow.ownerId === ownerId &&
-        (inTrash ? itemRow.isInTrash : !itemRow.isInTrash),
+      (itemRow) => itemRow.ancestors.includes(id) && (inTrash ? itemRow.isInTrash : !itemRow.isInTrash),
     );
     return descendants.map((descendant) => makeStorageItemEntityFromRow(descendant));
   };

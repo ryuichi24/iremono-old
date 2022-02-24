@@ -21,11 +21,7 @@ export class RemoveFolderUseCase implements UseCase<RemoveFolderRequestDTO, Remo
     if (folderToRemove.ownerId !== dto.ownerId)
       throw new InvalidRequestError(`the owner does not match the folder's owner`);
 
-    const allDescendants = await this._storageItemRepository.findAllDescendantsById(
-      folderToRemove.id,
-      dto.ownerId,
-      false,
-    );
+    const allDescendants = await this._storageItemRepository.findAllDescendantsById(folderToRemove.id, false);
 
     await Promise.all(
       allDescendants.map(async (descendant) => {

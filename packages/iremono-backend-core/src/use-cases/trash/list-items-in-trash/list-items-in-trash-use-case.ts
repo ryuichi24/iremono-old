@@ -16,7 +16,7 @@ export class ListItemsInTrashUseCase implements UseCase<ListItemsInTrashRequestD
     const rootFolder = await this._storageItemRepository.findRootFolderByOwnerId(dto.ownerId);
     if (!rootFolder) throw new NotExistError('the root folder does not exists.');
 
-    const trashItems = await this._storageItemRepository.findAllDescendantsById(rootFolder.id, dto.ownerId, true);
+    const trashItems = await this._storageItemRepository.findAllDescendantsById(rootFolder.id, true);
     const trashItemIds = trashItems.map((trashItem) => trashItem.id);
     const trashItemDTOs = trashItems
       .filter((trashItem) => !trashItemIds.includes(trashItem.parentId!))

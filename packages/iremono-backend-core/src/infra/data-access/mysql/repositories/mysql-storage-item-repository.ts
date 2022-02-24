@@ -9,23 +9,65 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
     await this._query(query, values);
   }
 
-  public async findByParentId(parentId: string, ownerId: string, inTrash: boolean): Promise<StorageItem[]> {
-    throw new Error('Method not implemented.');
+  public async findByParentId(parentId: string, inTrash: boolean): Promise<StorageItem[]> {
+    const query = 'SELECT * FROM storage_items WHERE parent_id = ? AND is_in_trash = ?;';
+    const values = [parentId, inTrash];
+    const result = await this._query(query, values);
+    const storageItems = result as any[];
+    return storageItems.map((item: any) => this._toEntity(item));
   }
 
-  public async findAllDescendantsById(id: string, ownerId: string, inTrash: boolean): Promise<StorageItem[]> {
-    throw new Error('Method not implemented.');
+  public async findAllDescendantsById(id: string, inTrash: boolean): Promise<StorageItem[]> {
+    const query = `WITH RECURSIVE descendants (
+        id, name, parent_id, is_folder, is_in_trash, 
+        file_path, file_size, last_viewed_at, initialization_vector, is_encrypted_with_client_key,
+        has_thumbnail, thumbnail_path, thumbnail_size, thumbnail_initialization_vector, created_at, 
+        updated_at, owner_id
+      ) 
+      AS 
+      (
+      SELECT     id, name, parent_id, is_folder, is_in_trash,
+                 file_path, file_size, last_viewed_at, initialization_vector, is_encrypted_with_client_key,
+                 has_thumbnail, thumbnail_path, thumbnail_size, thumbnail_initialization_vector, created_at, 
+                 updated_at, owner_id
+      FROM       storage_items
+      WHERE      parent_id = ? AND is_in_trash = ?
+
+      UNION ALL
+
+      SELECT     si.id, si.name, si.parent_id, si.is_folder, si.is_in_trash,
+                 si.file_path, si.file_size, si.last_viewed_at, si.initialization_vector, si.is_encrypted_with_client_key,
+                 si.has_thumbnail, si.thumbnail_path, si.thumbnail_size, si.thumbnail_initialization_vector, si.created_at, 
+                 si.updated_at, si.owner_id
+
+      FROM       storage_items si
+      INNER JOIN descendants
+              ON si.parent_id = descendants.id AND si.is_in_trash = ?
+    )
+    SELECT * FROM descendants;
+    `;
+    const values = [id, inTrash, inTrash];
+
+    const result = await this._query(query, values);
+    const storageItems = result as any[];
+    this._logger.debug(storageItems);
+    return storageItems.map((item) => this._toEntity(item));
   }
 
   public async findRootFolderByOwnerId(ownerId: string): Promise<StorageItem | null> {
-    throw new Error('Method not implemented.');
+    const query = 'SELECT * FROM storage_items WHERE owner_id = ? AND is_root_folder = 1;';
+    const values = [ownerId];
+    const result = await this._query(query, values);
+    const storageItem = (result as any)[0];
+    if (!storageItem) return null;
+    return this._toEntity(storageItem);
   }
 
   public async findOneById(id: string): Promise<StorageItem | null> {
     const query = 'SELECT * FROM storage_items WHERE id = ?;';
     const values = [id];
     const result = await this._query(query, values);
-    const storageItem = (result[0] as any)[0];
+    const storageItem = (result as any)[0];
     if (!storageItem) return null;
     return this._toEntity(storageItem);
   }
@@ -101,19 +143,19 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
     return new StorageItem(
       {
         name: raw.name,
-        isFolder: raw.is_folder,
+        isFolder: Boolean(raw.is_folder),
         ownerId: raw.owner_id,
         parentId: raw.parent_id,
         filePath: raw.file_path,
         mimeType: raw.mime_type,
         fileSize: raw.file_size,
         fileExtension: raw.file_extension,
-        isInTrash: raw.is_in_trash,
+        isInTrash: Boolean(raw.is_in_trash),
         lastViewedAt: raw.last_viewed_at,
         initializationVector: raw.initialization_vector,
-        isRootFolder: raw.is_root_folder,
-        isEncryptedWithClientKey: raw.is_encrypted_with_client_key,
-        hasThumbnail: raw.has_thumbnail,
+        isRootFolder: Boolean(raw.is_root_folder),
+        isEncryptedWithClientKey: Boolean(raw.is_encrypted_with_client_key),
+        hasThumbnail: Boolean(raw.has_thumbnail),
         thumbnailPath: raw.thumbnail_path,
         thumbnailSize: raw.thumbnail_size,
         thumbnailInitializationVector: raw.thumbnail_initialization_vector,

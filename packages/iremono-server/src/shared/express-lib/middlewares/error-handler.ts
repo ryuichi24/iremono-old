@@ -17,6 +17,8 @@ export const errorHandler =
       message = config.serverConfig.PRODUCTION_ERROR_MESSAGE;
     }
 
+    console.log(error);
+
     return res.status(statusCode).json({
       error: {
         message,

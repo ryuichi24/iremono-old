@@ -26,7 +26,7 @@ export class ListItemsInFolderUseCase implements UseCase<ListItemsInFolderReques
 
     if (!parentFolder) throw new NotExistError('the parent folder does not exist.');
 
-    const items = await this._storageItemRepository.findByParentId(parentFolder.id, dto.ownerId, false);
+    const items = await this._storageItemRepository.findByParentId(parentFolder.id, false);
 
     return {
       entries: items.map((item) => makeStorageItemDTO(item)),

@@ -29,6 +29,7 @@ export class StorageItem extends Entity<Props> {
         isRootFolder: props.isRootFolder || false,
         isInTrash: props.isInTrash || false,
         isEncryptedWithClientKey: props.isEncryptedWithClientKey || false,
+        lastViewedAt: props.lastViewedAt || new Date(),
       },
       id,
     );
