@@ -27,5 +27,7 @@ CREATE TABLE IF NOT EXISTS storage_items (
     thumbnail_size INT,
     thumbnail_initialization_vector VARCHAR(32),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk__storage_items__users__owner_id FOREIGN KEY (owner_id) REFERENCES users (id),
+    CONSTRAINT fk__storage_items__myself__parent_id FOREIGN KEY (parent_id) REFERENCES storage_items (id)
 );
