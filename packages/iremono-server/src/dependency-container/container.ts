@@ -54,8 +54,8 @@ import {
 import { loggerFactory } from '../shared/utils/logger';
 
 // TODO: replace it once the real repository gets ready
-// export const userRepository = constructMockUserRepository(loggerFactory);
-export const userRepository = new MysqlUserRepository(loggerFactory);
+export const userRepository = constructMockUserRepository(loggerFactory);
+// export const userRepository = new MysqlUserRepository(loggerFactory);
 const storageItemRepository = constructMockStorageItemRepository(loggerFactory);
 
 const bcryptService = constructBcryptService();

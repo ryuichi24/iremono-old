@@ -21,7 +21,7 @@ export class RestoreFolderUseCase implements UseCase<RestoreFolderRequestDTO, Re
     if (folderToRestore.ownerId !== dto.ownerId)
       throw new InvalidRequestError(`the owner does not match the folder's owner`);
 
-    const allDescendants = await this._storageItemRepository.findAllDescendantsById(dto.id, dto.ownerId, true);
+    const allDescendants = await this._storageItemRepository.findAllDescendantsById(folderToRestore.id, dto.ownerId, true);
 
     await Promise.all(
       allDescendants.map(async (descendant) => {

@@ -34,16 +34,13 @@ export class SignUpUseCase implements UseCase<SignUpRequestDTO, SignUpResponseDT
     const savedUser = await this._userRepository.save(user);
 
     // TODO: decouple root folder initialization with event emitter
-    const rootFolder = new StorageItem(
-      {
-        name: 'all_files',
-        parentId: null,
-        isFolder: true,
-        isRootFolder: true,
-        ownerId: savedUser.id,
-      },
-      '0',
-    );
+    const rootFolder = new StorageItem({
+      name: 'all_files',
+      parentId: null,
+      isFolder: true,
+      isRootFolder: true,
+      ownerId: savedUser.id,
+    });
 
     await this._storageItemRepository.save(rootFolder);
 
