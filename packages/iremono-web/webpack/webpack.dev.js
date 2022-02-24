@@ -8,7 +8,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        API_URL: JSON.stringify('http://localhost:4000'),
+        API_URL: JSON.stringify(''),
       },
     }),
     new ReactRefreshWebpackPlugin(),
@@ -18,5 +18,16 @@ module.exports = {
     hot: true,
     open: true,
     historyApiFallback: true,
+    proxy: {
+      '/api': {
+        target: `http://localhost:${process.env.PORT}`,
+        secure: false,
+        changeOrigin: true,
+        headers: {
+          Connection: 'keep-alive',
+        },
+      },
+      open: true,
+    },
   },
 };
