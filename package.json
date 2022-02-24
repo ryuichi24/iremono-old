@@ -12,6 +12,8 @@
     "dev": " yarn concurrently \"yarn dev-server\" \"yarn dev-web\"",
     "dev-web": "export $(cat .env.dev | grep -v \"#\" | xargs) && yarn workspace @iremono/web dev",
     "dev-server": "export $(cat .env.dev | grep -v \"#\" | xargs) && yarn workspace @iremono/server dev",
+    "make-dev-env-file": "echo \"$(cat ./.env.example)\" > .env.dev",
+    "make-prod-env-file": "echo \"$(cat ./.env.example)\" > .env.prod",
     "init-mysql-db": "export $(cat .env.dev | grep -v \"#\" | xargs) && yarn workspace @iremono/backend-core init-mysql-db",
     "init-mysql-tables": "export $(cat .env.dev | grep -v \"#\" | xargs) && yarn workspace @iremono/backend-core init-mysql-tables",
     "cleanup-mysql-db": "export $(cat .env.dev | grep -v \"#\" | xargs) && yarn workspace @iremono/backend-core cleanup-mysql-db"
