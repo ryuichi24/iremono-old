@@ -24,6 +24,10 @@ export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, Down
       throw new InvalidRequestError('the file is in a trash.');
     }
 
+    if (fileToDownload.ownerId !== dto.ownerId) {
+      throw new InvalidRequestError(`the owner does not match the file's owner`);
+    }
+
     const responseDto: DownloadFileResponseDTO = {
       name: fileToDownload.name,
       mimeType: fileToDownload.mimeType!,
