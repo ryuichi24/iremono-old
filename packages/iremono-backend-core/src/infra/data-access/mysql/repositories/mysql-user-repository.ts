@@ -20,7 +20,7 @@ export class MysqlUserRepository implements UserRepository {
   }
 
   public async findOneByEmail(email: string): Promise<User | null> {
-    const result = await MysqlDatabase.connectionPool.query('SELECT * FROM users WHERE email = ?;', [email]);
+    const result = await MysqlDatabase.getConnectionPool().query('SELECT * FROM users WHERE email = ?;', [email]);
     const user = (result[0] as any)[0];
     if (!user) return null;
 
@@ -37,7 +37,7 @@ export class MysqlUserRepository implements UserRepository {
   }
 
   public async findOneById(id: string): Promise<User | null> {
-    const result = await MysqlDatabase.connectionPool.query('SELECT * FROM users WHERE id = ?;', [id]);
+    const result = await MysqlDatabase.getConnectionPool().query('SELECT * FROM users WHERE id = ?;', [id]);
     const user = (result[0] as any)[0];
     if (!user) return null;
 
@@ -54,7 +54,7 @@ export class MysqlUserRepository implements UserRepository {
   }
 
   private async _insert(entity: User) {
-    await MysqlDatabase.connectionPool.query('INSERT INTO users (id, email, password) VALUES (?, ?, ?);', [
+    await MysqlDatabase.getConnectionPool().query('INSERT INTO users (id, email, password) VALUES (?, ?, ?);', [
       entity.id,
       entity.email,
       entity.hashedPassword,
@@ -64,12 +64,10 @@ export class MysqlUserRepository implements UserRepository {
   }
 
   private async _update(entity: User) {
-    await MysqlDatabase.connectionPool.query('UPDATE users SET email = ?, password = ?, updated_at = ? WHERE id = ?;', [
-      entity.email,
-      entity.hashedPassword,
-      entity.updatedAt,
-      entity.id,
-    ]);
+    await MysqlDatabase.getConnectionPool().query(
+      'UPDATE users SET email = ?, password = ?, updated_at = ? WHERE id = ?;',
+      [entity.email, entity.hashedPassword, entity.updatedAt, entity.id],
+    );
 
     return entity;
   }

@@ -4,17 +4,12 @@ import { config } from './config';
 import { filesRouter, foldersRouter, authRouter, trashRouter, securityRouter } from './routes';
 import { cookieHandler, errorHandler } from './shared/express-lib';
 import { loggerFactory } from './shared/utils/logger';
-import { MysqlDatabase } from '@iremono/backend-core/dist/infra/data-access';
+import { initMysqlDB } from './db';
 
 const logger = loggerFactory.createLogger('main');
 
-const init = async () => {
-  await MysqlDatabase.initConnectionPool({
-    host: config.dbConfig.DB_HOST,
-    user: config.dbConfig.DB_USERNAME,
-    password: config.dbConfig.DB_PASSWORD,
-    database: config.dbConfig.DB_NAME,
-  });
+const main = async () => {
+  await initMysqlDB();
 
   const HOST = config.serverConfig.HOST;
   const PORT = config.serverConfig.PORT;
@@ -36,4 +31,4 @@ const init = async () => {
   app.listen(PORT, () => logger.info(`Server is running at http://${HOST}:${PORT}`));
 };
 
-init();
+main();

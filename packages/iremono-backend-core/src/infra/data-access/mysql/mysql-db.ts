@@ -1,5 +1,6 @@
 import mysql from 'mysql2';
 import { Pool } from 'mysql2/promise';
+import { LoggerFactory } from '@iremono/util';
 
 interface Options {
   host: string;
@@ -11,8 +12,10 @@ interface Options {
 export class MysqlDatabase {
   public static connectionPool: Pool;
 
-  public static async initConnectionPool({ host, user, password, database }: Options) {
+  public static async initConnectionPool({ host, user, password, database }: Options, loggerFactory: LoggerFactory) {
     try {
+      const logger = loggerFactory.createLogger('MysqlDatabase');
+
       const pool = mysql.createPool({ host, user, database, password });
 
       const promisePool = pool.promise();
@@ -21,7 +24,7 @@ export class MysqlDatabase {
 
       await con.connect();
 
-      console.log('Successfully connected to database!');
+      logger.info('Successfully connected to database!');
 
       this.connectionPool = promisePool;
     } catch (error) {
