@@ -13,7 +13,7 @@ export class ListItemsInFolderUseCase implements UseCase<ListItemsInFolderReques
   }
 
   public async handle(dto: ListItemsInFolderRequestDTO): Promise<ListItemsInFolderResponseDTO> {
-    const parentFolder = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
+    const parentFolder = await this._storageItemRepository.findOneById(dto.id);
     if (!parentFolder) throw new NotExistError('the parent folder does not exist.');
 
     const items = await this._storageItemRepository.findByParentId(dto.id, dto.ownerId, false);

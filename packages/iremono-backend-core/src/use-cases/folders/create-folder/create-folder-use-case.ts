@@ -14,9 +14,12 @@ export class CreateFolderUseCase implements UseCase<CreateFolderRequestDTO, Crea
   }
 
   public async handle(dto: CreateFolderRequestDTO): Promise<CreateFolderResponseDTO> {
-    const parentFolder = await this._storageItemRepository.findOneById(dto.parentId, dto.ownerId);
+    const parentFolder = await this._storageItemRepository.findOneById(dto.parentId);
 
     if (!parentFolder) throw new InvalidRequestError('the parent folder does not exist.');
+
+    if (parentFolder.ownerId !== dto.ownerId)
+      throw new InvalidRequestError(`the owner does not match the folder's owner`);
 
     if (parentFolder.isInTrash) throw new InvalidRequestError('the parent folder is in a trash.');
 

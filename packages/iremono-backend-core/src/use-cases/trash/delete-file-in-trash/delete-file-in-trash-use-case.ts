@@ -13,8 +13,11 @@ export class DeleteFileInTrashUseCase implements UseCase<DeleteFileInTrashReques
   }
 
   public async handle(dto: DeleteFileInTrashRequestDTO): Promise<DeleteFileInTrashResponseDTO> {
-    const fileToRemove = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
+    const fileToRemove = await this._storageItemRepository.findOneById(dto.id);
     if (!fileToRemove || fileToRemove.isFolder) throw new InvalidRequestError('the file does not exist in trash.');
+
+    if (fileToRemove.ownerId !== dto.ownerId)
+      throw new InvalidRequestError(`the owner does not match the folder's owner`);
 
     await this._storageItemRepository.remove(fileToRemove);
 

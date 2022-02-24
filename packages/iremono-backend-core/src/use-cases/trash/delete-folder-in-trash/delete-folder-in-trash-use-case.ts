@@ -15,10 +15,13 @@ export class DeleteFolderInTrashUseCase
   }
 
   public async handle(dto: DeleteFolderInTrashRequestDTO): Promise<DeleteFolderInTrashResponseDTO> {
-    const folderInTrashToDelete = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
+    const folderInTrashToDelete = await this._storageItemRepository.findOneById(dto.id);
 
     if (!folderInTrashToDelete || !folderInTrashToDelete.isFolder)
       throw new InvalidRequestError('the folder does not exist in trash.');
+
+    if (folderInTrashToDelete.ownerId !== dto.ownerId)
+      throw new InvalidRequestError(`the owner does not match the folder's owner`);
 
     const allDescendants = await this._storageItemRepository.findAllDescendantsById(dto.id, dto.ownerId, true);
 

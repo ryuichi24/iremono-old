@@ -14,7 +14,7 @@ export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, Down
   }
 
   public async handle(dto: DownloadFileRequestDTO): Promise<DownloadFileResponseDTO> {
-    const fileToDownload = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
+    const fileToDownload = await this._storageItemRepository.findOneById(dto.id);
 
     if (!fileToDownload) {
       throw new NotExistError('the file does not exist.');

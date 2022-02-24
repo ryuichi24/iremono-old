@@ -13,7 +13,7 @@ export class UpdateFolderUseCase implements UseCase<UpdateFolderRequestDTO, Upda
   }
 
   public async handle(dto: UpdateFolderRequestDTO): Promise<UpdateFolderResponseDTO> {
-    const folderToUpdate = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
+    const folderToUpdate = await this._storageItemRepository.findOneById(dto.id);
 
     if (!folderToUpdate || !folderToUpdate.isFolder) throw new InvalidRequestError('the folder does not exist.');
 
@@ -21,10 +21,13 @@ export class UpdateFolderUseCase implements UseCase<UpdateFolderRequestDTO, Upda
 
     if (folderToUpdate.isRootFolder) throw new InvalidRequestError('the root folder cannot be updated.');
 
+    if (folderToUpdate.ownerId !== dto.ownerId)
+      throw new InvalidRequestError(`the owner does not match the folder's owner`);
+
     if (dto.name) folderToUpdate.rename(dto.name);
 
     if (dto.parentId) {
-      const parentExists = !!(await this._storageItemRepository.findOneById(dto.parentId, dto.ownerId));
+      const parentExists = !!(await this._storageItemRepository.findOneById(dto.parentId));
       if (!parentExists) throw new InvalidRequestError('the parent folder does not exist.');
       folderToUpdate.move(dto.parentId);
     }

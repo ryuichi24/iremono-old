@@ -12,10 +12,13 @@ export class RestoreFileUseCase implements UseCase<RestoreFileRequestDTO, Restor
   }
 
   public async handle(dto: RestoreFileRequestDTO): Promise<RestoreFileResponseDTO> {
-    const fileToRestore = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
+    const fileToRestore = await this._storageItemRepository.findOneById(dto.id);
     if (!fileToRestore || fileToRestore.isFolder) throw new NotExistError('the file does not exist.');
 
-    const parentFolder = await this._storageItemRepository.findOneById(fileToRestore.parentId!, dto.ownerId);
+    if (fileToRestore.ownerId !== dto.ownerId)
+      throw new InvalidRequestError(`the owner does not match the folder's owner`);
+
+    const parentFolder = await this._storageItemRepository.findOneById(fileToRestore.parentId!);
     if (parentFolder?.isInTrash) throw new InvalidRequestError('the parent folder is in a trash.');
 
     fileToRestore.restore();

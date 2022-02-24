@@ -21,6 +21,8 @@ export class DownloadFileController extends Controller<DownloadFileUseCase> {
     const dto = makeDownloadFileRequestDTO(request);
     const result = await this._useCase.handle(dto);
 
+    this._logger.debug(result);
+
     const readStream = fs.createReadStream(result.filePath);
     const decipherStream = this._cryptoService.generateDecipherStreamInCBC(
       config.mediaConfig.ENCRYPTION_KEY,

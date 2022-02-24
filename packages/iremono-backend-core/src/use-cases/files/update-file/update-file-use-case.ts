@@ -13,16 +13,19 @@ export class UpdateFileUseCase implements UseCase<UpdateFileRequestDTO, UpdateFi
   }
 
   public async handle(dto: UpdateFileRequestDTO): Promise<UpdateFileResponseDTO> {
-    const fileToUpdate = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
+    const fileToUpdate = await this._storageItemRepository.findOneById(dto.id);
 
     if (!fileToUpdate || fileToUpdate.isFolder) throw new NotExistError('the file does not exist.');
 
     if (fileToUpdate.isInTrash) throw new InvalidRequestError('the file is in a trash.');
 
+    if (fileToUpdate.ownerId !== dto.ownerId)
+      throw new InvalidRequestError(`the owner does not match the folder's owner`);
+
     if (dto.name) fileToUpdate.rename(dto.name);
 
     if (dto.parentId) {
-      const parentExists = !!(await this._storageItemRepository.findOneById(dto.parentId, dto.ownerId));
+      const parentExists = !!(await this._storageItemRepository.findOneById(dto.parentId));
       if (!parentExists) throw new InvalidRequestError('the parent folder does not exist.');
       fileToUpdate.move(dto.parentId);
     }

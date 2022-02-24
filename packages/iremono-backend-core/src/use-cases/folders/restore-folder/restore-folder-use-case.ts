@@ -12,11 +12,14 @@ export class RestoreFolderUseCase implements UseCase<RestoreFolderRequestDTO, Re
   }
 
   public async handle(dto: RestoreFolderRequestDTO): Promise<RestoreFolderResponseDTO> {
-    const folderToRestore = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
+    const folderToRestore = await this._storageItemRepository.findOneById(dto.id);
     if (!folderToRestore || !folderToRestore.isFolder) throw new InvalidRequestError('the folder does not exist.');
 
-    const parentFolder = await this._storageItemRepository.findOneById(folderToRestore.parentId!, dto.ownerId);
+    const parentFolder = await this._storageItemRepository.findOneById(folderToRestore.parentId!);
     if (parentFolder?.isInTrash) throw new InvalidRequestError('the parent folder is in a trash.');
+
+    if (folderToRestore.ownerId !== dto.ownerId)
+      throw new InvalidRequestError(`the owner does not match the folder's owner`);
 
     const allDescendants = await this._storageItemRepository.findAllDescendantsById(dto.id, dto.ownerId, true);
 

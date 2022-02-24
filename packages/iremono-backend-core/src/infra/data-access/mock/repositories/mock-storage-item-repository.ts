@@ -68,7 +68,7 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
   };
 
   const save = async (entity: StorageItem) => {
-    const entityExists = !!(await findOneById(entity.id, entity.ownerId));
+    const entityExists = !!(await findOneById(entity.id));
 
     if (!entityExists) await _insert(entity);
     if (entityExists) await _update(entity);
@@ -91,8 +91,8 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     );
   };
 
-  const findOneById = async (id: string, ownerId: string) => {
-    const foundItemRow = storageItemTable.find((item) => item.id === id && item.ownerId === ownerId);
+  const findOneById = async (id: string) => {
+    const foundItemRow = storageItemTable.find((item) => item.id === id);
     if (!foundItemRow) return null;
 
     return makeStorageItemEntityFromRow(foundItemRow);

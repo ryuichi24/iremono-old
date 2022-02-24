@@ -16,7 +16,7 @@ export class DownloadFileThumbnailUseCase
   }
 
   public async handle(dto: DownloadFileThumbnailRequestDTO): Promise<DownloadFileThumbnailResponseDTO> {
-    const fileOfThumbnailToDownload = await this._storageItemRepository.findOneById(dto.id, dto.ownerId);
+    const fileOfThumbnailToDownload = await this._storageItemRepository.findOneById(dto.id);
 
     if (!fileOfThumbnailToDownload) {
       throw new NotExistError('the file does not exist.');
