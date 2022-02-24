@@ -1,6 +1,7 @@
 import { makeStorageItemDTO } from '../../../models';
 import { StorageItemRepository } from '../../../repositories';
 import { UseCase } from '../../../shared/use-case-lib';
+import { NotExistError } from '../../../shared/utils/errors';
 import { DeleteAllInTrashRequestDTO } from './delete-all-in-trash-request-DTO';
 import { DeleteAllInTrashResponseDTO } from './delete-all-in-trash-response-DTO';
 
@@ -12,7 +13,10 @@ export class DeleteAllInTrashUseCase implements UseCase<DeleteAllInTrashRequestD
   }
 
   public async handle(dto: DeleteAllInTrashRequestDTO): Promise<DeleteAllInTrashResponseDTO> {
-    const trashItems = await this._storageItemRepository.findAllDescendantsById('0', dto.ownerId, true);
+    const rootFolder = await this._storageItemRepository.findRootFolderByOwnerId(dto.ownerId);
+    if (!rootFolder) throw new NotExistError('The root folder does not exists.');
+
+    const trashItems = await this._storageItemRepository.findAllDescendantsById(rootFolder.id, dto.ownerId, true);
     await Promise.all(trashItems.map(async (trashItem) => await this._storageItemRepository.remove(trashItem)));
 
     return {

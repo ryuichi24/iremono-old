@@ -1,4 +1,4 @@
 export interface ListItemsInFolderRequestDTO {
-  id: string;
+  parentId: string;
   ownerId: string;
 }

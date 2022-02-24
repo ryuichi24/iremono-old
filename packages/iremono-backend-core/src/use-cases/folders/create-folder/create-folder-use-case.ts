@@ -3,6 +3,7 @@ import { makeStorageItemDTO } from '../../../models';
 import { StorageItemRepository } from '../../../repositories';
 import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError } from '../../../shared/utils/errors';
+import { isRootFolder } from '../../../shared/utils/is-rootr-folder';
 import { CreateFolderRequestDTO } from './create-folder-request-DTO';
 import { CreateFolderResponseDTO } from './create-folder-response-DTO';
 
@@ -14,7 +15,15 @@ export class CreateFolderUseCase implements UseCase<CreateFolderRequestDTO, Crea
   }
 
   public async handle(dto: CreateFolderRequestDTO): Promise<CreateFolderResponseDTO> {
-    const parentFolder = await this._storageItemRepository.findOneById(dto.parentId);
+    let parentFolder;
+
+    if (isRootFolder(dto.parentId)) {
+      parentFolder = await this._storageItemRepository.findRootFolderByOwnerId(dto.ownerId);
+    }
+
+    if (!isRootFolder(dto.parentId)) {
+      parentFolder = await this._storageItemRepository.findOneById(dto.parentId);
+    }
 
     if (!parentFolder) throw new InvalidRequestError('the parent folder does not exist.');
 
@@ -27,7 +36,7 @@ export class CreateFolderUseCase implements UseCase<CreateFolderRequestDTO, Crea
       name: dto.name,
       isFolder: true,
       ownerId: dto.ownerId,
-      parentId: dto.parentId,
+      parentId: parentFolder.id,
     });
 
     const saved = await this._storageItemRepository.save(folder);

@@ -8,12 +8,12 @@ import Button from '@mui/material/Button';
 import { foldersService } from '@/services/folders-service';
 import { useFoldersStore } from '@/store/folders/use-folders-store';
 interface Props {
-  folderId: string;
+  currentFolderId: string;
   open: boolean;
   handleClose: () => void;
 }
 
-export const NewFolderForm = ({ folderId, open, handleClose }: Props) => {
+export const NewFolderForm = ({ currentFolderId, open, handleClose }: Props) => {
   const [folderName, setFolderName] = useState('Untitled folder');
 
   const { addOneFolderItem } = useFoldersStore();
@@ -22,9 +22,9 @@ export const NewFolderForm = ({ folderId, open, handleClose }: Props) => {
     e.preventDefault();
     handleClose();
     foldersService
-      .create({ parentId: folderId, name: folderName })
+      .create({ parentId: currentFolderId, name: folderName })
       .then((result) => {
-        addOneFolderItem({ folderItem: result });
+        addOneFolderItem({ folderItem: result, parentId: currentFolderId });
         setFolderName('Untitled folder');
       })
       .catch((err) => console.log(err));

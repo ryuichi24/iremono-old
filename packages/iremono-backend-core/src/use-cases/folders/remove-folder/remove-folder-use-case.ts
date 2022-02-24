@@ -13,6 +13,7 @@ export class RemoveFolderUseCase implements UseCase<RemoveFolderRequestDTO, Remo
 
   public async handle(dto: RemoveFolderRequestDTO): Promise<RemoveFolderResponseDTO> {
     const folderToRemove = await this._storageItemRepository.findOneById(dto.id);
+
     if (!folderToRemove || !folderToRemove.isFolder) throw new InvalidRequestError('the folder does not exist.');
 
     if (folderToRemove.isRootFolder) throw new InvalidRequestError('the root folder cannot be removed.');
@@ -20,7 +21,11 @@ export class RemoveFolderUseCase implements UseCase<RemoveFolderRequestDTO, Remo
     if (folderToRemove.ownerId !== dto.ownerId)
       throw new InvalidRequestError(`the owner does not match the folder's owner`);
 
-    const allDescendants = await this._storageItemRepository.findAllDescendantsById(folderToRemove.id, dto.ownerId, false);
+    const allDescendants = await this._storageItemRepository.findAllDescendantsById(
+      folderToRemove.id,
+      dto.ownerId,
+      false,
+    );
 
     await Promise.all(
       allDescendants.map(async (descendant) => {

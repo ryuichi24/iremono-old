@@ -12,11 +12,12 @@ import { useFilesStore } from '@/store/files/use-files-store';
 
 interface Props {
   storageItem: any;
+  currentFolderId: string;
   open: boolean;
   handleClose: () => void;
 }
 
-export const RenameStorageItemForm = ({ storageItem, open, handleClose }: Props) => {
+export const RenameStorageItemForm = ({ storageItem, currentFolderId, open, handleClose }: Props) => {
   const [storageItemName, setStorageItemName] = useState(storageItem.name);
 
   const { updateFolderItem } = useFoldersStore();
@@ -30,13 +31,13 @@ export const RenameStorageItemForm = ({ storageItem, open, handleClose }: Props)
       ? foldersService
           .update({ folderId: storageItem.id, folderProperties: { name: storageItemName } })
           .then((result) => {
-            updateFolderItem({ folderItem: result });
+            updateFolderItem({ folderItem: result, parentId: currentFolderId });
           })
           .catch((err) => console.log(err))
       : filesService
           .update({ fileId: storageItem.id, fileProperties: { name: storageItemName } })
           .then((result) => {
-            updateFileItem({ fileItem: result });
+            updateFileItem({ fileItem: result, parentId: currentFolderId });
           })
           .catch((err) => console.log(err));
   };

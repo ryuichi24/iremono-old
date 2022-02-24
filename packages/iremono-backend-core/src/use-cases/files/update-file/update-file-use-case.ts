@@ -26,7 +26,7 @@ export class UpdateFileUseCase implements UseCase<UpdateFileRequestDTO, UpdateFi
 
     if (dto.parentId) {
       const parentExists = !!(await this._storageItemRepository.findOneById(dto.parentId));
-      if (!parentExists) throw new InvalidRequestError('the parent folder does not exist.');
+      if (!parentExists) throw new InvalidRequestError('the new parent folder does not exist.');
       fileToUpdate.move(dto.parentId);
     }
 

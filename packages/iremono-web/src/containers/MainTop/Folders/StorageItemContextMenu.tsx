@@ -14,9 +14,10 @@ import { RemoveStorageItemForm } from './RemoveStorageItemForm';
 interface Props {
   children: React.ReactNode;
   storageItem: any;
+  currentFolderId: string;
 }
 
-export const StorageItemContextMenu = ({ children, storageItem }: Props) => {
+export const StorageItemContextMenu = ({ children, storageItem, currentFolderId }: Props) => {
   const { xPos, yPos, showMenu, handleContextMenu } = useContextMenu();
   const [openRenameStorageItemForm, handleOpenRenameStorageItemForm, handleCloseRenameStorageItemForm] = useModal();
   const [openRemoveStorageItemForm, handleOpenRemoveStorageItemForm, handleCloseRemoveStorageItemForm] = useModal();
@@ -53,12 +54,14 @@ export const StorageItemContextMenu = ({ children, storageItem }: Props) => {
         storageItem={storageItem}
         open={openRenameStorageItemForm}
         handleClose={handleCloseRenameStorageItemForm}
+        currentFolderId={currentFolderId}
       />
 
       <RemoveStorageItemForm
         storageItem={storageItem}
         open={openRemoveStorageItemForm}
         handleClose={handleCloseRemoveStorageItemForm}
+        currentFolderId={currentFolderId}
       />
     </>
   );

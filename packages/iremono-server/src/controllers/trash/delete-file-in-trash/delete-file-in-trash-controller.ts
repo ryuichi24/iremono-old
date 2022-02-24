@@ -18,6 +18,8 @@ export class DeleteFileInTrashController extends Controller<DeleteFileInTrashUse
 
     await deleteFromFileSystem(result.deletedFile.filePath!);
 
+    if (result.deletedFile.hasThumbnail) await deleteFromFileSystem(result.deletedFile.thumbnailPath!);
+
     this._logger.info(
       'user has deleted a folder in trash',
       `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has deleted a folder in trash"]`,

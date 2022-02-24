@@ -12,11 +12,12 @@ import { Typography } from '@mui/material';
 
 interface Props {
   storageItem: any;
+  currentFolderId: string;
   open: boolean;
   handleClose: () => void;
 }
 
-export const RemoveStorageItemForm = ({ storageItem, open, handleClose }: Props) => {
+export const RemoveStorageItemForm = ({ storageItem, currentFolderId, open, handleClose }: Props) => {
   const { removeFolderItem } = useFoldersStore();
   const { removeFileItem } = useFilesStore();
 
@@ -28,13 +29,13 @@ export const RemoveStorageItemForm = ({ storageItem, open, handleClose }: Props)
       ? foldersService
           .remove({ folderId: storageItem.id })
           .then((result) => {
-            removeFolderItem({ folderItem: storageItem });
+            removeFolderItem({ folderItem: storageItem, parentId: currentFolderId });
           })
           .catch((err) => console.log(err))
       : filesService
           .remove({ fileId: storageItem.id })
           .then((result) => {
-            removeFileItem({ fileItem: storageItem });
+            removeFileItem({ fileItem: storageItem, parentId: currentFolderId });
           })
           .catch((err) => console.log(err));
   };

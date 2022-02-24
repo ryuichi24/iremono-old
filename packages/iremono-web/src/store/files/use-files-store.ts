@@ -6,9 +6,9 @@ import { filesActions } from './files-slice';
 interface FilesStore {
   fileGroupList: RootState['filesState']['fileGroupList'];
   addFileGroup: (args: { fileItems: any[]; parentId: string }) => void;
-  addOneFileItem: (args: { fileItem: any }) => void;
-  updateFileItem: (args: { fileItem: any }) => void;
-  removeFileItem: (args: { fileItem: any }) => void;
+  addOneFileItem: (args: { fileItem: any; parentId: string }) => void;
+  updateFileItem: (args: { fileItem: any; parentId: string }) => void;
+  removeFileItem: (args: { fileItem: any; parentId: string }) => void;
 }
 
 export const useFilesStore = (): FilesStore => {
@@ -23,21 +23,21 @@ export const useFilesStore = (): FilesStore => {
   );
 
   const addOneFileItem = useCallback(
-    (args: { fileItem: any }) => {
+    (args: { fileItem: any; parentId: string }) => {
       dispatch(filesActions.addOneFileItem(args));
     },
     [dispatch],
   );
 
   const updateFileItem = useCallback(
-    (args: { fileItem: any }) => {
+    (args: { fileItem: any; parentId: string }) => {
       dispatch(filesActions.updateFileItem(args));
     },
     [dispatch],
   );
 
   const removeFileItem = useCallback(
-    (args: { fileItem: any }) => {
+    (args: { fileItem: any; parentId: string }) => {
       dispatch(filesActions.removeFileItem(args));
     },
     [dispatch],

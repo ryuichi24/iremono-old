@@ -3,6 +3,7 @@ import { makeStorageItemDTO } from '../../../models';
 import { StorageItemRepository } from '../../../repositories';
 import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError } from '../../../shared/utils/errors';
+import { isRootFolder } from '../../../shared/utils/is-rootr-folder';
 import { UploadFileRequestDTO } from './upload-file-request-DTO';
 import { UploadFileResponseDTO } from './upload-file-response-DTO';
 
@@ -14,7 +15,15 @@ export class UploadFileUseCase implements UseCase<UploadFileRequestDTO, UploadFi
   }
 
   public async handle(dto: UploadFileRequestDTO): Promise<UploadFileResponseDTO> {
-    const parentFolder = await this._storageItemRepository.findOneById(dto.parentId);
+    let parentFolder;
+
+    if (isRootFolder(dto.parentId)) {
+      parentFolder = await this._storageItemRepository.findRootFolderByOwnerId(dto.ownerId);
+    }
+
+    if (!isRootFolder(dto.parentId)) {
+      parentFolder = await this._storageItemRepository.findOneById(dto.parentId);
+    }
 
     if (!parentFolder || !parentFolder.isFolder) throw new InvalidRequestError('the parent folder does not exist.');
 
@@ -27,7 +36,7 @@ export class UploadFileUseCase implements UseCase<UploadFileRequestDTO, UploadFi
       name: dto.name,
       isFolder: false,
       ownerId: dto.ownerId,
-      parentId: dto.parentId,
+      parentId: parentFolder.id,
       filePath: dto.filePath,
       fileSize: dto.fileSize,
       mimeType: dto.mimeType,

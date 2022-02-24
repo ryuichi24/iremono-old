@@ -4,9 +4,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import { useFoldersStore } from '@/store/folders/use-folders-store';
 import { filesService } from '@/services/files-service';
-import { useFilesStore } from '@/store/files/use-files-store';
 import { Typography } from '@mui/material';
 import { useTrashStore } from '@/store/trash/use-trash-store';
 import { foldersService } from '@/services/folders-service';
@@ -19,8 +17,6 @@ interface Props {
 
 export const RestoreTrashItemForm = ({ trashItem, open, handleClose }: Props) => {
   const { removeTrashItem } = useTrashStore();
-  const { addOneFolderItem } = useFoldersStore();
-  const { addOneFileItem } = useFilesStore();
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -31,14 +27,12 @@ export const RestoreTrashItemForm = ({ trashItem, open, handleClose }: Props) =>
           .restore({ folderId: trashItem.id })
           .then((result) => {
             removeTrashItem({ trashItem: trashItem });
-            addOneFolderItem({ folderItem: trashItem });
           })
           .catch((err) => console.log(err))
       : filesService
           .restore({ fileId: trashItem.id })
           .then((result) => {
             removeTrashItem({ trashItem: trashItem });
-            addOneFileItem({ fileItem: trashItem });
           })
           .catch((err) => console.log(err));
   };

@@ -6,9 +6,9 @@ import { foldersActions } from './folders-slice';
 interface foldersStore {
   folderGroupList: RootState['foldersState']['folderGroupList'];
   addFolderGroup: (args: { folderItems: any[]; parentId: string }) => void;
-  addOneFolderItem: (args: { folderItem: any }) => void;
-  updateFolderItem: (args: { folderItem: any }) => void;
-  removeFolderItem: (args: { folderItem: any }) => void;
+  addOneFolderItem: (args: { folderItem: any; parentId: string }) => void;
+  updateFolderItem: (args: { folderItem: any; parentId: string }) => void;
+  removeFolderItem: (args: { folderItem: any; parentId: string }) => void;
 }
 
 export const useFoldersStore = (): foldersStore => {
@@ -23,21 +23,21 @@ export const useFoldersStore = (): foldersStore => {
   );
 
   const addOneFolderItem = useCallback(
-    (args: { folderItem: any }) => {
+    (args: { folderItem: any; parentId: string }) => {
       dispatch(foldersActions.addOneFolderItem(args));
     },
     [dispatch],
   );
 
   const updateFolderItem = useCallback(
-    (args: { folderItem: any }) => {
+    (args: { folderItem: any; parentId: string }) => {
       dispatch(foldersActions.updateFolderItem(args));
     },
     [dispatch],
   );
 
   const removeFolderItem = useCallback(
-    (args: { folderItem: any }) => {
+    (args: { folderItem: any; parentId: string }) => {
       dispatch(foldersActions.removeFolderItem(args));
     },
     [dispatch],

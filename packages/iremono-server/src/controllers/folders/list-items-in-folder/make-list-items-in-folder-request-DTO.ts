@@ -5,6 +5,6 @@ export const makeListItemsInFolderRequestDTO = ({
   user,
   params: { id },
 }: HttpRequest): ListItemsInFolderRequestDTO => ({
-  id,
+  parentId: id,
   ownerId: user.id,
 });
