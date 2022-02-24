@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import cors from 'cors';
 import { config } from './config';
@@ -27,6 +28,16 @@ const main = async () => {
   app.get('/api/health', async (_, res) => res.send('API is running'));
 
   app.use(errorHandler());
+
+  if (!config.serverConfig.IS_DEVELOPMENT) {
+    const staticFilesDir = path.resolve('..', '..', 'packages', 'iremono-web', 'dist');
+
+    app.use(express.static(staticFilesDir));
+
+    app.get('*', (req, res) => {
+      res.sendFile(path.resolve(staticFilesDir, 'index.html'));
+    });
+  }
 
   app.listen(PORT, () => logger.info(`Server is running at http://${HOST}:${PORT}`));
 };

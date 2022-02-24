@@ -5,9 +5,7 @@ module.exports = {
   devtool: 'source-map',
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
-        API_URL: JSON.stringify('https://example.com'),
-      },
+      'process.env': {},
     }),
   ],
 };
