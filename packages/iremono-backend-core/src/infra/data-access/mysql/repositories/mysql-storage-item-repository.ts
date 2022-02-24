@@ -3,17 +3,21 @@ import { StorageItemRepository } from '../../../../repositories';
 import { MysqlRepository } from './mysql-repository';
 
 export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> implements StorageItemRepository {
-  async remove(entity: StorageItem): Promise<void> {
+  public async remove(entity: StorageItem): Promise<void> {
     const query = 'DELETE FROM storage_items WHERE id = ? AND owner_id = ?;';
     const values = [entity.id, entity.ownerId];
     await this._query(query, values);
   }
 
-  async findByParentId(parentId: string, ownerId: string, inTrash: boolean): Promise<StorageItem[]> {
+  public async findByParentId(parentId: string, ownerId: string, inTrash: boolean): Promise<StorageItem[]> {
     throw new Error('Method not implemented.');
   }
 
-  async findAllDescendantsById(id: string, ownerId: string, inTrash: boolean): Promise<StorageItem[]> {
+  public async findAllDescendantsById(id: string, ownerId: string, inTrash: boolean): Promise<StorageItem[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  public async findRootFolderByOwnerId(ownerId: string): Promise<StorageItem | null> {
     throw new Error('Method not implemented.');
   }
 

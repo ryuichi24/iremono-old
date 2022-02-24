@@ -118,12 +118,19 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     return descendants.map((descendant) => makeStorageItemEntityFromRow(descendant));
   };
 
+  const findRootFolderByOwnerId = async (ownerId: string) => {
+    const foundRootFolder = storageItemTable.find((item) => item.isRootFolder && item.ownerId === ownerId);
+    if (!foundRootFolder) return null;
+    return makeStorageItemEntityFromRow(foundRootFolder);
+  };
+
   return {
     save,
     remove,
     findOneById,
     findByParentId,
     findAllDescendantsById,
+    findRootFolderByOwnerId,
   };
 };
 

@@ -1,1 +1,1 @@
-export * from './list-items-in-controller';
+export * from './list-items-in-folder-controller';

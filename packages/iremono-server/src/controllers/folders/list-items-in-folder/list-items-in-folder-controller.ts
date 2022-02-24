@@ -1,7 +1,7 @@
 import { ListItemsInFolderUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeListItemsInFolderRequestDTO } from './make-list-items-in-controller-request-DTO';
+import { makeListItemsInFolderRequestDTO } from './make-list-items-in-folder-request-DTO';
 
 export class ListItemsInFolderController extends Controller<ListItemsInFolderUseCase> {
   private readonly _logger: Logger;
