@@ -12,8 +12,8 @@ interface Props {
 export const FolderItemCard = ({ folder, handleClick, handleDoubleClick }: Props) => {
   return (
     <Container onClick={handleClick} onDoubleClick={handleDoubleClick}>
-      <FolderIcon sx={{ color: 'text.primary' }} />
-      <Typography sx={{ color: 'text.primary' }}>{folder.name}</Typography>
+      <FolderIcon sx={{ color: 'text.secondary' }} />
+      <Typography sx={{ color: 'text.secondary' }}>{folder.name}</Typography>
     </Container>
   );
 };

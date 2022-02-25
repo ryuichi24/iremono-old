@@ -13,5 +13,5 @@ export const Viewer = () => {
   if (checkViewer(selectedViewerItem?.fileExtension) === VIEWERS.VIDEO)
     return <VideoViewer file={selectedViewerItem} />;
 
-  return <div>Default</div>;
+  return <></>;
 };

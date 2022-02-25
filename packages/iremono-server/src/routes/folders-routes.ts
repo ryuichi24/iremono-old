@@ -3,6 +3,7 @@ import {
   createFolderController,
   getRootFolderController,
   jwtService,
+  listAllAncestorsController,
   listItemsInFolderController,
   removeFolderController,
   restoreFolderController,
@@ -17,4 +18,5 @@ export const foldersRouter = express
   .post('/:id/remove', authHandler(jwtService), makeExpressHandler(removeFolderController))
   .post('/:id/restore', authHandler(jwtService), makeExpressHandler(restoreFolderController))
   .get('/:id/items', authHandler(jwtService), makeExpressHandler(listItemsInFolderController))
-  .get('/root', authHandler(jwtService), makeExpressHandler(getRootFolderController));
+  .get('/root', authHandler(jwtService), makeExpressHandler(getRootFolderController))
+  .get('/:id/ancestors', authHandler(jwtService), makeExpressHandler(listAllAncestorsController));

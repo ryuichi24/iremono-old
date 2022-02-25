@@ -112,6 +112,12 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     return descendants.map((descendant) => makeStorageItemEntityFromRow(descendant));
   };
 
+  const findAllAncestorsById = async (id: string): Promise<StorageItem[]> => {
+    const folder = storageItemTable.find((item) => item.id === id);
+    const ancestors = storageItemTable.filter((itemRow) => folder?.ancestors.includes(itemRow.id));
+    return ancestors.map((ancestor) => makeStorageItemEntityFromRow(ancestor));
+  };
+
   const findRootFolderByOwnerId = async (ownerId: string) => {
     const foundRootFolder = storageItemTable.find((item) => item.isRootFolder && item.ownerId === ownerId);
     if (!foundRootFolder) return null;
@@ -124,6 +130,7 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     findOneById,
     findByParentId,
     findAllDescendantsById,
+    findAllAncestorsById,
     findRootFolderByOwnerId,
   };
 };

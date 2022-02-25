@@ -31,7 +31,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
                  has_thumbnail, thumbnail_path, thumbnail_size, thumbnail_initialization_vector, created_at, 
                  updated_at, owner_id
       FROM       storage_items
-      WHERE      parent_id = ? AND is_in_trash = ?
+      WHERE      parent_id = ?
 
       UNION ALL
 
@@ -42,11 +42,48 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
 
       FROM       storage_items si
       INNER JOIN descendants
-              ON si.parent_id = descendants.id AND si.is_in_trash = ?
+              ON si.parent_id = descendants.id
     )
-    SELECT * FROM descendants;
+    SELECT * FROM descendants WHERE is_in_trash = ?
     `;
-    const values = [id, inTrash, inTrash];
+    const values = [id, inTrash];
+
+    const result = await this._query(query, values);
+    const storageItems = result as any[];
+    this._logger.debug(storageItems);
+    return storageItems.map((item) => this._toEntity(item));
+  }
+
+  public async findAllAncestorsById(id: string): Promise<StorageItem[]> {
+    const query = `WITH RECURSIVE ancestors (
+        id, name, parent_id, is_folder, is_in_trash, 
+        file_path, file_size, last_viewed_at, initialization_vector, is_encrypted_with_client_key,
+        has_thumbnail, thumbnail_path, thumbnail_size, thumbnail_initialization_vector, created_at, 
+        updated_at, owner_id
+      ) 
+      AS 
+      (
+      SELECT     id, name, parent_id, is_folder, is_in_trash,
+                 file_path, file_size, last_viewed_at, initialization_vector, is_encrypted_with_client_key,
+                 has_thumbnail, thumbnail_path, thumbnail_size, thumbnail_initialization_vector, created_at, 
+                 updated_at, owner_id
+      FROM       storage_items
+      WHERE      id = ?
+
+      UNION ALL
+
+      SELECT     si.id, si.name, si.parent_id, si.is_folder, si.is_in_trash,
+                 si.file_path, si.file_size, si.last_viewed_at, si.initialization_vector, si.is_encrypted_with_client_key,
+                 si.has_thumbnail, si.thumbnail_path, si.thumbnail_size, si.thumbnail_initialization_vector, si.created_at, 
+                 si.updated_at, si.owner_id
+
+      FROM       storage_items si
+      INNER JOIN ancestors
+              ON si.id = ancestors.parent_id
+    )
+    SELECT * FROM ancestors WHERE id != ?
+    `;
+    const values = [id, id];
 
     const result = await this._query(query, values);
     const storageItems = result as any[];

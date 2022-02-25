@@ -4,3 +4,4 @@ export * from './remove-folder';
 export * from './restore-folder';
 export * from './list-items-in-folder';
 export * from './get-root-folder';
+export * from './list-all-ancestors';

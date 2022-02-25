@@ -6,5 +6,6 @@ export interface StorageItemRepository {
   findOneById(id: string): Promise<StorageItem | null>;
   findByParentId(parentId: string, inTrash: boolean): Promise<StorageItem[]>;
   findAllDescendantsById(id: string, inTrash: boolean): Promise<StorageItem[]>;
+  findAllAncestorsById(id: string): Promise<StorageItem[]>;
   findRootFolderByOwnerId(ownerId: string): Promise<StorageItem | null>;
 }

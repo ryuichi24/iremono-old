@@ -15,8 +15,14 @@ export const getTheme = (currentMode: 'dark' | 'light' = 'light') =>
             primary: {
               main: '#00acee',
             },
+            secondary: {
+              main: '#50d4a4',
+            },
             common: {
               grey: '#94a4c4',
+            },
+            text: {
+              secondary: '#525151',
             },
           }
         : {
@@ -29,8 +35,14 @@ export const getTheme = (currentMode: 'dark' | 'light' = 'light') =>
             primary: {
               main: '#00acee',
             },
+            secondary: {
+              main: '#50d4a4',
+            },
             common: {
               grey: '#7b808a',
+            },
+            text: {
+              secondary: '#bfbfbf',
             },
           }),
     },
