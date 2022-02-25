@@ -2,25 +2,10 @@ import fs from 'fs';
 import mysql from 'mysql2';
 
 export const createConnection = ({ hasDatabase } = {}) => {
-  let dbHost;
-  let dbUsername;
-  let dbPassword;
-  let dbName;
-
-  if (process.env.DB_CONNECTION_STRING) {
-    const parsed = new URL(process.env.DB_CONNECTION_STRING);
-    dbHost = parsed.host;
-    dbUsername = parsed.username;
-    dbPassword = parsed.password;
-    dbName = parsed.pathname.split('/')[1];
-  }
-
-  if (process.env.DB_HOST && process.env.DB_USERNAME && process.env.DB_PASSWORD) {
-    dbHost = process.env.DB_HOST;
-    dbUsername = process.env.DB_USERNAME;
-    dbPassword = process.env.DB_PASSWORD;
-    dbName = process.env.DB_NAME;
-  }
+  const dbHost = process.env.DB_HOST;
+  const dbUsername = process.env.DB_USERNAME;
+  const dbPassword = process.env.DB_PASSWORD;
+  const dbName = process.env.DB_NAME;
 
   if (!dbHost || !dbUsername || !dbPassword) {
     throw new Error('Some database credentials are missing.');
