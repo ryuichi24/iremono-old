@@ -14,23 +14,23 @@ export const Activity = (): JSX.Element => {
 
   const links = [
     {
-      icon: <FileCopyOutlinedIcon color="primary" />,
+      icon: <FileCopyOutlinedIcon sx={{ color: pathname.includes('/folders') ? 'primary.main' : 'common.grey' }} />,
       path: '/folders',
     },
     {
-      icon: <LockOutlinedIcon color="primary" />,
+      icon: <LockOutlinedIcon sx={{ color: pathname.includes('/crypto-folders') ? 'primary.main' : 'common.grey' }} />,
       path: '/crypto-folders',
     },
     {
-      icon: <MenuBookOutlinedIcon color="primary" />,
+      icon: <MenuBookOutlinedIcon sx={{ color: pathname.includes('/books') ? 'primary.main' : 'common.grey' }} />,
       path: '/books',
     },
     {
-      icon: <VideoLibraryOutlinedIcon color="primary" />,
+      icon: <VideoLibraryOutlinedIcon sx={{ color: pathname.includes('/videos') ? 'primary.main' : 'common.grey' }} />,
       path: '/videos',
     },
     {
-      icon: <DeleteOutlineOutlinedIcon color="primary" />,
+      icon: <DeleteOutlineOutlinedIcon sx={{ color: pathname.includes('/trash') ? 'primary.main' : 'common.grey' }} />,
       path: '/trash',
     },
   ];
@@ -48,7 +48,7 @@ export const Activity = (): JSX.Element => {
       </MainActivity>
       <SubActivity>
         <ActivityItem>
-          <SettingsOutlinedIcon color="primary" />
+          <SettingsOutlinedIcon sx={{ color: 'common.grey' }} />
         </ActivityItem>
       </SubActivity>
     </Container>
@@ -64,6 +64,7 @@ const ColumnFlexBase = styled(Box)`
 const Container = styled(ColumnFlexBase)`
   justify-content: space-between;
   height: 100%;
+  background-color: ${(props) => props.theme.palette.background.secondary};
 `;
 
 const MainActivity = styled(ColumnFlexBase)`
