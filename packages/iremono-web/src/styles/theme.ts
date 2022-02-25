@@ -1,4 +1,3 @@
-import { green, grey, purple } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
 export const getTheme = (currentMode: 'dark' | 'light' = 'light') =>
