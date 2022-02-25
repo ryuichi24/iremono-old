@@ -1,5 +1,6 @@
 import React from 'react';
+import { Viewer } from './Viewer';
 
 export const MainBottom = () => {
-  return <div></div>;
+  return <Viewer />;
 };

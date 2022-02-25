@@ -5,12 +5,13 @@ import Typography from '@mui/material/Typography';
 
 interface Props {
   folder: any;
-  handleDoubleClick: React.MouseEventHandler<HTMLDivElement>;
+  handleDoubleClick?: React.MouseEventHandler<HTMLDivElement>;
+  handleClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-export const FolderItemCard = ({ folder, handleDoubleClick }: Props) => {
+export const FolderItemCard = ({ folder, handleClick, handleDoubleClick }: Props) => {
   return (
-    <Container onDoubleClick={handleDoubleClick}>
+    <Container onClick={handleClick} onDoubleClick={handleDoubleClick}>
       <FolderIcon sx={{ color: 'text.primary' }} />
       <Typography sx={{ color: 'text.primary' }}>{folder.name}</Typography>
     </Container>

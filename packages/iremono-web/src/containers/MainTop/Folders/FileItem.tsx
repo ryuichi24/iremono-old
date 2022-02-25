@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FileItemCard } from '@/components/FileItemCard';
 import { filesService } from '@/services/files-service';
+import { useSelectedStore } from '@/store/selected/use-selected-store';
 
 interface Props {
   file: any;
@@ -8,6 +9,7 @@ interface Props {
 
 export const FileItem = ({ file }: Props) => {
   const [thumbnailURL, setThumbnailURL] = useState('');
+  const { setSelectedItem, setSelectedViewerItem } = useSelectedStore();
 
   useEffect(() => {
     if (file.hasThumbnail) {
@@ -19,5 +21,12 @@ export const FileItem = ({ file }: Props) => {
         .catch((err) => console.log(err));
     }
   }, []);
-  return <FileItemCard file={file} thumbnailURL={thumbnailURL} />;
+  return (
+    <FileItemCard
+      handleClick={() => setSelectedItem({ selectedItem: file })}
+      handleDoubleClick={() => setSelectedViewerItem({ selectedViewerItem: file })}
+      file={file}
+      thumbnailURL={thumbnailURL}
+    />
+  );
 };
