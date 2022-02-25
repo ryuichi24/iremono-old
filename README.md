@@ -10,6 +10,12 @@ iremono is a self-hosted cloud storage built with node js and react both of whic
 git clone https://github.com/ryuichi24/iremono.git && cd iremono
 ```
 
+### Install dependencies
+
+```bash
+yarn install
+```
+
 ### Make env file
 
 ```bash
@@ -56,4 +62,28 @@ yarn build
 
 ```bash
 yarn start
+```
+
+## How to run iremono for development
+
+You just take exactly the same steps to ["Install dependencies"](#install-dependencies)  and do the following.
+
+### Make env file
+
+```bash
+yarn make-dev-env-file
+```
+
+### Run iremono
+
+#### Run both backend and frontend
+
+```bash
+yarn dev
+```
+
+#### Run only api server
+
+```bash
+yarn dev-server
 ```
