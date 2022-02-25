@@ -6,12 +6,13 @@ import { ThumbnailAlt } from '../AltThumbnail';
 interface Props {
   file: any;
   thumbnailURL?: string;
+  handleClick?: React.MouseEventHandler<HTMLDivElement>;
   handleDoubleClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-export const FileItemCard = ({ file, thumbnailURL, handleDoubleClick }: Props) => {
+export const FileItemCard = ({ file, thumbnailURL, handleClick, handleDoubleClick }: Props) => {
   return (
-    <Container onDoubleClick={handleDoubleClick}>
+    <Container onClick={handleClick} onDoubleClick={handleDoubleClick}>
       <ThumbnailSection>
         {thumbnailURL ? (
           <Thumbnail src={thumbnailURL} />
@@ -20,7 +21,9 @@ export const FileItemCard = ({ file, thumbnailURL, handleDoubleClick }: Props) =
         )}
       </ThumbnailSection>
       <FileNameSection>
-        <Typography sx={{ color: 'text.primary' }}>{file.name}</Typography>
+        <Typography noWrap sx={{ color: 'text.primary' }}>
+          {file.name}
+        </Typography>
       </FileNameSection>
     </Container>
   );

@@ -3,6 +3,7 @@ import { authReducer } from '@/store/auth/auth-slice';
 import { filesReducer } from './files/files-slice';
 import { foldersReducer } from './folders/folders-slice';
 import { trashReducer } from './trash/trash-slice';
+import { selectedReducer } from './selected/selected-slice';
 
 export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
@@ -12,6 +13,7 @@ export const store = configureStore({
     filesState: filesReducer,
     foldersState: foldersReducer,
     trashState: trashReducer,
+    selectedState: selectedReducer,
   },
 });
 

@@ -1,5 +1,4 @@
-import { stringToColor } from '@/utils/string-to-color';
-import { AppBar, Avatar, Box, Toolbar } from '@mui/material';
+import { AppBar, Toolbar } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
 

@@ -35,4 +35,6 @@ export const FolderExplore = () => {
 
 const Container = styled(Box)`
   padding: 0.5rem;
+  background-color: ${(props) => props.theme.palette.background.secondary};
+  height: 100%;
 `;

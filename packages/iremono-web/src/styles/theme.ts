@@ -9,16 +9,28 @@ export const getTheme = (currentMode: 'dark' | 'light' = 'light') =>
             background: {
               default: '#F9FAFC',
               paper: '#FFFFFF',
-              primary: '#fbfbfb',
+              primary: '#f3f4f9',
               secondary: '#FFFFFF',
+            },
+            primary: {
+              main: '#00acee',
+            },
+            common: {
+              grey: '#94a4c4',
             },
           }
         : {
             background: {
               default: '#F9FAFC',
               paper: '#FFFFFF',
-              primary: '#222831',
-              secondary: '#393E46',
+              primary: '#1e2732',
+              secondary: '#222b36',
+            },
+            primary: {
+              main: '#00acee',
+            },
+            common: {
+              grey: '#7b808a',
             },
           }),
     },
