@@ -79,6 +79,17 @@ const download = (request: DownloadFileRequest) => {
   link.parentNode?.removeChild(link);
 };
 
+interface DownloadImageFileRequest {
+  fileId: string;
+}
+
+const downloadImageFile = async (request: DownloadImageFileRequest) => {
+  const res = await apiClient.get(`${BASE_URL}/${request.fileId}/content`, { responseType: 'arraybuffer' });
+  const result = res.data;
+  const imgFileBlob = new Blob([result], { type: res.headers['content-type'] });
+  const imgURL = URL.createObjectURL(imgFileBlob);
+  return imgURL;
+};
 interface DownloadFileThumbnailRequest {
   fileId: string;
 }
@@ -91,4 +102,12 @@ const downloadThumbnail = async (request: DownloadFileThumbnailRequest) => {
   return imgURL;
 };
 
-export const filesService = Object.freeze({ upload, update, remove, restore, download, downloadThumbnail });
+export const filesService = Object.freeze({
+  upload,
+  update,
+  remove,
+  restore,
+  download,
+  downloadImageFile,
+  downloadThumbnail,
+});
