@@ -31,7 +31,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
                  has_thumbnail, thumbnail_path, thumbnail_size, thumbnail_initialization_vector, created_at, 
                  updated_at, owner_id
       FROM       storage_items
-      WHERE      parent_id = ? AND is_in_trash = ?
+      WHERE      parent_id = ?
 
       UNION ALL
 
@@ -42,11 +42,11 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
 
       FROM       storage_items si
       INNER JOIN descendants
-              ON si.parent_id = descendants.id AND si.is_in_trash = ?
+              ON si.parent_id = descendants.id
     )
-    SELECT * FROM descendants;
+    SELECT * FROM descendants WHERE is_in_trash = ?
     `;
-    const values = [id, inTrash, inTrash];
+    const values = [id, inTrash];
 
     const result = await this._query(query, values);
     const storageItems = result as any[];

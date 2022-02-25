@@ -21,7 +21,7 @@ export const FileItemCard = ({ file, thumbnailURL, handleClick, handleDoubleClic
         )}
       </ThumbnailSection>
       <FileNameSection>
-        <Typography noWrap sx={{ color: 'text.primary' }}>
+        <Typography noWrap sx={{ color: 'text.secondary' }}>
           {file.name}
         </Typography>
       </FileNameSection>
