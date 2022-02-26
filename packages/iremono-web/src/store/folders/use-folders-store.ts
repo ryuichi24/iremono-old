@@ -5,7 +5,7 @@ import { foldersActions } from './folders-slice';
 
 interface foldersStore {
   folderGroupList: RootState['foldersState']['folderGroupList'];
-  addFolderGroup: (args: { folderItems: any[]; parentId: string }) => void;
+  addFolderGroup: (args: { folderItems: any[]; folder: any; ancestors: any[] }) => void;
   addOneFolderItem: (args: { folderItem: any; parentId: string }) => void;
   updateFolderItem: (args: { folderItem: any; parentId: string }) => void;
   removeFolderItem: (args: { folderItem: any; parentId: string }) => void;
@@ -16,7 +16,7 @@ export const useFoldersStore = (): foldersStore => {
   const folderGroupList = useSelector((state: RootState) => state.foldersState.folderGroupList);
 
   const addFolderGroup = useCallback(
-    (args: { folderItems: any[]; parentId: string }) => {
+    (args: { folderItems: any[]; folder: any; ancestors: any[] }) => {
       dispatch(foldersActions.addFolderGroup(args));
     },
     [dispatch],

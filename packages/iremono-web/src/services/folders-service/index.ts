@@ -56,4 +56,23 @@ const listItems = async (request: ListItemsInFolderRequest) => {
   return result;
 };
 
-export const foldersService = Object.freeze({ create, update, remove, restore, listItems });
+interface ListAllAncestorsRequest {
+  folderId: string;
+}
+const listAllAncestors = async (request: ListAllAncestorsRequest) => {
+  const res = await apiClient.get(`${BASE_URL}/${request.folderId}/ancestors`);
+  const result = res.data;
+  return result;
+};
+
+interface GetFolderRequest {
+  folderId: string;
+}
+
+const get = async (request: GetFolderRequest) => {
+  const res = await apiClient.get(`${BASE_URL}/${request.folderId}`);
+  const result = res.data;
+  return result;
+};
+
+export const foldersService = Object.freeze({ create, update, remove, restore, listItems, listAllAncestors, get });

@@ -1,7 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+interface FolderGroup {
+  parentId: string;
+  folderItems: any[];
+  ancestors: any[];
+  isRootFolder: boolean;
+}
+
 interface FoldersState {
-  folderGroupList: { parentId: string; folderItems: any[] }[];
+  folderGroupList: FolderGroup[];
 }
 
 const initialState: FoldersState = {
@@ -12,14 +19,20 @@ const foldersSlice = createSlice({
   name: 'foldersSlice',
   initialState,
   reducers: {
-    addFolderGroup: (state, { payload }: PayloadAction<{ folderItems: any[]; parentId: string }>) => {
-      const indexOfFileGroup = state.folderGroupList.findIndex((group) => group.parentId === payload.parentId);
+    addFolderGroup: (state, { payload }: PayloadAction<{ folderItems: any[]; folder: any; ancestors: any[] }>) => {
+      const indexOfFileGroup = state.folderGroupList.findIndex((group) => group.parentId === payload.folder.id);
       if (indexOfFileGroup < 0) {
-        const folderGroup = { parentId: payload.parentId, folderItems: payload.folderItems };
+        const folderGroup = {
+          parentId: payload.folder.id,
+          folderItems: payload.folderItems,
+          isRootFolder: payload.folder.isRootFolder,
+          ancestors: payload.ancestors.slice().reverse(),
+        };
         state.folderGroupList.push(folderGroup);
         return;
       }
       state.folderGroupList[indexOfFileGroup].folderItems = payload.folderItems;
+      state.folderGroupList[indexOfFileGroup].ancestors = payload.ancestors;
     },
     addOneFolderItem: (state, { payload }: PayloadAction<{ folderItem: any; parentId: string }>) => {
       const indexOfGroup = state.folderGroupList.findIndex((group) => group.parentId === payload.parentId);
@@ -31,6 +44,14 @@ const foldersSlice = createSlice({
         (item) => item.id === payload.folderItem.id,
       );
       state.folderGroupList[indexOfFileGroup].folderItems[indexOfFolderItem] = payload.folderItem;
+
+      for (let index = 0; index < state.folderGroupList.length; index++) {
+        const indexOfAncestor = state.folderGroupList[index].ancestors.findIndex(
+          (ancestor) => ancestor.id === payload.folderItem.id,
+        );
+
+        state.folderGroupList[index].ancestors[indexOfAncestor] = payload.folderItem;
+      }
     },
     removeFolderItem: (state, { payload }: PayloadAction<{ folderItem: any; parentId: string }>) => {
       const indexOfFileGroup = state.folderGroupList.findIndex((group) => group.parentId === payload.parentId);

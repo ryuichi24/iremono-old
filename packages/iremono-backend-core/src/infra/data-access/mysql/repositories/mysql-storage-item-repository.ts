@@ -50,7 +50,6 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
 
     const result = await this._query(query, values);
     const storageItems = result as any[];
-    this._logger.debug(storageItems);
     return storageItems.map((item) => this._toEntity(item));
   }
 
@@ -87,7 +86,6 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
 
     const result = await this._query(query, values);
     const storageItems = result as any[];
-    this._logger.debug(storageItems);
     return storageItems.map((item) => this._toEntity(item));
   }
 

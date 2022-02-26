@@ -18,7 +18,7 @@ import {
   DeleteFolderInTrashUseCase,
   DownloadFileThumbnailUseCase,
   DownloadFileUseCase,
-  GetRootFolderUseCase,
+  GetFolderUseCase,
   ListAllAncestorsUseCase,
   ListItemsInFolderUseCase,
   ListItemsInTrashUseCase,
@@ -53,7 +53,7 @@ import {
   DeleteAllInTrashController,
   DownloadFileThumbnailController,
   RegisterEncryptionKeyController,
-  GetRootFolderController,
+  GetFolderController,
   ListAllAncestorsController,
 } from '../controllers';
 import { loggerFactory } from '../shared/utils/logger';
@@ -86,7 +86,7 @@ const updateFolderUseCase = new UpdateFolderUseCase(storageItemRepository);
 const removeFolderUseCase = new RemoveFolderUseCase(storageItemRepository);
 const restoreFolderUseCase = new RestoreFolderUseCase(storageItemRepository);
 const listItemsInFolderUserCase = new ListItemsInFolderUseCase(storageItemRepository);
-const getRootFolderUserCase = new GetRootFolderUseCase(storageItemRepository);
+const getFolderUserCase = new GetFolderUseCase(storageItemRepository);
 const listAllAncestorsUserCase = new ListAllAncestorsUseCase(storageItemRepository);
 
 export const createFolderController = new CreateFolderController(createFolderUseCase, loggerFactory);
@@ -94,7 +94,7 @@ export const updateFolderController = new UpdateFolderController(updateFolderUse
 export const removeFolderController = new RemoveFolderController(removeFolderUseCase, loggerFactory);
 export const restoreFolderController = new RestoreFolderController(restoreFolderUseCase, loggerFactory);
 export const listItemsInFolderController = new ListItemsInFolderController(listItemsInFolderUserCase, loggerFactory);
-export const getRootFolderController = new GetRootFolderController(getRootFolderUserCase, loggerFactory);
+export const getFolderController = new GetFolderController(getFolderUserCase, loggerFactory);
 export const listAllAncestorsController = new ListAllAncestorsController(listAllAncestorsUserCase, loggerFactory);
 
 // files

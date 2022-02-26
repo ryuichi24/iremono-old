@@ -11,6 +11,7 @@ export interface StorageItemDTO {
   fileExtension?: string;
   isFolder: boolean;
   isInTrash?: boolean;
+  isRootFolder: boolean;
   lastViewedAt?: Date;
   hasThumbnail: boolean;
   thumbnailPath?: string;
@@ -30,6 +31,7 @@ export const makeStorageItemDTO = (storageItem: StorageItem): StorageItemDTO => 
   mimeType: storageItem.mimeType,
   isFolder: storageItem.isFolder,
   isInTrash: storageItem.isInTrash,
+  isRootFolder: storageItem.isRootFolder!,
   lastViewedAt: storageItem.lastViewedAt,
   hasThumbnail: storageItem.hasThumbnail,
   thumbnailPath: storageItem.thumbnailPath,
