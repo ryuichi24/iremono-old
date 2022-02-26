@@ -4,23 +4,33 @@ import Box from '@mui/material/Box';
 import { useFoldersStore } from '@/store/folders/use-folders-store';
 import { foldersService } from '@/services/folders-service';
 import { FolderTreeItem } from './FolderTreeItem';
+import { useFilesStore } from '@/store/files/use-files-store';
 
 export const FolderExplore = () => {
   const { folderGroupList, addFolderGroup } = useFoldersStore();
+  const { addFileGroup } = useFilesStore();
 
   useEffect(() => {
-    const rootFolderGroup = folderGroupList.find((group) => group.parentId === '0');
-    if (!rootFolderGroup)
-      foldersService.listItems({ folderId: '0' }).then((result) => {
-        addFolderGroup({ folderItems: result.entries, parentId: '0' });
-      });
+    (async () => {
+      const rootFolderGroup = folderGroupList.find((group) => group.isRootFolder);
+
+      if (rootFolderGroup) return;
+
+      const rootFolder = await foldersService.get({ folderId: '0' });
+      const rootFolderItems = (await foldersService.listItems({ folderId: rootFolder.id })).entries;
+      const folders = rootFolderItems.filter((item: any) => item.isFolder);
+      const files = rootFolderItems.filter((item: any) => !item.isFolder);
+
+      addFolderGroup({ folderItems: folders, folder: rootFolder, ancestors: [] });
+      addFileGroup({ fileItems: files, parentId: rootFolder.id });
+    })();
   }, []);
 
   return (
     <Container>
       {folderGroupList
-        .find((group) => group.parentId === '0')
-        ?.folderItems.filter((item) => item.isFolder)
+        .find((group) => group.isRootFolder)
+        ?.folderItems?.filter((item) => item.isFolder)
         .map((item) => (
           <FolderTreeItem item={item} key={item.id} />
         ))}

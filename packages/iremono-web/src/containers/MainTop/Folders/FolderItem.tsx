@@ -9,13 +9,16 @@ interface Props {
 
 export const FolderItem = ({ folder }: Props) => {
   const navigate = useNavigate();
-  const { setSelectedItem } = useSelectedStore();
+  const { setSelectedItem, setSelectedCurrentFolder } = useSelectedStore();
 
   return (
     <FolderItemCard
       folder={folder}
       handleClick={() => setSelectedItem({ selectedItem: folder })}
-      handleDoubleClick={() => navigate(`/folders/${folder.id}`)}
+      handleDoubleClick={() => {
+        setSelectedCurrentFolder(folder);
+        navigate(`/folders/${folder.id}`);
+      }}
     />
   );
 };

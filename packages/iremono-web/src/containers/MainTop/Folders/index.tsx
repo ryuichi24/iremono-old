@@ -19,18 +19,19 @@ import { filesService } from '@/services/files-service';
 import { StorageItemContextMenu } from './StorageItemContextMenu';
 import { FileItem } from './FileItem';
 import { FolderItem } from './FolderItem';
+import { FolderPathNav } from './FolderPathNav';
+import { useSelectedStore } from '@/store/selected/use-selected-store';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
   const currentFolderId = params.id || '0';
-
-  const { pathname } = useLocation();
 
   const [openNewFolderForm, handleOpenNewFolderForm, handleCloseNewFolderForm] = useModal();
   const fileUploaderRef: React.Ref<HTMLInputElement> = useRef(null);
   const [openMenu, anchorEl, handleOpenMenu, handleCloseMenu] = usePopupMenu();
   const { addFolderGroup, folderGroupList } = useFoldersStore();
   const { addFileGroup, addOneFileItem, fileGroupList } = useFilesStore();
+  const { setSelectedCurrentFolder, selectedCurrentFolder } = useSelectedStore();
 
   const menuItems = [
     {
@@ -57,24 +58,30 @@ export const Folders = () => {
   ];
 
   useEffect(() => {
-    foldersService
-      .listItems({ folderId: currentFolderId })
-      .then((result) => {
-        const folders = result.entries.filter((item: any) => item.isFolder);
-        const files = result.entries.filter((item: any) => !item.isFolder);
-        addFolderGroup({ folderItems: folders, parentId: currentFolderId });
-        addFileGroup({ fileItems: files, parentId: currentFolderId });
-      })
-      .catch((err) => console.log(err));
-  }, [currentFolderId, pathname]);
+    (async () => {
+      const currentFolder = await foldersService.get({ folderId: currentFolderId });
+      setSelectedCurrentFolder({ selectedCurrentFolder: currentFolder });
+
+      const currentFolderGroup = folderGroupList.find((group) => group.parentId === currentFolder.id);
+
+      if (currentFolderGroup) return;
+
+      const currentFolderItems = (await foldersService.listItems({ folderId: currentFolder.id })).entries;
+      const folders = currentFolderItems.filter((item: any) => item.isFolder);
+      const files = currentFolderItems.filter((item: any) => !item.isFolder);
+
+      const ancestors = (await foldersService.listAllAncestors({ folderId: currentFolder.id })).entries;
+
+      addFolderGroup({ folderItems: folders, folder: currentFolder, ancestors });
+      addFileGroup({ fileItems: files, parentId: currentFolder.id });
+    })();
+  }, [currentFolderId]);
 
   return (
     <Container>
       <Header isSubHeader={true}>
         <>
-          <Typography sx={{ color: 'text.primary' }} variant="h4" component="h2">
-            All files
-          </Typography>
+          <FolderPathNav currentFolder={selectedCurrentFolder} />
         </>
         <>
           <div>
@@ -94,7 +101,7 @@ export const Folders = () => {
 
       <NewFolderForm
         open={openNewFolderForm}
-        currentFolderId={currentFolderId}
+        currentFolderId={selectedCurrentFolder?.id}
         handleClose={handleCloseNewFolderForm}
       />
       <Uploader
@@ -102,9 +109,9 @@ export const Folders = () => {
           if (!e.currentTarget.value) return;
 
           filesService
-            .upload({ parentId: currentFolderId, fileToUpload: e.target.files![0] }) // eslint-disable-line @typescript-eslint/no-non-null-assertion
+            .upload({ parentId: selectedCurrentFolder?.id, fileToUpload: e.target.files![0] }) // eslint-disable-line @typescript-eslint/no-non-null-assertion
             .then((result) => {
-              addOneFileItem({ fileItem: result, parentId: currentFolderId });
+              addOneFileItem({ fileItem: result, parentId: selectedCurrentFolder?.id });
             })
             .catch((err) => console.log(err));
         }}
@@ -116,9 +123,13 @@ export const Folders = () => {
           <SectionName>Folders</SectionName>
           <FolderList>
             {folderGroupList
-              ?.find((group) => group.parentId === currentFolderId)
+              ?.find((group) => group.parentId === selectedCurrentFolder?.id)
               ?.folderItems?.map((folder: any) => (
-                <StorageItemContextMenu storageItem={folder} currentFolderId={currentFolderId} key={folder.id}>
+                <StorageItemContextMenu
+                  storageItem={folder}
+                  currentFolderId={selectedCurrentFolder?.id}
+                  key={folder.id}
+                >
                   <FolderItem folder={folder} />
                 </StorageItemContextMenu>
               ))}
@@ -128,9 +139,9 @@ export const Folders = () => {
           <SectionName>Files</SectionName>
           <FileList container>
             {fileGroupList
-              ?.find((group) => group.parentId === currentFolderId)
+              ?.find((group) => group.parentId === selectedCurrentFolder?.id)
               ?.fileItems?.map((file) => (
-                <StorageItemContextMenu storageItem={file} currentFolderId={currentFolderId} key={file.id}>
+                <StorageItemContextMenu storageItem={file} currentFolderId={selectedCurrentFolder?.id} key={file.id}>
                   <FileItem file={file} />
                 </StorageItemContextMenu>
               ))}

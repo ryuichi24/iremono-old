@@ -35,7 +35,7 @@ export class SignUpUseCase implements UseCase<SignUpRequestDTO, SignUpResponseDT
 
     // TODO: decouple root folder initialization with event emitter
     const rootFolder = new StorageItem({
-      name: 'all_files',
+      name: 'all files',
       parentId: null,
       isFolder: true,
       isRootFolder: true,

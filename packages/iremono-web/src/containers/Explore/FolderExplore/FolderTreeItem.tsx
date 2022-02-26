@@ -8,6 +8,8 @@ import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import { Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSelectedStore } from '@/store/selected/use-selected-store';
+import { useFilesStore } from '@/store/files/use-files-store';
 
 interface Props {
   item: any;
@@ -15,18 +17,27 @@ interface Props {
 
 export const FolderTreeItem = ({ item }: Props) => {
   const { folderGroupList, addFolderGroup } = useFoldersStore();
+  const { addFileGroup } = useFilesStore();
+  const { setSelectedCurrentFolder } = useSelectedStore();
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const params = useParams<{ id: string }>();
 
-  const handleClick = () => {
+  const handleClick = async () => {
     setIsOpen(!isOpen);
 
     const currentFolderGroup = folderGroupList.find((group) => group.parentId === item.id);
-    if (!currentFolderGroup)
-      foldersService.listItems({ folderId: item.id }).then((result) => {
-        addFolderGroup({ folderItems: result.entries, parentId: item.id });
-      });
+
+    if (currentFolderGroup) return;
+
+    const folderItems = (await foldersService.listItems({ folderId: item.id })).entries;
+    const folders = folderItems.filter((item: any) => item.isFolder);
+    const files = folderItems.filter((item: any) => !item.isFolder);
+
+    const ancestors = (await foldersService.listAllAncestors({ folderId: item.id })).entries;
+
+    addFolderGroup({ folderItems: folders, folder: item, ancestors });
+    addFileGroup({ fileItems: files, parentId: item.id });
   };
 
   return (
@@ -44,7 +55,12 @@ export const FolderTreeItem = ({ item }: Props) => {
             <FolderIcon sx={{ color: 'text.secondary' }} />
           )}
         </Selectable>
-        <FolderName onClick={() => navigate(`/folders/${item.id}`)}>
+        <FolderName
+          onClick={() => {
+            setSelectedCurrentFolder({ selectedCurrentFolder: item });
+            navigate(`/folders/${item.id}`);
+          }}
+        >
           <Typography sx={{ color: 'text.secondary', fontWeight: item.id === params.id ? '600' : '' }} noWrap>
             {item.name}
           </Typography>
@@ -53,7 +69,7 @@ export const FolderTreeItem = ({ item }: Props) => {
       <Collapsible isOpen={isOpen}>
         {folderGroupList
           .find((group) => group.parentId === item.id)
-          ?.folderItems.filter((item) => item.isFolder)
+          ?.folderItems?.filter((item) => item.isFolder)
           .map((item) => (
             <FolderTreeItem item={item} key={item.id} />
           ))}
