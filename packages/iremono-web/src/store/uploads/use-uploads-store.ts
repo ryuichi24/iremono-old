@@ -3,29 +3,38 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../';
 import { uploadsActions } from './uploads-slice';
 
+type UploadItemList = RootState['uploadsState']['uploadItemList'];
+
 interface UploadsStore {
-  uploadItemList: RootState['uploadsState']['uploadItemList'];
-  addUploadItem: (args: { uploadItem: any }) => void;
-  updateUploadItem: (args: { uploadItem: any }) => void;
+  uploadItemList: UploadItemList;
+  showProgress: boolean;
+  addUploadItem: (args: { uploadItem: UploadItemList[0] }) => void;
+  updateUploadItem: (args: { uploadItem: UploadItemList[0] }) => void;
+  clearUploadItems: () => void;
 }
 
 export const useUploadsStore = (): UploadsStore => {
   const dispatch: AppDispatch = useDispatch();
   const uploadItemList = useSelector((state: RootState) => state.uploadsState.uploadItemList);
+  const showProgress = useSelector((state: RootState) => state.uploadsState.showProgress);
 
   const addUploadItem = useCallback(
-    (args: { uploadItem: any }) => {
+    (args: { uploadItem: UploadItemList[0] }) => {
       dispatch(uploadsActions.addUploadItem(args));
     },
     [dispatch],
   );
 
   const updateUploadItem = useCallback(
-    (args: { uploadItem: any }) => {
+    (args: { uploadItem: UploadItemList[0] }) => {
       dispatch(uploadsActions.updateUploadItem(args));
     },
     [dispatch],
   );
 
-  return { addUploadItem, uploadItemList, updateUploadItem } as const;
+  const clearUploadItems = useCallback(() => {
+    dispatch(uploadsActions.clearUploadItems());
+  }, [dispatch]);
+
+  return { addUploadItem, showProgress, uploadItemList, updateUploadItem, clearUploadItems } as const;
 };
