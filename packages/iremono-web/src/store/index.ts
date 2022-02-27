@@ -4,6 +4,7 @@ import { filesReducer } from './files/files-slice';
 import { foldersReducer } from './folders/folders-slice';
 import { trashReducer } from './trash/trash-slice';
 import { selectedReducer } from './selected/selected-slice';
+import { uploadsReducer } from './uploads/uploads-slice';
 
 export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
@@ -14,6 +15,7 @@ export const store = configureStore({
     foldersState: foldersReducer,
     trashState: trashReducer,
     selectedState: selectedReducer,
+    uploadsState: uploadsReducer,
   },
 });
 
