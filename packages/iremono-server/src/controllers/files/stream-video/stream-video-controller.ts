@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { CryptoService } from '@iremono/backend-core/dist/services/crypto-service';
 import { StreamVideoUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
@@ -44,7 +45,12 @@ export class StreamVideoController extends Controller<StreamVideoUseCase> {
       see the "Cipher block chaining (CBC)" section in https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation
     */
     const currentInitVector =
-      start === 0 ? result.fileInitializationVector : await this.getPrevCipherText(fixedStart - 16, result.filePath!);
+      start === 0
+        ? result.fileInitializationVector
+        : await this.getPrevCipherText(
+            fixedStart - 16,
+            path.join(config.mediaConfig.PATH_TO_MEDIA_DIR, result.filePath!),
+          );
 
     const decipherStream = this._cryptoService.generateDecipherStreamInCBC(
       config.mediaConfig.ENCRYPTION_KEY,
@@ -55,7 +61,7 @@ export class StreamVideoController extends Controller<StreamVideoUseCase> {
     const skipStream = new SkipStream({ skipLength: start - fixedStart });
 
     const readStream = fs
-      .createReadStream(result.filePath, {
+      .createReadStream(path.join(config.mediaConfig.PATH_TO_MEDIA_DIR, result.filePath), {
         start: fixedStart,
         end: fixedEnd,
       })

@@ -1,8 +1,10 @@
+import path from 'path';
 import { DeleteAllInTrashUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { deleteFromFileSystem } from '@iremono/util/dist/file-system';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeDeleteAllInTrashRequestDTO } from './make-delete-all-in-trash-request-DTO';
+import { config } from '../../../config';
 
 export class DeleteAllInTrashController extends Controller<DeleteAllInTrashUseCase> {
   private readonly _logger: Logger;
@@ -16,7 +18,13 @@ export class DeleteAllInTrashController extends Controller<DeleteAllInTrashUseCa
     const dto = makeDeleteAllInTrashRequestDTO(request);
     const result = await this._useCase.handle(dto);
 
-    await Promise.all(result.deletedFiles.map((file) => deleteFromFileSystem(file.filePath!)));
+    await Promise.all(
+      result.deletedFiles.map((file) => {
+        deleteFromFileSystem(path.join(config.mediaConfig.PATH_TO_MEDIA_DIR, file.filePath!));
+        if (file.hasThumbnail)
+          deleteFromFileSystem(path.join(config.mediaConfig.PATH_TO_MEDIA_DIR, file.thumbnailPath!));
+      }),
+    );
 
     this._logger.info(
       'user has deleted all in trash',

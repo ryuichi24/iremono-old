@@ -12,34 +12,40 @@ import { deleteFromFileSystem, fileTypeChecker, getFileType } from '@iremono/uti
 
 const logger = loggerFactory.createLogger('uploadHandler');
 
+interface Options {
+  mediaDirPath: string;
+  mediaDirName: string;
+  encryptionKey: string;
+}
+
 export const uploadHandler =
-  ({ folderPath, encryptionKey }: { folderPath: string; encryptionKey: string }, cryptoService: CryptoService) =>
+  ({ mediaDirPath, mediaDirName, encryptionKey }: Options, cryptoService: CryptoService) =>
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       // base dir initialization
-      const userMediaDir = path.join(folderPath, 'iremono_media', req.user.id);
+      const userMediaDir = path.join(mediaDirName, req.user.id);
 
       const filesDir = path.join(userMediaDir, 'files');
       const thumbnailsDir = path.join(userMediaDir, 'thumbnails');
       const uploadsDir = path.join(userMediaDir, 'uploads');
 
-      await createFolderIfNotExists(filesDir);
-      await createFolderIfNotExists(thumbnailsDir);
-      await createFolderIfNotExists(uploadsDir);
+      await createFolderIfNotExists(path.join(mediaDirPath, filesDir));
+      await createFolderIfNotExists(path.join(mediaDirPath, thumbnailsDir));
+      await createFolderIfNotExists(path.join(mediaDirPath, uploadsDir));
 
       // uploading file
       const uploadingFileDest = path.join(uploadsDir, crypto.randomUUID());
-      const uploadingFileWriteStream = fs.createWriteStream(uploadingFileDest);
+      const uploadingFileWriteStream = fs.createWriteStream(path.join(mediaDirPath, uploadingFileDest));
 
       const { fileName, formData } = await parseMultipart(req, req.headers, (file) => {
         file.pipe(uploadingFileWriteStream);
       });
 
       // get file size of the uploaded file
-      const uploadedFileSize = (await fs.promises.stat(uploadingFileDest)).size;
+      const uploadedFileSize = (await fs.promises.stat(path.join(mediaDirPath, uploadingFileDest))).size;
 
       // get file type of the uploaded file
-      const fileType = await getFileType(uploadingFileDest);
+      const fileType = await getFileType(path.join(mediaDirPath, uploadingFileDest));
 
       // generate thumbnail
       let thumbnailPath;
@@ -49,8 +55,8 @@ export const uploadHandler =
       if (fileTypeChecker.isImage(fileType.fileExtension)) {
         thumbnailPath = path.join(thumbnailsDir, crypto.randomUUID());
 
-        const thumbnailWriteStream = fs.createWriteStream(thumbnailPath);
-        const uploadedFileReadStream = fs.createReadStream(uploadingFileDest);
+        const thumbnailWriteStream = fs.createWriteStream(path.join(mediaDirPath, thumbnailPath));
+        const uploadedFileReadStream = fs.createReadStream(path.join(mediaDirPath, uploadingFileDest));
 
         const imageResizeStream = sharp()
           .resize(300)
@@ -78,8 +84,8 @@ export const uploadHandler =
 
       // encrypt uploaded file
       const fileDest = path.join(filesDir, crypto.randomUUID());
-      const encryptedFileWriteStream = fs.createWriteStream(fileDest);
-      const uploadedFileReadStream2 = fs.createReadStream(uploadingFileDest);
+      const encryptedFileWriteStream = fs.createWriteStream(path.join(mediaDirPath, fileDest));
+      const uploadedFileReadStream2 = fs.createReadStream(path.join(mediaDirPath, uploadingFileDest));
 
       const fileInitializationVector = cryptoService.generateInitializeVector();
       const fileCipherStream = cryptoService.generateCipherStreamInCBC(encryptionKey, fileInitializationVector);
@@ -87,7 +93,7 @@ export const uploadHandler =
       await stream.promises.pipeline(uploadedFileReadStream2, fileCipherStream, encryptedFileWriteStream);
 
       // delete uploaded file
-      await deleteFromFileSystem(uploadingFileDest);
+      await deleteFromFileSystem(path.join(mediaDirPath, uploadingFileDest));
 
       req.uploadedFile = {
         fileName,

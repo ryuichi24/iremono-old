@@ -20,12 +20,17 @@ export const filesRouter = express
     '/content',
     authHandler(jwtService),
     uploadHandler(
-      { folderPath: config.mediaConfig.PATH_TO_MEDIA_DIR, encryptionKey: config.mediaConfig.ENCRYPTION_KEY },
+      {
+        mediaDirPath: config.mediaConfig.PATH_TO_MEDIA_DIR,
+        mediaDirName: config.mediaConfig.MEDIA_DIR_NAME,
+        encryptionKey: config.mediaConfig.ENCRYPTION_KEY,
+      },
       cryptoService,
     ),
     clientEncryptionKeyHandler(
       {
-        folderPath: config.mediaConfig.PATH_TO_MEDIA_DIR,
+        mediaDirPath: config.mediaConfig.PATH_TO_MEDIA_DIR,
+        mediaDirName: config.mediaConfig.MEDIA_DIR_NAME,
         encryptionKeyForClientEncryptionKey: config.mediaConfig.ENCRYPTION_KEY_FOR_CLIENT_ENCRYPTION_KEY,
       },
       cryptoService,

@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { CryptoService } from '@iremono/backend-core/dist/services/crypto-service';
 import { DownloadFileThumbnailUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
@@ -21,7 +22,7 @@ export class DownloadFileThumbnailController extends Controller<DownloadFileThum
     const dto = makeDownloadFileThumbnailRequestDTO(request);
     const result = await this._useCase.handle(dto);
 
-    const readStream = fs.createReadStream(result.thumbnailPath);
+    const readStream = fs.createReadStream(path.join(config.mediaConfig.PATH_TO_MEDIA_DIR, result.thumbnailPath));
     const decipherStream = this._cryptoService.generateDecipherStreamInCBC(
       config.mediaConfig.ENCRYPTION_KEY,
       result.thumbnailInitializationVector,
