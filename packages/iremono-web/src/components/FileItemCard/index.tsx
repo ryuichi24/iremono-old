@@ -37,6 +37,7 @@ const Container = styled('div')`
   height: 290px;
   border: 1px solid ${(props) => props.theme.palette.grey[300]};
   cursor: pointer;
+  background-color: ${(props) => props.theme.palette.background.secondary};
   &:hover {
     background-color: ${(props) => props.theme.palette.action.hover};
   }
@@ -44,10 +45,9 @@ const Container = styled('div')`
 
 const ThumbnailSection = styled('div')`
   width: 100%;
-  height: 70%;
+  height: 80%;
   border-radius: inherit;
   border-radius: ${(props) => props.theme.shape.borderRadius} ${(props) => props.theme.shape.borderRadius} 0px 0px;
-  background-color: ${(props) => props.theme.palette.background.secondary};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,6 +65,7 @@ const FileNameSection = styled('div')`
   display: flex;
   align-items: center;
   padding-left: 1rem;
-  height: 30%;
+  height: 20%;
   border-radius: 0px 0px ${(props) => props.theme.shape.borderRadius} ${(props) => props.theme.shape.borderRadius};
+  border-top: 1px solid ${(props) => props.theme.palette.divider};
 `;

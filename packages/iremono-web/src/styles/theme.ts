@@ -13,7 +13,7 @@ export const getTheme = (currentMode: 'dark' | 'light' = 'light') =>
               secondary: '#FFFFFF',
             },
             primary: {
-              main: '#00acee',
+              main: '#0061d5',
             },
             secondary: {
               main: '#50d4a4',
@@ -33,7 +33,7 @@ export const getTheme = (currentMode: 'dark' | 'light' = 'light') =>
               secondary: '#222b36',
             },
             primary: {
-              main: '#00acee',
+              main: '#0061d5',
             },
             secondary: {
               main: '#50d4a4',

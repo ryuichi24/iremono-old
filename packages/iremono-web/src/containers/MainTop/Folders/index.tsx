@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -21,6 +21,8 @@ import { FileItem } from './FileItem';
 import { FolderItem } from './FolderItem';
 import { FolderPathNav } from './FolderPathNav';
 import { useSelectedStore } from '@/store/selected/use-selected-store';
+import { useUploadsStore } from '@/store/uploads/use-uploads-store';
+import { formatBytes } from '@/utils/format-bytes';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
@@ -32,6 +34,7 @@ export const Folders = () => {
   const { addFolderGroup, folderGroupList } = useFoldersStore();
   const { addFileGroup, addOneFileItem, fileGroupList } = useFilesStore();
   const { setSelectedCurrentFolder, selectedCurrentFolder } = useSelectedStore();
+  const { addUploadItem, updateUploadItem } = useUploadsStore();
 
   const menuItems = [
     {
@@ -89,7 +92,13 @@ export const Folders = () => {
               variant="outlined"
               startIcon={<AddIcon />}
               onClick={handleOpenMenu}
-              sx={{ maxWidth: '110px', maxHeight: '50px', minWidth: '110px', minHeight: '50px' }}
+              sx={{
+                maxWidth: '110px',
+                maxHeight: '50px',
+                minWidth: '110px',
+                minHeight: '50px',
+                backgroundColor: 'background.secondary',
+              }}
             >
               New
             </Button>
@@ -109,9 +118,37 @@ export const Folders = () => {
           if (!e.currentTarget.value) return;
 
           filesService
-            .upload({ parentId: selectedCurrentFolder?.id, fileToUpload: e.target.files![0] }) // eslint-disable-line @typescript-eslint/no-non-null-assertion
+            .upload({
+              parentId: selectedCurrentFolder?.id,
+              fileToUpload: e.target.files![0], // eslint-disable-line @typescript-eslint/no-non-null-assertion
+              initUpload: (uploadItemId, fileName, progress) => {
+                addUploadItem({
+                  uploadItem: {
+                    id: uploadItemId,
+                    fileName,
+                    progress,
+                    isCompleted: false,
+                  },
+                });
+              },
+              onUpload: (uploadItemId, progress, uploadedSize) => {
+                updateUploadItem({
+                  uploadItem: { id: uploadItemId, progress, uploadedSize: formatBytes(uploadedSize) },
+                });
+              },
+              afterUpload: (uploadItemId, progress) => {
+                updateUploadItem({
+                  uploadItem: {
+                    id: uploadItemId,
+                    progress,
+                    isCompleted: true,
+                  },
+                });
+              },
+            })
             .then((result) => {
               addOneFileItem({ fileItem: result, parentId: selectedCurrentFolder?.id });
+              e.target.value = '';
             })
             .catch((err) => console.log(err));
         }}

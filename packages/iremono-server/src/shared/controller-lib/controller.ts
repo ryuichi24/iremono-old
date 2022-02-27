@@ -27,6 +27,10 @@ export abstract class Controller<TUseCase = any> {
     return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.OK, readableStream, headers, cookies });
   }
 
+  protected _streamVideo(readableStream: Readable, headers: Headers = {}, cookies: Cookie[] = []) {
+    return this._makeHttpResponse({ httpStatusCode: HttpStatusCode.PARTIAL_CONTENT, readableStream, headers, cookies });
+  }
+
   private _makeHttpResponse({
     httpStatusCode,
     body = null,

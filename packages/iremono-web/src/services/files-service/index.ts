@@ -1,5 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
 import { apiClient } from '@/utils/api-client';
-import { formatBytes } from '@/utils/format-bytes';
 import { AxiosRequestConfig } from 'axios';
 
 const BASE_URL = '/api/files';
@@ -7,13 +7,18 @@ const BASE_URL = '/api/files';
 interface UploadFileRequest {
   parentId: string;
   fileToUpload: File;
+  initUpload: (uploadItemId: string, fileName: string, progress: number) => void;
+  onUpload: (uploadItemId: string, progress: number, uploadedSize: number) => void;
+  afterUpload: (uploadItemId: string, progress: number) => void;
 }
 
 const upload = async (request: UploadFileRequest) => {
+  const uploadId = uuidv4();
+
   const config: AxiosRequestConfig = {
     onUploadProgress: (progressEvent) => {
       const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
-      const formattedProgress = formatBytes(progressEvent.loaded);
+      request.onUpload(uploadId, progress, progressEvent.loaded);
     },
   };
 
@@ -25,7 +30,12 @@ const upload = async (request: UploadFileRequest) => {
   formData.append('file', fileBrob, request.fileToUpload.name);
   formData.append('parentId', request.parentId);
 
+  request.initUpload(uploadId, request.fileToUpload.name, 0);
+
   const res = await apiClient.post(`${BASE_URL}/content`, formData, config);
+
+  request.afterUpload(uploadId, 100);
+
   const result = res.data;
   return result;
 };
