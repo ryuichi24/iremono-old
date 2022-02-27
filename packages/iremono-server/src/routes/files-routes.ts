@@ -7,6 +7,7 @@ import {
   jwtService,
   removeFileController,
   restoreFileController,
+  streamVideoController,
   updateFileController,
   uploadFileController,
   userRepository,
@@ -36,4 +37,5 @@ export const filesRouter = express
   .get('/:id/thumbnail', authHandler(jwtService), makeExpressHandler(downloadFileThumbnailController))
   .patch('/:id', authHandler(jwtService), makeExpressHandler(updateFileController))
   .post('/:id/remove', authHandler(jwtService), makeExpressHandler(removeFileController))
-  .post('/:id/restore', authHandler(jwtService), makeExpressHandler(restoreFileController));
+  .post('/:id/restore', authHandler(jwtService), makeExpressHandler(restoreFileController))
+  .get('/:id/video', authHandler(jwtService), makeExpressHandler(streamVideoController));

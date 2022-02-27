@@ -4,6 +4,7 @@ export interface HttpRequest {
   query: { [key: string]: string };
   params: { [key: string]: string };
   cookies: { [key: string]: string };
+  headers: { [key: string]: string };
   ip?: string;
   ips?: string[];
   method: string;

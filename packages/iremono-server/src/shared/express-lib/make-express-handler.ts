@@ -1,3 +1,4 @@
+import stream from 'stream';
 import express from 'express';
 import { isObject } from '@iremono/util';
 import { Controller, HttpRequest } from '../controller-lib';
@@ -26,6 +27,7 @@ const makeHttpRequestFromExpressRequest = (req: express.Request): HttpRequest =>
   query: req.query as { [key: string]: string },
   params: req.params,
   cookies: req.cookies,
+  headers: req.headers as { [key: string]: string },
   ip: req.ip,
   ips: req.ips,
   method: req.method,
@@ -48,7 +50,14 @@ export const makeExpressHandler = (controller: Controller) =>
     if (httpResponse.hasCookies)
       httpResponse.cookies.forEach((cookie) => res.cookie(cookie.key, cookie.value, cookie.options));
 
-    if (httpResponse.readableStream) return httpResponse.readableStream.pipe(res);
+    if (httpResponse.readableStream) {
+      res.status(httpResponse.statusCode);
+      return await stream.promises.pipeline(httpResponse.readableStream, res).catch((err) => {
+        res.destroy(err); // emit 'error' and 'close'
+
+        console.error(err);
+      });
+    }
 
     const expressResponseAction = isObject(httpResponse.body) ? 'json' : 'send';
     return res.status(httpResponse.statusCode)[expressResponseAction](httpResponse.body || '');

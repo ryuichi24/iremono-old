@@ -29,6 +29,7 @@ import {
   RestoreFolderUseCase,
   SignInUseCase,
   SignUpUseCase,
+  StreamVideoUseCase,
   UpdateFileUseCase,
   UpdateFolderUseCase,
   UploadFileUseCase,
@@ -55,6 +56,7 @@ import {
   RegisterEncryptionKeyController,
   GetFolderController,
   ListAllAncestorsController,
+  StreamVideoController,
 } from '../controllers';
 import { loggerFactory } from '../shared/utils/logger';
 
@@ -104,6 +106,7 @@ const downloadFileThumbnailUseCase = new DownloadFileThumbnailUseCase(storageIte
 const updateFileUseCase = new UpdateFileUseCase(storageItemRepository);
 const removeFileUseCase = new RemoveFileUseCase(storageItemRepository);
 const restoreFileUseCase = new RestoreFileUseCase(storageItemRepository);
+const streamVideoUseCase = new StreamVideoUseCase(storageItemRepository);
 
 export const uploadFileController = new UploadFileController(uploadFileUseCase, loggerFactory);
 export const downloadFileController = new DownloadFileController(downloadFileUseCase, cryptoService, loggerFactory);
@@ -115,6 +118,7 @@ export const downloadFileThumbnailController = new DownloadFileThumbnailControll
 export const updateFileController = new UpdateFileController(updateFileUseCase, loggerFactory);
 export const removeFileController = new RemoveFileController(removeFileUseCase, loggerFactory);
 export const restoreFileController = new RestoreFileController(restoreFileUseCase, loggerFactory);
+export const streamVideoController = new StreamVideoController(streamVideoUseCase, cryptoService, loggerFactory);
 
 // trash
 const deleteFileInTrashUseCase = new DeleteFileInTrashUseCase(storageItemRepository);
