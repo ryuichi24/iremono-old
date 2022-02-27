@@ -92,7 +92,13 @@ export const Folders = () => {
               variant="outlined"
               startIcon={<AddIcon />}
               onClick={handleOpenMenu}
-              sx={{ maxWidth: '110px', maxHeight: '50px', minWidth: '110px', minHeight: '50px' }}
+              sx={{
+                maxWidth: '110px',
+                maxHeight: '50px',
+                minWidth: '110px',
+                minHeight: '50px',
+                backgroundColor: 'background.secondary',
+              }}
             >
               New
             </Button>
