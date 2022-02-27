@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import { config } from './config';
 import { filesRouter, foldersRouter, authRouter, trashRouter, securityRouter } from './routes';
-import { cookieHandler, errorHandler } from './shared/express-lib';
+import { cookieHandler, demoModeHandler, errorHandler } from './shared/express-lib';
 import { loggerFactory } from './shared/utils/logger';
 import { initMysqlDB } from './db';
 
@@ -17,7 +17,7 @@ const main = async () => {
 
   const app = express();
 
-  app.use([express.json(), cookieHandler(), cors({ credentials: true, origin: true })]);
+  app.use([express.json(), cookieHandler(), cors({ credentials: true, origin: true }), demoModeHandler()]);
 
   app.use('/api/auth', authRouter);
   app.use('/api/folders', foldersRouter);
