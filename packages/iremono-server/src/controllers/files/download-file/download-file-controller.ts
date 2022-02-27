@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { CryptoService } from '@iremono/backend-core/dist/services/crypto-service';
 import { DownloadFileUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
@@ -23,7 +24,7 @@ export class DownloadFileController extends Controller<DownloadFileUseCase> {
 
     this._logger.debug(result);
 
-    const readStream = fs.createReadStream(result.filePath);
+    const readStream = fs.createReadStream(path.join(config.mediaConfig.PATH_TO_MEDIA_DIR, result.filePath));
     const decipherStream = this._cryptoService.generateDecipherStreamInCBC(
       config.mediaConfig.ENCRYPTION_KEY,
       result.fileInitializationVector,

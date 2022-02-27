@@ -30,7 +30,7 @@ export const clientEncryptionKeyHandler =
 
       req.uploadedFile.isEncryptedWithClientKey = true;
 
-      const userMediaDir = path.join(folderPath, 'iremono_media', req.user.id);
+      const userMediaDir = path.join('iremono_media', req.user.id);
       const filesDir = path.join(userMediaDir, 'files');
       const thumbnailsDir = path.join(userMediaDir, 'thumbnails');
 
@@ -41,8 +41,8 @@ export const clientEncryptionKeyHandler =
       req.uploadedFile.isEncryptedWithClientKey = true;
 
       const fileDest = path.join(filesDir, crypto.randomUUID());
-      const encryptedWithClientKeyFileWriteStream = fs.createWriteStream(fileDest);
-      const uploadedFileReadStream = fs.createReadStream(req.uploadedFile.filePath);
+      const encryptedWithClientKeyFileWriteStream = fs.createWriteStream(path.join(folderPath, fileDest));
+      const uploadedFileReadStream = fs.createReadStream(path.join(folderPath, req.uploadedFile.filePath));
 
       const clientKey = cryptoService.decryptInCBC(
         clientEncryptedEncryptionKey,
@@ -61,18 +61,20 @@ export const clientEncryptionKeyHandler =
         encryptedWithClientKeyFileWriteStream,
       );
 
-      await deleteFromFileSystem(req.uploadedFile.filePath);
+      await deleteFromFileSystem(path.join(folderPath, req.uploadedFile.filePath));
       req.uploadedFile.filePath = fileDest;
 
       if (!req.uploadedFile.thumbnail.thumbnailPath) return next();
 
-      const uploadedThumbnailReadStream = fs.createReadStream(req.uploadedFile.thumbnail.thumbnailPath);
+      const uploadedThumbnailReadStream = fs.createReadStream(
+        path.join(folderPath, req.uploadedFile.thumbnail.thumbnailPath),
+      );
       const thumbnailCipherWithClientKeyStream = cryptoService.generateCipherStreamInCBC(
         clientKey,
         req.uploadedFile.thumbnail.thumbnailInitializationVector,
       );
       const thumbnailDest = path.join(thumbnailsDir, crypto.randomUUID());
-      const thumbnailWriteStream = fs.createWriteStream(thumbnailDest);
+      const thumbnailWriteStream = fs.createWriteStream(path.join(folderPath, thumbnailDest));
 
       await stream.promises.pipeline(
         uploadedThumbnailReadStream,
@@ -80,7 +82,7 @@ export const clientEncryptionKeyHandler =
         thumbnailWriteStream,
       );
 
-      await deleteFromFileSystem(req.uploadedFile.thumbnail.thumbnailPath);
+      await deleteFromFileSystem(path.join(folderPath, req.uploadedFile.thumbnail.thumbnailPath));
       req.uploadedFile.thumbnail.thumbnailPath = thumbnailDest;
 
       next();

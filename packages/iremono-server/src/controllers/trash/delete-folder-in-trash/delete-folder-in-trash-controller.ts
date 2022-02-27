@@ -1,8 +1,10 @@
+import path from 'path';
 import { DeleteFolderInTrashUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { deleteFromFileSystem } from '@iremono/util/dist/file-system';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { makeDeleteFolderInTrashRequestDTO } from './make-delete-folder-in-trash-request-DTO';
+import { config } from '../../../config';
 
 export class DeleteFolderInTrashController extends Controller<DeleteFolderInTrashUseCase> {
   private readonly _logger: Logger;
@@ -18,8 +20,9 @@ export class DeleteFolderInTrashController extends Controller<DeleteFolderInTras
 
     await Promise.all(
       result.deletedFiles.map((file) => {
-        deleteFromFileSystem(file.filePath!);
-        if (file.hasThumbnail) deleteFromFileSystem(file.thumbnailPath!);
+        deleteFromFileSystem(path.join(config.mediaConfig.PATH_TO_MEDIA_DIR, file.filePath!));
+        if (file.hasThumbnail)
+          deleteFromFileSystem(path.join(config.mediaConfig.PATH_TO_MEDIA_DIR, file.thumbnailPath!));
       }),
     );
 
