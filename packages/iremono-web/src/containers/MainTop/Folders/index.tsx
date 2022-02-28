@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { formatBytes } from '@iremono/util/dist/format-bytes';
 import { Header } from '@/components/Header';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -22,7 +23,6 @@ import { FolderItem } from './FolderItem';
 import { FolderPathNav } from './FolderPathNav';
 import { useSelectedStore } from '@/store/selected/use-selected-store';
 import { useUploadsStore } from '@/store/uploads/use-uploads-store';
-import { formatBytes } from '@/utils/format-bytes';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();

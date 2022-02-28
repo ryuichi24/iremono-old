@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { stringToColor } from '@/utils/string-to-color';
 import { Typography } from '@mui/material';
+import { stringToColor } from '@iremono/util/dist/string-to-color';
 
 interface Props {
   fileExtension: string;
