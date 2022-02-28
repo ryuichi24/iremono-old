@@ -54,6 +54,7 @@ export const SignUpPage = () => {
             name="email"
             autoComplete="email"
             onChange={(e) => setEmail(e.target.value)}
+            value={email}
           />
           <TextField
             margin="normal"
@@ -65,6 +66,7 @@ export const SignUpPage = () => {
             id="password"
             autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value)}
+            value={password}
           />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign Up
