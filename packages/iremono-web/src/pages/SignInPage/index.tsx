@@ -55,6 +55,7 @@ export const SignInPage = () => {
             name="email"
             autoComplete="email"
             onChange={(e) => setEmail(e.target.value)}
+            value={email}
           />
           <TextField
             margin="normal"
@@ -66,6 +67,7 @@ export const SignInPage = () => {
             id="password"
             autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value)}
+            value={password}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
