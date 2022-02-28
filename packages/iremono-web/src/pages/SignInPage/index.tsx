@@ -14,8 +14,8 @@ import { authService } from '@/services/auth-service';
 import { useAuthStore } from '@/store/auth/use-auth-store';
 
 export const SignInPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('demo@iremono.com');
+  const [password, setPassword] = useState('iremono123');
 
   const { setAuth } = useAuthStore();
 
