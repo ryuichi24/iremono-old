@@ -17,7 +17,11 @@
     "init-mysql-db-dev": "export $(cat .env.dev | grep -v \"#\" | xargs) && yarn workspace @iremono/backend-core init-mysql-db",
     "cleanup-mysql-db-dev": "export $(cat .env.dev | grep -v \"#\" | xargs) && yarn workspace @iremono/backend-core cleanup-mysql-db",
     "init-mysql-db-prod": "export $(cat .env.prod | grep -v \"#\" | xargs) && yarn workspace @iremono/backend-core init-mysql-db",
-    "cleanup-mysql-db-prod": "export $(cat .env.prod | grep -v \"#\" | xargs) && yarn workspace @iremono/backend-core cleanup-mysql-db"
+    "cleanup-mysql-db-prod": "export $(cat .env.prod | grep -v \"#\" | xargs) && yarn workspace @iremono/backend-core cleanup-mysql-db",
+    "init-sqlite-db-dev": "export $(cat .env.dev | grep -v \"#\" | xargs) && yarn workspace @iremono/backend-core init-sqlite-db",
+    "cleanup-sqlite-db-dev": "export $(cat .env.dev | grep -v \"#\" | xargs) && yarn workspace @iremono/backend-core cleanup-sqlite-db",
+    "init-sqlite-db-prod": "export $(cat .env.prod | grep -v \"#\" | xargs) && yarn workspace @iremono/backend-core init-sqlite-db",
+    "cleanup-sqlite-db-prod": "export $(cat .env.prod | grep -v \"#\" | xargs) && yarn workspace @iremono/backend-core cleanup-sqlite-db"
   },
   "workspaces": [
     "packages/*"
