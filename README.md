@@ -8,11 +8,6 @@ iremono is a self-hosted cloud storage built with node js and react both of whic
 
 There is demo to play around with: [iremono demo](https://iremono.herokuapp.com/)
 
-You can use demo account below:
-
-- email: demo@iremono.com
-- password: iremono123
-
 \*The demo account does not have any write access.
 
 ## How to run iremono
@@ -67,6 +62,12 @@ DB_PASSWORD=password
 DB_NAME=iremono_db
 ```
 
+### Initialize database
+
+```bash
+yarn init-mysql-db-prod
+```
+
 ### Build the project
 
 ```bash
@@ -87,6 +88,12 @@ You just take exactly the same steps to ["Install dependencies"](#install-depend
 
 ```bash
 yarn make-dev-env-file
+```
+
+### Initialize database
+
+```bash
+yarn init-mysql-db-dev
 ```
 
 ### Run iremono

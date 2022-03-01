@@ -10,7 +10,6 @@
     "build": "yarn tsc --build",
     "postinstall": "yarn build",
     "init-mysql-db": "node scripts/mysql/initialize-db.js",
-    "init-mysql-tables": "node scripts/mysql/initialize-tables.js",
     "cleanup-mysql-db": "node scripts/mysql/cleanup-db.js"
   },
   "dependencies": {
