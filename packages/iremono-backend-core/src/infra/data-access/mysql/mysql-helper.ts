@@ -1,5 +1,6 @@
 import fs from 'fs';
 import mysql from 'mysql2';
+import { Connection } from 'mysql2/promise';
 
 interface Options {
   dbHost?: string;
@@ -8,7 +9,7 @@ interface Options {
   dbName?: string;
 }
 
-export const createConnection = ({ dbHost, dbUsername, dbPassword, dbName }: Options) => {
+const createConnection = ({ dbHost, dbUsername, dbPassword, dbName }: Options) => {
   if (!dbHost || !dbUsername || !dbPassword) {
     throw new Error('Some database credentials are missing.');
   }
@@ -33,7 +34,29 @@ export const createConnection = ({ dbHost, dbUsername, dbPassword, dbName }: Opt
   return con.promise();
 };
 
-export const runSqlQuery = async (sqlQuery: string, values: string[] = [], dbConnection: mysql.Connection) => {
+const createConnectionPool = async ({ dbHost, dbUsername, dbPassword, dbName }: Options) => {
+  if (!dbHost || !dbUsername || !dbPassword) {
+    throw new Error('Some database credentials are missing.');
+  }
+
+  const pool = mysql.createPool({
+    host: dbHost,
+    user: dbUsername,
+    database: dbName,
+    password: dbPassword,
+  });
+
+  const promisePool = pool.promise();
+
+  const con = await promisePool.getConnection();
+
+  await con.connect();
+  con.release();
+
+  return promisePool;
+};
+
+const runSqlQuery = async (sqlQuery: string, values: string[] = [], dbConnection: Connection) => {
   await dbConnection.connect();
   console.log('DB connected!');
 
@@ -44,7 +67,7 @@ export const runSqlQuery = async (sqlQuery: string, values: string[] = [], dbCon
   return result;
 };
 
-export const runSqlFile = async (pathToFile: string, dbConnection: mysql.Connection) => {
+const runSqlFile = async (pathToFile: string, dbConnection: Connection) => {
   await dbConnection.connect();
   console.log('DB connected!');
   const queryList = fs.readFileSync(pathToFile).toString().split(';');
@@ -57,3 +80,5 @@ export const runSqlFile = async (pathToFile: string, dbConnection: mysql.Connect
   console.log('Query successfully executed!');
   await dbConnection.end();
 };
+
+export const mysqlHelper = Object.freeze({ createConnection, createConnectionPool, runSqlQuery, runSqlFile });

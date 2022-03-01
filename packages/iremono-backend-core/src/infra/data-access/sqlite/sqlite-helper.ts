@@ -5,7 +5,7 @@ interface Options {
   dbName: string;
 }
 
-export const createConnection = ({ dbName }: Options) => {
+const createConnection = ({ dbName }: Options) => {
   const sqlite = sqlite3.verbose();
   const connection = new sqlite.Database(dbName, (err) => {
     if (err) {
@@ -48,7 +48,7 @@ export const createConnection = ({ dbName }: Options) => {
   return Object.freeze({ all, get, run, close });
 };
 
-export const runSqlFile = async (pathToFile: string, dbConnection: any) => {
+const runSqlFile = async (pathToFile: string, dbConnection: any) => {
   const queryList = fs.readFileSync(pathToFile).toString().split(';');
 
   for (const queryItem of queryList) {
@@ -59,3 +59,7 @@ export const runSqlFile = async (pathToFile: string, dbConnection: any) => {
   console.log('Query successfully executed!');
   await dbConnection.close();
 };
+
+export const sqliteHelper = Object.freeze({ createConnection, runSqlFile });
+
+export type SqliteConnection = ReturnType<typeof createConnection>;
