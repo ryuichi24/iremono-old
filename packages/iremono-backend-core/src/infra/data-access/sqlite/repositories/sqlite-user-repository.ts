@@ -3,7 +3,7 @@ import { User } from '../../../../entities';
 import { UserRepository } from '../../../../repositories';
 import { SqliteRepository } from './sqlite-repository';
 
-export class MysqlUserRepository extends SqliteRepository<User> implements UserRepository {
+export class SqliteUserRepository extends SqliteRepository<User> implements UserRepository {
   constructor(loggerFactory: LoggerFactory) {
     super(loggerFactory);
   }

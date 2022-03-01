@@ -52,11 +52,7 @@ export const makeExpressHandler = (controller: Controller) =>
 
     if (httpResponse.readableStream) {
       res.status(httpResponse.statusCode);
-      return await stream.promises.pipeline(httpResponse.readableStream, res).catch((err) => {
-        res.destroy(err); // emit 'error' and 'close'
-
-        console.error(err);
-      });
+      return await stream.promises.pipeline(httpResponse.readableStream, res);
     }
 
     const expressResponseAction = isObject(httpResponse.body) ? 'json' : 'send';

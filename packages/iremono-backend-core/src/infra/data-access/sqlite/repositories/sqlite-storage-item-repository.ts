@@ -2,7 +2,7 @@ import { StorageItem } from '../../../../entities';
 import { StorageItemRepository } from '../../../../repositories';
 import { SqliteRepository } from './sqlite-repository';
 
-export class MysqlStorageItemRepository extends SqliteRepository<StorageItem> implements StorageItemRepository {
+export class SqliteStorageItemRepository extends SqliteRepository<StorageItem> implements StorageItemRepository {
   public async remove(entity: StorageItem): Promise<void> {
     const query = 'DELETE FROM storage_items WHERE id = ? AND owner_id = ?;';
     const values = [entity.id, entity.ownerId];
