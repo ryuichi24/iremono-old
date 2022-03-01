@@ -18,7 +18,7 @@ export abstract class MysqlRepository<TEntity extends { id: string }> {
   }
 
   protected async _query(query: string, values: any[]) {
-    const result = await MysqlDatabase.getConnectionPool().query(query, values);
+    const result = await MysqlDatabase.getConnection().query(query, values);
     this._logger.debug(
       `[query="${query}", \nvalues="[${values}]", \nresult="${JSON.stringify(result[0], null, '\t')}"]`,
     );

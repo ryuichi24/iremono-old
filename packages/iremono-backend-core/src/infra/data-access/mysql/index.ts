@@ -1,2 +1,2 @@
 export * from './repositories';
-export * from './mysql-db';
+export * from './mysql-database';

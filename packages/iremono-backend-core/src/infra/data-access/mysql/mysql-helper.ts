@@ -1,7 +1,15 @@
 import fs from 'fs';
 import mysql from 'mysql2';
+import { Connection } from 'mysql2/promise';
 
-export const createConnection = ({ dbHost, dbUsername, dbPassword, dbName } = {}) => {
+interface Options {
+  dbHost?: string;
+  dbUsername?: string;
+  dbPassword?: string;
+  dbName?: string;
+}
+
+const createConnection = ({ dbHost, dbUsername, dbPassword, dbName }: Options) => {
   if (!dbHost || !dbUsername || !dbPassword) {
     throw new Error('Some database credentials are missing.');
   }
@@ -26,7 +34,29 @@ export const createConnection = ({ dbHost, dbUsername, dbPassword, dbName } = {}
   return con.promise();
 };
 
-export const runSqlQuery = async (sqlQuery, values = [], dbConnection) => {
+const createConnectionPool = async ({ dbHost, dbUsername, dbPassword, dbName }: Options) => {
+  if (!dbHost || !dbUsername || !dbPassword) {
+    throw new Error('Some database credentials are missing.');
+  }
+
+  const pool = mysql.createPool({
+    host: dbHost,
+    user: dbUsername,
+    database: dbName,
+    password: dbPassword,
+  });
+
+  const promisePool = pool.promise();
+
+  const con = await promisePool.getConnection();
+
+  await con.connect();
+  con.release();
+
+  return promisePool;
+};
+
+const runSqlQuery = async (sqlQuery: string, values: string[] = [], dbConnection: Connection) => {
   await dbConnection.connect();
   console.log('DB connected!');
 
@@ -37,7 +67,7 @@ export const runSqlQuery = async (sqlQuery, values = [], dbConnection) => {
   return result;
 };
 
-export const runSqlFile = async (pathToFile, dbConnection) => {
+const runSqlFile = async (pathToFile: string, dbConnection: Connection) => {
   await dbConnection.connect();
   console.log('DB connected!');
   const queryList = fs.readFileSync(pathToFile).toString().split(';');
@@ -50,3 +80,5 @@ export const runSqlFile = async (pathToFile, dbConnection) => {
   console.log('Query successfully executed!');
   await dbConnection.end();
 };
+
+export const mysqlHelper = Object.freeze({ createConnection, createConnectionPool, runSqlQuery, runSqlFile });

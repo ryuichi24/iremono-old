@@ -20,14 +20,14 @@ const upload = async (request: UploadFileRequest) => {
       const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
       request.onUpload(uploadId, progress, progressEvent.loaded);
     },
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   };
 
   const formData = new FormData();
-  const arrayBuffer = await request.fileToUpload.arrayBuffer();
-  const fileBrob = new Blob([new Uint8Array(arrayBuffer)], {
-    type: request.fileToUpload.type,
-  });
-  formData.append('file', fileBrob, request.fileToUpload.name);
+  formData.append('file', request.fileToUpload, request.fileToUpload.name);
+  formData.append('fileSize', request.fileToUpload.size.toString());
   formData.append('parentId', request.parentId);
 
   request.initUpload(uploadId, request.fileToUpload.name, 0);

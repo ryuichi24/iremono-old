@@ -41,9 +41,6 @@ export const uploadHandler =
         file.pipe(uploadingFileWriteStream);
       });
 
-      // get file size of the uploaded file
-      const uploadedFileSize = (await fs.promises.stat(path.join(mediaDirPath, uploadingFileDest))).size;
-
       // get file type of the uploaded file
       const fileType = await getFileType(path.join(mediaDirPath, uploadingFileDest));
 
@@ -99,7 +96,7 @@ export const uploadHandler =
         fileName,
         mimeType: fileType.mimeType,
         fileExtension: fileType.fileExtension,
-        fileSize: uploadedFileSize,
+        fileSize: parseInt(formData.fileSize),
         formData,
         filePath: fileDest,
         fileInitializationVector,

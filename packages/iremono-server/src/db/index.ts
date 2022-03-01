@@ -1,1 +1,1 @@
-export * from './init-mysql-db';
+export * from './connectDB';

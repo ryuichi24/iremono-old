@@ -4,6 +4,9 @@ import {
   constructMockStorageItemRepository,
   MysqlUserRepository,
   MysqlStorageItemRepository,
+  SqliteUserRepository,
+  SqliteStorageItemRepository,
+  DatabaseType,
 } from '@iremono/backend-core/dist/infra/data-access';
 import {
   constructBcryptService,
@@ -60,11 +63,24 @@ import {
 } from '../controllers';
 import { loggerFactory } from '../shared/utils/logger';
 
-// TODO: replace it once the real repository gets ready
-// export const userRepository = constructMockUserRepository(loggerFactory);
-export const userRepository = new MysqlUserRepository(loggerFactory);
-// const storageItemRepository = constructMockStorageItemRepository(loggerFactory);
-const storageItemRepository = new MysqlStorageItemRepository(loggerFactory);
+const repositories = {
+  userRepository: [
+    { dbType: DatabaseType.MYSQL, repository: new MysqlUserRepository(loggerFactory) },
+    { dbType: DatabaseType.SQLITE, repository: new SqliteUserRepository(loggerFactory) },
+  ],
+  storageItemRepository: [
+    { dbType: DatabaseType.MYSQL, repository: new MysqlStorageItemRepository(loggerFactory) },
+    { dbType: DatabaseType.SQLITE, repository: new SqliteStorageItemRepository(loggerFactory) },
+  ],
+};
+
+export const userRepository =
+  repositories.userRepository.find((repo) => repo.dbType === config.dbConfig.DB_TYPE)?.repository ||
+  constructMockUserRepository(loggerFactory);
+
+const storageItemRepository =
+  repositories.storageItemRepository.find((repo) => repo.dbType === config.dbConfig.DB_TYPE)?.repository ||
+  constructMockStorageItemRepository(loggerFactory);
 
 const bcryptService = constructBcryptService();
 export const jwtService = constructJwtService({
