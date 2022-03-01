@@ -1,2 +1,2 @@
-release: yarn init-mysql-tables
+release: yarn init-mysql-db-prod
 web: yarn start
