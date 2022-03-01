@@ -1,11 +1,11 @@
-import path from 'path';
-import url from 'url';
-import { createConnection, runSqlFile } from './mysql-helper.js';
+import { createConnection, runSqlQuery } from './mysql-helper.js';
 
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const pathToFile = path.resolve(__dirname, 'cleanup-db.sql');
+(async () => {
+  const connectionWithoutDB = createConnection({
+    dbHost: process.env.DB_HOST,
+    dbUsername: process.env.DB_USERNAME,
+    dbPassword: process.env.DB_PASSWORD,
+  });
 
-const connection = createConnection();
-
-runSqlFile(pathToFile, connection);
+  await runSqlQuery('DROP DATABASE IF EXISTS ??;', [process.env.DB_NAME], connectionWithoutDB);
+})();

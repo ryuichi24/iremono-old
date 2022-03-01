@@ -1,19 +1,14 @@
 import fs from 'fs';
 import mysql from 'mysql2';
 
-export const createConnection = ({ hasDatabase } = {}) => {
-  const dbHost = process.env.DB_HOST;
-  const dbUsername = process.env.DB_USERNAME;
-  const dbPassword = process.env.DB_PASSWORD;
-  const dbName = process.env.DB_NAME;
-
+export const createConnection = ({ dbHost, dbUsername, dbPassword, dbName } = {}) => {
   if (!dbHost || !dbUsername || !dbPassword) {
     throw new Error('Some database credentials are missing.');
   }
 
   let con;
 
-  if (hasDatabase) {
+  if (dbName) {
     con = mysql.createConnection({
       host: dbHost,
       user: dbUsername,
@@ -28,25 +23,30 @@ export const createConnection = ({ hasDatabase } = {}) => {
     });
   }
 
-  return con;
+  return con.promise();
 };
 
-export const runSqlFile = (pathToFile, dbConnection) => {
-  dbConnection.connect((err) => {
-    if (err) throw err;
-    console.log('DB connected!');
+export const runSqlQuery = async (sqlQuery, values = [], dbConnection) => {
+  await dbConnection.connect();
+  console.log('DB connected!');
 
-    const queryList = fs.readFileSync(pathToFile).toString().split(';');
+  const result = await dbConnection.query(sqlQuery, values);
+  console.log('Query successfully executed!');
 
-    queryList.forEach((query) => {
-      if (!query || query === '\n') return;
+  await dbConnection.end();
+  return result;
+};
 
-      dbConnection.query(query, function (err, result) {
-        if (err) throw err;
-      });
-    });
+export const runSqlFile = async (pathToFile, dbConnection) => {
+  await dbConnection.connect();
+  console.log('DB connected!');
+  const queryList = fs.readFileSync(pathToFile).toString().split(';');
 
-    console.log('Query successfully executed!');
-    dbConnection.end();
-  });
+  for (const queryItem of queryList) {
+    if (!queryItem || queryItem === '\n') continue;
+    await dbConnection.query(queryItem);
+  }
+
+  console.log('Query successfully executed!');
+  await dbConnection.end();
 };
