@@ -84,8 +84,8 @@ const storageItemRepository =
 
 const bcryptService = constructBcryptService();
 export const jwtService = constructJwtService({
-  jwtSecret: config.jwtConfig.JWT_SECRET_FOR_ACCESS_TOKEN,
-  jwtExpiresIn: config.jwtConfig.JWT_EXPIRE_IN_FOR_ACCESS_TOKEN,
+  jwtSecretForAccessToken: config.jwtConfig.JWT_SECRET_FOR_ACCESS_TOKEN,
+  jwtExpiresInForAccessToken: config.jwtConfig.JWT_EXPIRE_IN_FOR_ACCESS_TOKEN,
 });
 export const cryptoService = constructCryptoService();
 

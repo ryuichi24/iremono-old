@@ -2,23 +2,23 @@ import jwt from 'jsonwebtoken';
 import { TokenService } from '../../services';
 
 interface JwtOptions {
-  jwtSecret: string;
-  jwtExpiresIn: string;
+  jwtSecretForAccessToken: string;
+  jwtExpiresInForAccessToken: string;
 }
 
 export const constructJwtService = (jwtOptions: JwtOptions): TokenService =>
   Object.freeze({
     generateAccessToken: (payload: { [key: string]: string }) => {
-      const accessTokenString = jwt.sign(payload, jwtOptions.jwtSecret, {
-        expiresIn: jwtOptions.jwtExpiresIn,
+      const accessTokenString = jwt.sign(payload, jwtOptions.jwtSecretForAccessToken, {
+        expiresIn: jwtOptions.jwtExpiresInForAccessToken,
       });
 
       return {
         value: accessTokenString,
-        expiresIn: jwtOptions.jwtExpiresIn,
+        expiresIn: jwtOptions.jwtExpiresInForAccessToken,
       };
     },
     verifyToken: (token: string) => {
-      return jwt.verify(token, jwtOptions.jwtSecret);
+      return jwt.verify(token, jwtOptions.jwtSecretForAccessToken);
     },
   });
