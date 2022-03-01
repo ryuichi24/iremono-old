@@ -38,10 +38,10 @@ SECURE_COOKIE=false
 LOGGING_MIN_LEVEL=1
 
 # secret for access token
-JWT_SECRET=6de0ed2016381b13b3728372e4a55fe2
+JWT_SECRET_FOR_ACCESS_TOKEN=6de0ed2016381b13b3728372e4a55fe2
 
 # expiry for the token
-JWT_EXPIRE_IN=900000
+JWT_EXPIRE_IN_FOR_ACCESS_TOKEN=900000
 
 # name for media directory
 MEDIA_DIR_NAME=iremono_media
@@ -63,8 +63,9 @@ DB_HOST=
 DB_USERNAME=
 DB_PASSWORD=
 
-# if sqlite selected, add path + the database file name
+# if sqlite selected, path and the database file name
 DB_NAME=../../iremono.db
+
 ```
 
 ### Initialize database

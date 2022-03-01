@@ -1,4 +1,4 @@
 export const jwtConfig = Object.freeze({
-  JWT_SECRET: process.env.JWT_SECRET || 'jwt-secret',
-  JWT_EXPIRE_IN: process.env.JWT_EXPIRE_IN || '600000',
+  JWT_SECRET_FOR_ACCESS_TOKEN: process.env.JWT_SECRET_FOR_ACCESS_TOKEN || 'jwt-secret-for-access-token',
+  JWT_EXPIRE_IN_FOR_ACCESS_TOKEN: process.env.JWT_EXPIRE_IN_FOR_ACCESS_TOKEN || '900000',
 });
