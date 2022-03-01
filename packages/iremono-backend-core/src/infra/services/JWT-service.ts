@@ -18,7 +18,7 @@ export const constructJwtService = (jwtOptions: JwtOptions): TokenService =>
         expiresIn: jwtOptions.jwtExpiresInForAccessToken,
       };
     },
-    verifyToken: (token: string) => {
+    verifyAccessTokenToken: (token: string) => {
       return jwt.verify(token, jwtOptions.jwtSecretForAccessToken);
     },
   });

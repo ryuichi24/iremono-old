@@ -17,7 +17,7 @@ export const authHandler =
       }
 
       if (!token) throw new UnauthorizedError('no bearer token provided');
-      req.user = tokenService.verifyToken(token);
+      req.user = tokenService.verifyAccessTokenToken(token);
       next();
     } catch (error) {
       if (error instanceof Error) {
