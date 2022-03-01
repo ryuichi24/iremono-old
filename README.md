@@ -62,6 +62,12 @@ DB_PASSWORD=password
 DB_NAME=iremono_db
 ```
 
+### Initialize database
+
+```bash
+yarn init-mysql-db-prod
+```
+
 ### Build the project
 
 ```bash
@@ -82,6 +88,12 @@ You just take exactly the same steps to ["Install dependencies"](#install-depend
 
 ```bash
 yarn make-dev-env-file
+```
+
+### Initialize database
+
+```bash
+yarn init-mysql-db-dev
 ```
 
 ### Run iremono
