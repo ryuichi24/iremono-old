@@ -1,6 +1,6 @@
-import { sqliteHelper } from './sqlite/sqlite-helper';
 import { LoggerFactory } from '@iremono/util';
-import { MysqlDatabase } from './mysql/mysql-database';
+import { MysqlDatabase } from './mysql';
+import { SqliteDatabase } from './sqlite';
 
 export enum DatabaseType {
   MYSQL = 'mysql',
@@ -30,7 +30,7 @@ export class Database {
       }
 
       if (databaseType === DatabaseType.SQLITE) {
-        sqliteHelper.createConnection({ dbName });
+        SqliteDatabase.connectDB({ dbName });
         logger.info('it has successfully connected to SQLite!');
         return;
       }
