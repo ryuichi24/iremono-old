@@ -1,6 +1,6 @@
 import path from 'path';
 import url from 'url';
-import { createConnection, runSqlFile } from './sqlite-helper.js';
+import { createConnection, runSqlFile } from '../../dist/infra/data-access/sqlite/sqlite-helper.js';
 
 (async () => {
   const connection = createConnection({

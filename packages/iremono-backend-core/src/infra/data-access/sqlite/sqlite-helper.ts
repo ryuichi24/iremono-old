@@ -1,7 +1,11 @@
 import fs from 'fs';
 import sqlite3 from 'sqlite3';
 
-export const createConnection = ({ dbName } = {}) => {
+interface Options {
+  dbName: string;
+}
+
+export const createConnection = ({ dbName }: Options) => {
   const sqlite = sqlite3.verbose();
   const connection = new sqlite.Database(dbName, (err) => {
     if (err) {
@@ -10,7 +14,7 @@ export const createConnection = ({ dbName } = {}) => {
     console.log(`it has successfully connected to database: ${dbName}!`);
   });
 
-  const all = async (query, params = []) =>
+  const all = async (query: string, params: string[] = []) =>
     new Promise((resolve, reject) => {
       connection.all(query, params, (err, rows) => {
         if (err) return reject(err);
@@ -19,7 +23,7 @@ export const createConnection = ({ dbName } = {}) => {
       });
     });
 
-  const get = async (query, params = []) =>
+  const get = async (query: string, params: string[] = []) =>
     new Promise((resolve, reject) => {
       connection.get(query, params, (err, row) => {
         if (err) return reject(err);
@@ -28,8 +32,8 @@ export const createConnection = ({ dbName } = {}) => {
       });
     });
 
-  const run = async (query, params = []) =>
-    new Promise((resolve, reject) => {
+  const run = async (query: string, params: string[] = []) =>
+    new Promise<void>((resolve, reject) => {
       connection.run(query, params, (err) => {
         if (err) return reject(err);
 
@@ -44,7 +48,7 @@ export const createConnection = ({ dbName } = {}) => {
   return Object.freeze({ all, get, run, close });
 };
 
-export const runSqlFile = async (pathToFile, dbConnection) => {
+export const runSqlFile = async (pathToFile: string, dbConnection: any) => {
   const queryList = fs.readFileSync(pathToFile).toString().split(';');
 
   for (const queryItem of queryList) {

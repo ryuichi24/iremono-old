@@ -1,7 +1,14 @@
 import fs from 'fs';
 import mysql from 'mysql2';
 
-export const createConnection = ({ dbHost, dbUsername, dbPassword, dbName } = {}) => {
+interface Options {
+  dbHost?: string;
+  dbUsername?: string;
+  dbPassword?: string;
+  dbName?: string;
+}
+
+export const createConnection = ({ dbHost, dbUsername, dbPassword, dbName }: Options) => {
   if (!dbHost || !dbUsername || !dbPassword) {
     throw new Error('Some database credentials are missing.');
   }
@@ -26,7 +33,7 @@ export const createConnection = ({ dbHost, dbUsername, dbPassword, dbName } = {}
   return con.promise();
 };
 
-export const runSqlQuery = async (sqlQuery, values = [], dbConnection) => {
+export const runSqlQuery = async (sqlQuery: string, values: string[] = [], dbConnection: mysql.Connection) => {
   await dbConnection.connect();
   console.log('DB connected!');
 
@@ -37,7 +44,7 @@ export const runSqlQuery = async (sqlQuery, values = [], dbConnection) => {
   return result;
 };
 
-export const runSqlFile = async (pathToFile, dbConnection) => {
+export const runSqlFile = async (pathToFile: string, dbConnection: mysql.Connection) => {
   await dbConnection.connect();
   console.log('DB connected!');
   const queryList = fs.readFileSync(pathToFile).toString().split(';');

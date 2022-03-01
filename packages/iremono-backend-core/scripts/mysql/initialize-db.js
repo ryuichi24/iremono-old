@@ -1,6 +1,6 @@
 import path from 'path';
 import url from 'url';
-import { createConnection, runSqlQuery, runSqlFile } from './mysql-helper.js';
+import { createConnection, runSqlQuery, runSqlFile } from '../../dist/infra/data-access/mysql/mysql-helper.js';
 
 (async () => {
   const connectionWithoutDB = createConnection({
