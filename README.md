@@ -69,8 +69,16 @@ DB_NAME=../../iremono.db
 
 ### Initialize database
 
+#### SQLite
+
 ```bash
 yarn init-sqlite-db-prod
+```
+
+#### MySQL
+
+```bash
+yarn init-mysql-db-prod
 ```
 
 ### Build the project
@@ -97,8 +105,16 @@ yarn make-dev-env-file
 
 ### Initialize database
 
+#### SQLite
+
 ```bash
-yarn init-sqlite-db-prod
+yarn init-sqlite-db-dev
+```
+
+#### MySQL
+
+```bash
+yarn init-mysql-db-dev
 ```
 
 ### Run iremono
