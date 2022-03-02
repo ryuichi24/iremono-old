@@ -11,7 +11,7 @@ import {
 import {
   constructBcryptService,
   constructCryptoService,
-  constructJwtService,
+  constructTokenService,
 } from '@iremono/backend-core/dist/infra/services';
 import {
   CheckAuthUseCase,
@@ -25,6 +25,7 @@ import {
   ListAllAncestorsUseCase,
   ListItemsInFolderUseCase,
   ListItemsInTrashUseCase,
+  RefreshTokenUseCase,
   RegisterEncryptionKeyUseCase,
   RemoveFileUseCase,
   RemoveFolderUseCase,
@@ -60,6 +61,7 @@ import {
   GetFolderController,
   ListAllAncestorsController,
   StreamVideoController,
+  RefreshTokenController,
 } from '../controllers';
 import { loggerFactory } from '../shared/utils/logger';
 
@@ -83,20 +85,23 @@ const storageItemRepository =
   constructMockStorageItemRepository(loggerFactory);
 
 const bcryptService = constructBcryptService();
-export const jwtService = constructJwtService({
-  jwtSecretForAccessToken: config.jwtConfig.JWT_SECRET_FOR_ACCESS_TOKEN,
-  jwtExpiresInForAccessToken: config.jwtConfig.JWT_EXPIRE_IN_FOR_ACCESS_TOKEN,
+export const tokenService = constructTokenService({
+  jwtSecretForAccessToken: config.tokenConfig.JWT_SECRET_FOR_ACCESS_TOKEN,
+  jwtExpiresInForAccessToken: config.tokenConfig.JWT_EXPIRE_IN_FOR_ACCESS_TOKEN,
+  expiresInForRefreshToken: config.tokenConfig.EXPIRE_IN_FOR_REFRESH_TOKEN,
 });
 export const cryptoService = constructCryptoService();
 
 // User
-const signUpUseCase = new SignUpUseCase(userRepository, storageItemRepository, jwtService, bcryptService);
-const signInUseCase = new SignInUseCase(userRepository, jwtService, bcryptService);
+const signUpUseCase = new SignUpUseCase(userRepository, storageItemRepository, tokenService, bcryptService);
+const signInUseCase = new SignInUseCase(userRepository, tokenService, bcryptService);
 const checkAuthUseCase = new CheckAuthUseCase(userRepository);
+const refreshTokenUseCase = new RefreshTokenUseCase(tokenService);
 
 export const signUpController = new SignUpController(signUpUseCase, loggerFactory);
 export const signInController = new SignInController(signInUseCase, loggerFactory);
 export const checkAuthController = new CheckAuthController(checkAuthUseCase, loggerFactory);
+export const refreshTokenController = new RefreshTokenController(refreshTokenUseCase, loggerFactory);
 
 // folders
 const createFolderUseCase = new CreateFolderUseCase(storageItemRepository);

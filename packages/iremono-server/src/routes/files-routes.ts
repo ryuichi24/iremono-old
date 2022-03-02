@@ -4,7 +4,7 @@ import {
   cryptoService,
   downloadFileController,
   downloadFileThumbnailController,
-  jwtService,
+  tokenService,
   removeFileController,
   restoreFileController,
   streamVideoController,
@@ -18,7 +18,7 @@ export const filesRouter = express
   .Router()
   .post(
     '/content',
-    authHandler(jwtService),
+    authHandler(tokenService),
     uploadHandler(
       {
         mediaDirPath: config.mediaConfig.PATH_TO_MEDIA_DIR,
@@ -38,9 +38,9 @@ export const filesRouter = express
     ),
     makeExpressHandler(uploadFileController),
   )
-  .get('/:id/content', authHandler(jwtService), makeExpressHandler(downloadFileController))
-  .get('/:id/thumbnail', authHandler(jwtService), makeExpressHandler(downloadFileThumbnailController))
-  .patch('/:id', authHandler(jwtService), makeExpressHandler(updateFileController))
-  .post('/:id/remove', authHandler(jwtService), makeExpressHandler(removeFileController))
-  .post('/:id/restore', authHandler(jwtService), makeExpressHandler(restoreFileController))
-  .get('/:id/video', authHandler(jwtService), makeExpressHandler(streamVideoController));
+  .get('/:id/content', authHandler(tokenService), makeExpressHandler(downloadFileController))
+  .get('/:id/thumbnail', authHandler(tokenService), makeExpressHandler(downloadFileThumbnailController))
+  .patch('/:id', authHandler(tokenService), makeExpressHandler(updateFileController))
+  .post('/:id/remove', authHandler(tokenService), makeExpressHandler(removeFileController))
+  .post('/:id/restore', authHandler(tokenService), makeExpressHandler(restoreFileController))
+  .get('/:id/video', authHandler(tokenService), makeExpressHandler(streamVideoController));

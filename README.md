@@ -40,8 +40,14 @@ LOGGING_MIN_LEVEL=1
 # secret for access token
 JWT_SECRET_FOR_ACCESS_TOKEN=6de0ed2016381b13b3728372e4a55fe2
 
-# expiry for the token
+# expiry for access token
 JWT_EXPIRE_IN_FOR_ACCESS_TOKEN=900000
+
+# secret for refresh token
+JWT_SECRET_FOR_REFRESH_TOKEN=wnabui4fbq9823fh28gi23nui28h28f3
+
+# expiry for refresh token
+JWT_EXPIRE_IN_FOR_REFRESH_TOKEN=86400000
 
 # name for media directory
 MEDIA_DIR_NAME=iremono_media

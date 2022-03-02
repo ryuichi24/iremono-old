@@ -1,7 +1,4 @@
-import { UserDTO } from '../../../models';
-
-export interface SignInResponseDTO {
+export interface RefreshTokenResponseDTO {
   accessToken: { value: string; expiresIn: string };
   refreshToken: { value: string; expiresIn: string };
-  user: UserDTO;
 }

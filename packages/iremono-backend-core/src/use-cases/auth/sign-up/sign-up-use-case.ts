@@ -45,10 +45,11 @@ export class SignUpUseCase implements UseCase<SignUpRequestDTO, SignUpResponseDT
     await this._storageItemRepository.save(rootFolder);
 
     const accessToken = this._tokenService.generateAccessToken({ id: savedUser.id });
+    const refreshToken = this._tokenService.generateRefreshToken(savedUser.id);
 
     return {
-      accessToken: accessToken.value,
-      expiresIn: accessToken.expiresIn,
+      accessToken,
+      refreshToken,
       user: makeUserDTO(savedUser),
     };
   }
