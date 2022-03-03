@@ -9,7 +9,7 @@ import Divider from '@mui/material/Divider';
 import styled from 'styled-components';
 
 interface PopupMenuItem {
-  text: string;
+  text: string | React.ReactNode;
   icon: any;
   action: React.MouseEventHandler<HTMLLIElement>;
 }
