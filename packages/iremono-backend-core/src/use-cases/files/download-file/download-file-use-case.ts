@@ -1,4 +1,5 @@
-import { StorageItemRepository, UserRepository } from '../../../repositories';
+import { StorageItemRepository } from '../../../repositories';
+import { TokenService } from '../../../services';
 import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
 import { DownloadFileRequestDTO } from './download-file-request-DTO';
@@ -6,14 +7,19 @@ import { DownloadFileResponseDTO } from './download-file-response-DTO';
 
 export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, DownloadFileResponseDTO> {
   private readonly _storageItemRepository: StorageItemRepository;
-  private readonly _userRepository: UserRepository;
+  private readonly _tokenService: TokenService;
 
-  constructor(storageItemRepository: StorageItemRepository, userRepository: UserRepository) {
+  constructor(storageItemRepository: StorageItemRepository, tokenService: TokenService) {
     this._storageItemRepository = storageItemRepository;
-    this._userRepository = userRepository;
+
+    this._tokenService = tokenService;
   }
 
   public async handle(dto: DownloadFileRequestDTO): Promise<DownloadFileResponseDTO> {
+    const fileIdFromToken = this._tokenService.verifyDownloadFileToken(dto.downloadFileToken);
+
+    if (fileIdFromToken !== dto.id) throw new InvalidRequestError('the download file token is invalid.');
+
     const fileToDownload = await this._storageItemRepository.findOneById(dto.id);
 
     if (!fileToDownload) {
@@ -24,10 +30,6 @@ export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, Down
       throw new InvalidRequestError('the file is in a trash.');
     }
 
-    if (fileToDownload.ownerId !== dto.ownerId) {
-      throw new InvalidRequestError(`the owner does not match the file's owner`);
-    }
-
     const responseDto: DownloadFileResponseDTO = {
       name: fileToDownload.name,
       mimeType: fileToDownload.mimeType!,
@@ -35,13 +37,6 @@ export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, Down
       fileSize: fileToDownload.fileSize!,
       fileInitializationVector: fileToDownload.initializationVector!,
     };
-
-    if (fileToDownload.isEncryptedWithClientKey) {
-      const user = await this._userRepository.findOneById(dto.ownerId);
-      if (!user) throw new InvalidRequestError('the owner is not found');
-
-      responseDto.clientEncryptionKeyInitializationVector = user.encryptionKeyInitializationVector!;
-    }
 
     return responseDto;
   }

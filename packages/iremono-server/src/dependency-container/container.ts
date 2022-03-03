@@ -124,7 +124,7 @@ export const listAllAncestorsController = new ListAllAncestorsController(listAll
 
 // files
 const uploadFileUseCase = new UploadFileUseCase(storageItemRepository);
-const downloadFileUseCase = new DownloadFileUseCase(storageItemRepository, userRepository);
+const downloadFileUseCase = new DownloadFileUseCase(storageItemRepository, tokenService);
 const getDownloadFileTokenUseCase = new GetDownloadFileTokenUseCase(storageItemRepository, tokenService);
 const downloadFileThumbnailUseCase = new DownloadFileThumbnailUseCase(storageItemRepository, userRepository);
 const updateFileUseCase = new UpdateFileUseCase(storageItemRepository);
@@ -134,7 +134,10 @@ const streamVideoUseCase = new StreamVideoUseCase(storageItemRepository);
 
 export const uploadFileController = new UploadFileController(uploadFileUseCase, loggerFactory);
 export const downloadFileController = new DownloadFileController(downloadFileUseCase, cryptoService, loggerFactory);
-export const getDownloadFileTokenController = new GetDownloadFileTokenController(getDownloadFileTokenUseCase, loggerFactory);
+export const getDownloadFileTokenController = new GetDownloadFileTokenController(
+  getDownloadFileTokenUseCase,
+  loggerFactory,
+);
 export const downloadFileThumbnailController = new DownloadFileThumbnailController(
   downloadFileThumbnailUseCase,
   cryptoService,

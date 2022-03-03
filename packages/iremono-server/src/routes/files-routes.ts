@@ -39,7 +39,7 @@ export const filesRouter = express
     ),
     makeExpressHandler(uploadFileController),
   )
-  .get('/:id/content', authHandler(tokenService), makeExpressHandler(downloadFileController))
+  .get('/:id/content', makeExpressHandler(downloadFileController))
   .get('/:id/token', authHandler(tokenService), makeExpressHandler(getDownloadFileTokenController))
   .get('/:id/thumbnail', authHandler(tokenService), makeExpressHandler(downloadFileThumbnailController))
   .patch('/:id', authHandler(tokenService), makeExpressHandler(updateFileController))
