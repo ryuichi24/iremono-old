@@ -6,6 +6,7 @@ export const demoModeHandler = () => (req: express.Request, res: express.Respons
   if (
     ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method) &&
     req.path !== '/api/auth/signin' &&
+    req.path !== '/api/auth/signout' &&
     req.path !== '/api/auth/refresh-token'
   )
     return res.status(405).json({
