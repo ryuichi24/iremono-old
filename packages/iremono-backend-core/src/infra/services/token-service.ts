@@ -4,11 +4,13 @@ import jwt from 'jsonwebtoken';
 import { TokenService } from '../../services';
 
 const refreshTokenCache = new Cache();
+const downloadFileTokenCache = new Cache();
 
 interface TokenOptions {
   jwtSecretForAccessToken: string;
   jwtExpiresInForAccessToken: string;
   expiresInForRefreshToken: string;
+  expiresInForDownloadFileToken: string;
 }
 
 export const constructTokenService = (tokenOptions: TokenOptions): TokenService =>
@@ -38,5 +40,19 @@ export const constructTokenService = (tokenOptions: TokenOptions): TokenService 
       if (!userId) return null;
       refreshTokenCache.delete(token);
       return userId;
+    },
+    generateDownloadFileToken: (fileId: string) => {
+      const token = crypto.randomBytes(40).toString('hex');
+      downloadFileTokenCache.set(token, fileId, tokenOptions.expiresInForDownloadFileToken);
+      return {
+        value: token,
+        expiresIn: tokenOptions.expiresInForDownloadFileToken,
+      };
+    },
+    verifyDownloadFileToken: (token: string) => {
+      const fileId = downloadFileTokenCache.get(token);
+      if (!fileId) return null;
+      downloadFileTokenCache.delete(token);
+      return fileId;
     },
   });

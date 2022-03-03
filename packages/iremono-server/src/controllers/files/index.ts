@@ -5,3 +5,4 @@ export * from './restore-file';
 export * from './download-file';
 export * from './download-file-thumbnail';
 export * from './stream-video';
+export * from './get-download-file-token';

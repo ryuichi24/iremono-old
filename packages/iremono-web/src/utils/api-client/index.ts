@@ -36,7 +36,6 @@ apiClient.interceptors.response.use(
 
 apiClient.interceptors.request.use((request) => {
   const accessToken = tokenManager.accessToken.get();
-  console.log(accessToken);
   if (request.headers && accessToken) request.headers.Authorization = `Bearer ${accessToken}`;
 
   return request;

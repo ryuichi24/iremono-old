@@ -2,24 +2,21 @@ import { StorageItemRepository } from '../../../repositories';
 import { TokenService } from '../../../services';
 import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
-import { DownloadFileRequestDTO } from './download-file-request-DTO';
-import { DownloadFileResponseDTO } from './download-file-response-DTO';
+import { GetDownloadFileTokenRequestDTO } from './get-download-file-token-request-DTO';
+import { GetDownloadFileTokenResponseDTO } from './get-download-file-token-response-DTO';
 
-export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, DownloadFileResponseDTO> {
+export class GetDownloadFileTokenUseCase
+  implements UseCase<GetDownloadFileTokenRequestDTO, GetDownloadFileTokenResponseDTO>
+{
   private readonly _storageItemRepository: StorageItemRepository;
   private readonly _tokenService: TokenService;
 
   constructor(storageItemRepository: StorageItemRepository, tokenService: TokenService) {
     this._storageItemRepository = storageItemRepository;
-
     this._tokenService = tokenService;
   }
 
-  public async handle(dto: DownloadFileRequestDTO): Promise<DownloadFileResponseDTO> {
-    const fileIdFromToken = this._tokenService.verifyDownloadFileToken(dto.downloadFileToken);
-
-    if (fileIdFromToken !== dto.id) throw new InvalidRequestError('the download file token is invalid.');
-
+  public async handle(dto: GetDownloadFileTokenRequestDTO): Promise<GetDownloadFileTokenResponseDTO> {
     const fileToDownload = await this._storageItemRepository.findOneById(dto.id);
 
     if (!fileToDownload) {
@@ -30,14 +27,11 @@ export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, Down
       throw new InvalidRequestError('the file is in a trash.');
     }
 
-    const responseDto: DownloadFileResponseDTO = {
-      name: fileToDownload.name,
-      mimeType: fileToDownload.mimeType!,
-      filePath: fileToDownload.filePath!,
-      fileSize: fileToDownload.fileSize!,
-      fileInitializationVector: fileToDownload.initializationVector!,
-    };
+    if (fileToDownload.ownerId !== dto.ownerId) {
+      throw new InvalidRequestError(`the owner does not match the file's owner`);
+    }
 
-    return responseDto;
+    const downloadFileToken = this._tokenService.generateDownloadFileToken(fileToDownload.id);
+    return { downloadFileToken };
   }
 }
