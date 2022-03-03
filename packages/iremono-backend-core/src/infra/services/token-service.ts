@@ -1,8 +1,9 @@
+import { Cache } from '@iremono/util';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { TokenService } from '../../services';
 
-let refreshTokens: { [key: string]: string }[] = [];
+const refreshTokenCache = new Cache();
 
 interface TokenOptions {
   jwtSecretForAccessToken: string;
@@ -26,17 +27,16 @@ export const constructTokenService = (tokenOptions: TokenOptions): TokenService 
     },
     generateRefreshToken: (userId: string) => {
       const token = crypto.randomBytes(40).toString('hex');
-      refreshTokens.push({ [token]: userId });
+      refreshTokenCache.set(token, userId, tokenOptions.expiresInForRefreshToken);
       return {
         value: token,
         expiresIn: tokenOptions.expiresInForRefreshToken,
       };
     },
     verifyRefreshToken: (token: string) => {
-      const issuedToken = refreshTokens.find((refreshToken) => Object.keys(refreshToken)[0] === token);
-      if (!issuedToken) return null;
-      const userId = issuedToken[token];
-      refreshTokens = refreshTokens.filter((refreshToken) => !(Object.keys(refreshToken)[0] === token));
+      const userId = refreshTokenCache.get(token);
+      if (!userId) return null;
+      refreshTokenCache.delete(token);
       return userId;
     },
   });

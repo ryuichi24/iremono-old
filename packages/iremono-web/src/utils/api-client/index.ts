@@ -14,7 +14,7 @@ apiClient.interceptors.response.use(
   (response) => {
     const { accessToken } = response.data;
 
-    if (accessToken) tokenManager.accessToken.set(accessToken.value);
+    if (accessToken) tokenManager.accessToken.set(accessToken.value, accessToken.expiresIn);
 
     return response;
   },
@@ -28,7 +28,7 @@ apiClient.interceptors.response.use(
     const res = await retryAxios.post(refreshTokenEndpoint);
     const { accessToken } = res.data;
 
-    if (accessToken) tokenManager.accessToken.set(accessToken.value);
+    if (accessToken) tokenManager.accessToken.set(accessToken.value, accessToken.expiresIn);
 
     return await apiClient(config);
   },
@@ -36,6 +36,7 @@ apiClient.interceptors.response.use(
 
 apiClient.interceptors.request.use((request) => {
   const accessToken = tokenManager.accessToken.get();
+  console.log(accessToken);
   if (request.headers && accessToken) request.headers.Authorization = `Bearer ${accessToken}`;
 
   return request;
