@@ -40,11 +40,14 @@ LOGGING_MIN_LEVEL=1
 # secret for access token
 JWT_SECRET_FOR_ACCESS_TOKEN=6de0ed2016381b13b3728372e4a55fe2
 
-# expiry for access token
+# expiry for the access token
 JWT_EXPIRE_IN_FOR_ACCESS_TOKEN=900000
 
-# expiry for refresh token
+# expiry for the refresh token
 EXPIRE_IN_FOR_REFRESH_TOKEN=86400000
+
+# expiry for the download file token
+EXPIRE_IN_FOR_DOWNLOAD_FILE_TOKEN=3600000
 
 # name for media directory
 MEDIA_DIR_NAME=iremono_media
@@ -68,6 +71,7 @@ DB_PASSWORD=
 
 # if sqlite selected, path and the database file name
 DB_NAME=../../iremono.db
+
 
 ```
 
