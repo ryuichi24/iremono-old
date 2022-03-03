@@ -13,11 +13,11 @@ export const authHandler =
       token = req.get('authorization')?.slice(7);
 
       if (!token) {
-        token = req.cookies.accessToken;
+        token = req.cookies?.accessToken;
       }
 
       if (!token) throw new UnauthorizedError('no bearer token provided');
-      req.user = tokenService.verifyToken(token);
+      req.user = tokenService.verifyAccessTokenToken(token);
       next();
     } catch (error) {
       if (error instanceof Error) {

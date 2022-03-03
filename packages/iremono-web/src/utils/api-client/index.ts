@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios';
+import { tokenManager } from '../token-manager';
 
 const refreshTokenEndpoint = '/api/auth/refresh-token';
 
@@ -11,6 +12,10 @@ const retryAxios = axios.create({ baseURL: process.env.API_URL, withCredentials:
 
 apiClient.interceptors.response.use(
   (response) => {
+    const { accessToken } = response.data;
+
+    if (accessToken) tokenManager.accessToken.set(accessToken.value, accessToken.expiresIn);
+
     return response;
   },
   async (err: AxiosError) => {
@@ -20,12 +25,19 @@ apiClient.interceptors.response.use(
 
     if (config.url === refreshTokenEndpoint) throw err;
 
-    await retryAxios.post(refreshTokenEndpoint);
+    const res = await retryAxios.post(refreshTokenEndpoint);
+    const { accessToken } = res.data;
+
+    if (accessToken) tokenManager.accessToken.set(accessToken.value, accessToken.expiresIn);
 
     return await apiClient(config);
   },
 );
 
 apiClient.interceptors.request.use((request) => {
+  const accessToken = tokenManager.accessToken.get();
+  console.log(accessToken);
+  if (request.headers && accessToken) request.headers.Authorization = `Bearer ${accessToken}`;
+
   return request;
 });
