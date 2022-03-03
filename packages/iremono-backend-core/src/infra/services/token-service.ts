@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { TokenService } from '../../services';
 
 const refreshTokenCache = new Cache();
+const downloadFileTokenCache = new Cache();
 
 interface TokenOptions {
   jwtSecretForAccessToken: string;
@@ -38,5 +39,19 @@ export const constructTokenService = (tokenOptions: TokenOptions): TokenService 
       if (!userId) return null;
       refreshTokenCache.delete(token);
       return userId;
+    },
+    generateDownloadFileToken: (fileId: string) => {
+      const token = crypto.randomBytes(40).toString('hex');
+      downloadFileTokenCache.set(token, fileId, '999999');
+      return {
+        value: token,
+        expiresIn: '999999',
+      };
+    },
+    verifyDownloadFileToken: (token: string) => {
+      const fileId = downloadFileTokenCache.get(token);
+      if (!fileId) return null;
+      downloadFileTokenCache.delete(token);
+      return fileId;
     },
   });
