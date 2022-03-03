@@ -10,6 +10,7 @@ interface TokenOptions {
   jwtSecretForAccessToken: string;
   jwtExpiresInForAccessToken: string;
   expiresInForRefreshToken: string;
+  expiresInForDownloadFileToken: string;
 }
 
 export const constructTokenService = (tokenOptions: TokenOptions): TokenService =>
@@ -42,10 +43,10 @@ export const constructTokenService = (tokenOptions: TokenOptions): TokenService 
     },
     generateDownloadFileToken: (fileId: string) => {
       const token = crypto.randomBytes(40).toString('hex');
-      downloadFileTokenCache.set(token, fileId, '999999');
+      downloadFileTokenCache.set(token, fileId, tokenOptions.expiresInForDownloadFileToken);
       return {
         value: token,
-        expiresIn: '999999',
+        expiresIn: tokenOptions.expiresInForDownloadFileToken,
       };
     },
     verifyDownloadFileToken: (token: string) => {

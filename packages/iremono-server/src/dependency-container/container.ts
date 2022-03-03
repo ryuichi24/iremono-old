@@ -91,6 +91,7 @@ export const tokenService = constructTokenService({
   jwtSecretForAccessToken: config.tokenConfig.JWT_SECRET_FOR_ACCESS_TOKEN,
   jwtExpiresInForAccessToken: config.tokenConfig.JWT_EXPIRE_IN_FOR_ACCESS_TOKEN,
   expiresInForRefreshToken: config.tokenConfig.EXPIRE_IN_FOR_REFRESH_TOKEN,
+  expiresInForDownloadFileToken: config.tokenConfig.EXPIRE_IN_FOR_DOWNLOAD_FILE_TOKEN,
 });
 export const cryptoService = constructCryptoService();
 

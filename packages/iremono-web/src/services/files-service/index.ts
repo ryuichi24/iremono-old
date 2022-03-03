@@ -74,15 +74,26 @@ const restore = async (request: RestoreFileRequest) => {
   return result;
 };
 
+interface GetDownloadFileRTokenRequest {
+  fileId: string;
+}
+
+const getDownloadFileToken = async (request: GetDownloadFileRTokenRequest) => {
+  const res = await apiClient.get(`${BASE_URL}/${request.fileId}/token`);
+  const { downloadFileToken } = res.data;
+  return downloadFileToken.value;
+};
+
 interface DownloadFileRequest {
   fileId: string;
   fileName: string;
+  downloadFileToken: string;
 }
 
 const download = (request: DownloadFileRequest) => {
   const link = document.createElement('a');
   document.body.appendChild(link);
-  link.href = `${BASE_URL}/${request.fileId}/content`;
+  link.href = `${BASE_URL}/${request.fileId}/content?token=${request.downloadFileToken}`;
   link.setAttribute('type', 'hidden');
   link.setAttribute('download', `${request.fileName}`);
   link.click();
@@ -118,6 +129,7 @@ export const filesService = Object.freeze({
   remove,
   restore,
   download,
+  getDownloadFileToken,
   downloadImageFile,
   downloadThumbnail,
 });
