@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { filesService } from '@/services/files-service';
 import styled from 'styled-components';
+
 interface Props {
   file: any;
 }
@@ -7,7 +9,10 @@ interface Props {
 export const VideoViewer = ({ file }: Props): JSX.Element => {
   const [videoURL, setVideoURL] = useState('');
   useEffect(() => {
-    setVideoURL(`/api/files/${file.id}/video`);
+    (async () => {
+      const streamFileToken = await filesService.getFileToken({ fileId: file.id, tokenType: 'stream' });
+      setVideoURL(`/api/files/${file.id}/video?token=${streamFileToken}`);
+    })();
   }, [file]);
   return (
     <Container>

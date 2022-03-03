@@ -11,7 +11,6 @@ export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, Down
 
   constructor(storageItemRepository: StorageItemRepository, tokenService: TokenService) {
     this._storageItemRepository = storageItemRepository;
-
     this._tokenService = tokenService;
   }
 
@@ -29,6 +28,8 @@ export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, Down
     if (fileToDownload.isInTrash) {
       throw new InvalidRequestError('the file is in a trash.');
     }
+
+    this._tokenService.revokeDownloadFileToken(dto.downloadFileToken);
 
     const responseDto: DownloadFileResponseDTO = {
       name: fileToDownload.name,

@@ -5,12 +5,14 @@ import { TokenService } from '../../services';
 
 const refreshTokenCache = new Cache();
 const downloadFileTokenCache = new Cache();
+const streamFileTokenCache = new Cache();
 
 interface TokenOptions {
   jwtSecretForAccessToken: string;
   jwtExpiresInForAccessToken: string;
   expiresInForRefreshToken: string;
   expiresInForDownloadFileToken: string;
+  expiresInForStreamFileToken: string;
 }
 
 export const constructTokenService = (tokenOptions: TokenOptions): TokenService =>
@@ -55,7 +57,22 @@ export const constructTokenService = (tokenOptions: TokenOptions): TokenService 
     verifyDownloadFileToken: (token: string) => {
       const fileId = downloadFileTokenCache.get(token);
       if (!fileId) return null;
+      return fileId;
+    },
+    revokeDownloadFileToken: (token: string) => {
       downloadFileTokenCache.delete(token);
+    },
+    generateStreamFileToken: (fileId: string) => {
+      const token = crypto.randomBytes(40).toString('hex');
+      streamFileTokenCache.set(token, fileId, tokenOptions.expiresInForDownloadFileToken);
+      return {
+        value: token,
+        expiresIn: tokenOptions.expiresInForStreamFileToken,
+      };
+    },
+    verifyStreamFileToken: (token: string) => {
+      const fileId = streamFileTokenCache.get(token);
+      if (!fileId) return null;
       return fileId;
     },
   });

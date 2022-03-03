@@ -21,7 +21,7 @@ import {
   DeleteFolderInTrashUseCase,
   DownloadFileThumbnailUseCase,
   DownloadFileUseCase,
-  GetDownloadFileTokenUseCase,
+  GetFileTokenUseCase,
   GetFolderUseCase,
   ListAllAncestorsUseCase,
   ListItemsInFolderUseCase,
@@ -64,7 +64,7 @@ import {
   ListAllAncestorsController,
   StreamVideoController,
   RefreshTokenController,
-  GetDownloadFileTokenController,
+  GetFileTokenController,
   SignOutController,
 } from '../controllers';
 import { loggerFactory } from '../shared/utils/logger';
@@ -94,6 +94,7 @@ export const tokenService = constructTokenService({
   jwtExpiresInForAccessToken: config.tokenConfig.JWT_EXPIRE_IN_FOR_ACCESS_TOKEN,
   expiresInForRefreshToken: config.tokenConfig.EXPIRE_IN_FOR_REFRESH_TOKEN,
   expiresInForDownloadFileToken: config.tokenConfig.EXPIRE_IN_FOR_DOWNLOAD_FILE_TOKEN,
+  expiresInForStreamFileToken: config.tokenConfig.EXPIRE_IN_FOR_STREAM_FILE_TOKEN,
 });
 export const cryptoService = constructCryptoService();
 
@@ -130,19 +131,16 @@ export const listAllAncestorsController = new ListAllAncestorsController(listAll
 // files
 const uploadFileUseCase = new UploadFileUseCase(storageItemRepository);
 const downloadFileUseCase = new DownloadFileUseCase(storageItemRepository, tokenService);
-const getDownloadFileTokenUseCase = new GetDownloadFileTokenUseCase(storageItemRepository, tokenService);
+const getFileTokenUseCase = new GetFileTokenUseCase(storageItemRepository, tokenService);
 const downloadFileThumbnailUseCase = new DownloadFileThumbnailUseCase(storageItemRepository, userRepository);
 const updateFileUseCase = new UpdateFileUseCase(storageItemRepository);
 const removeFileUseCase = new RemoveFileUseCase(storageItemRepository);
 const restoreFileUseCase = new RestoreFileUseCase(storageItemRepository);
-const streamVideoUseCase = new StreamVideoUseCase(storageItemRepository);
+const streamVideoUseCase = new StreamVideoUseCase(storageItemRepository, tokenService);
 
 export const uploadFileController = new UploadFileController(uploadFileUseCase, loggerFactory);
 export const downloadFileController = new DownloadFileController(downloadFileUseCase, cryptoService, loggerFactory);
-export const getDownloadFileTokenController = new GetDownloadFileTokenController(
-  getDownloadFileTokenUseCase,
-  loggerFactory,
-);
+export const getFileTokenController = new GetFileTokenController(getFileTokenUseCase, loggerFactory);
 export const downloadFileThumbnailController = new DownloadFileThumbnailController(
   downloadFileThumbnailUseCase,
   cryptoService,

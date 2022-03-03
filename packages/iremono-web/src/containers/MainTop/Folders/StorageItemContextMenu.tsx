@@ -31,7 +31,10 @@ export const StorageItemContextMenu = ({ children, storageItem, currentFolderId 
         <ContextMenu yPos={yPos} xPos={xPos}>
           <ContextMenuItem
             onClick={async () => {
-              const downloadFileToken = await filesService.getDownloadFileToken({ fileId: storageItem.id });
+              const downloadFileToken = await filesService.getFileToken({
+                fileId: storageItem.id,
+                tokenType: 'download',
+              });
               filesService.download({ fileId: storageItem.id, fileName: storageItem.name, downloadFileToken });
             }}
           >

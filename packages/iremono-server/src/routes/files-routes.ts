@@ -11,7 +11,7 @@ import {
   updateFileController,
   uploadFileController,
   userRepository,
-  getDownloadFileTokenController,
+  getFileTokenController,
 } from '../dependency-container';
 import { authHandler, clientEncryptionKeyHandler, makeExpressHandler, uploadHandler } from '../shared/express-lib';
 
@@ -40,9 +40,9 @@ export const filesRouter = express
     makeExpressHandler(uploadFileController),
   )
   .get('/:id/content', makeExpressHandler(downloadFileController))
-  .get('/:id/token', authHandler(tokenService), makeExpressHandler(getDownloadFileTokenController))
+  .post('/:id/token', authHandler(tokenService), makeExpressHandler(getFileTokenController))
   .get('/:id/thumbnail', authHandler(tokenService), makeExpressHandler(downloadFileThumbnailController))
   .patch('/:id', authHandler(tokenService), makeExpressHandler(updateFileController))
   .post('/:id/remove', authHandler(tokenService), makeExpressHandler(removeFileController))
   .post('/:id/restore', authHandler(tokenService), makeExpressHandler(restoreFileController))
-  .get('/:id/video', authHandler(tokenService), makeExpressHandler(streamVideoController));
+  .get('/:id/video', makeExpressHandler(streamVideoController));

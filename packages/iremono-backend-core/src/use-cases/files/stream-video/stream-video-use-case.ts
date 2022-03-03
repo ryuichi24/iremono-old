@@ -1,4 +1,5 @@
 import { StorageItemRepository } from '../../../repositories';
+import { TokenService } from '../../../services';
 import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
 import { StreamVideoRequestDTO } from './stream-video-request-DTO';
@@ -6,12 +7,18 @@ import { StreamVideoResponseDTO } from './stream-video-response-DTO';
 
 export class StreamVideoUseCase implements UseCase<StreamVideoRequestDTO, StreamVideoResponseDTO> {
   private readonly _storageItemRepository: StorageItemRepository;
+  private readonly _tokenService: TokenService;
 
-  constructor(storageItemRepository: StorageItemRepository) {
+  constructor(storageItemRepository: StorageItemRepository, tokenService: TokenService) {
     this._storageItemRepository = storageItemRepository;
+    this._tokenService = tokenService;
   }
 
   public async handle(dto: StreamVideoRequestDTO): Promise<StreamVideoResponseDTO> {
+    const fileIdFromToken = this._tokenService.verifyStreamFileToken(dto.streamFileToken);
+
+    if (fileIdFromToken !== dto.id) throw new InvalidRequestError('the stream file token is invalid.');
+
     const videoToStream = await this._storageItemRepository.findOneById(dto.id);
 
     if (!videoToStream) {
@@ -20,10 +27,6 @@ export class StreamVideoUseCase implements UseCase<StreamVideoRequestDTO, Stream
 
     if (videoToStream.isInTrash) {
       throw new InvalidRequestError('the video is in a trash.');
-    }
-
-    if (videoToStream.ownerId !== dto.ownerId) {
-      throw new InvalidRequestError(`the owner does not match the video's owner`);
     }
 
     const responseDto: StreamVideoResponseDTO = {
