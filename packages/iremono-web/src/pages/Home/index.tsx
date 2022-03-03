@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
-import { Avatar } from '@mui/material';
+import { Avatar, Typography } from '@mui/material';
 import { useTheme } from '@mui/system';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { ResizablePanel } from '@/components/ResizablePanel';
 import { Sidebar } from '@/components/Sidebar';
 import { Activity } from '@/containers/Activity';
@@ -11,11 +12,15 @@ import { MainTop } from '@/containers/MainTop';
 import { MainBottom } from '@/containers/MainBottom';
 import { useAuthStore } from '@/store/auth/use-auth-store';
 import { Header } from '@/components/Header';
+import { PopupMenu } from '@/components/PopupMenu';
+import { usePopupMenu } from '@/hooks/use-popup-menu';
+import { authService } from '@/services/auth-service';
 
 export const Home = () => {
   const [isSidebarPositionLeft, setsSidebarPositionLeft] = useState(true);
+  const [openMenu, anchorEl, handleOpenMenu, handleCloseMenu] = usePopupMenu();
   const muiTheme = useTheme();
-  const { user } = useAuthStore();
+  const { user, clearAuth } = useAuthStore();
 
   return (
     <HomeContainer>
@@ -34,9 +39,29 @@ export const Home = () => {
               <Header>
                 <></>
                 <>
-                  <Avatar sx={{ bgcolor: 'primary.main', color: 'white', width: '36px', height: '36px' }}>
+                  <Avatar
+                    sx={{ bgcolor: 'primary.main', color: 'white', width: '36px', height: '36px' }}
+                    onClick={handleOpenMenu as any}
+                  >
                     {user.email[0].toUpperCase()}
                   </Avatar>
+
+                  <PopupMenu
+                    menuItems={[
+                      {
+                        text: <Typography sx={{ color: 'error.main' }}>{'Sign out'}</Typography>,
+                        icon: <LogoutIcon sx={{ color: 'error.main' }} fontSize="small" />,
+                        action: async () => {
+                          await authService.signOut();
+                          clearAuth();
+                          handleCloseMenu();
+                        },
+                      },
+                    ]}
+                    anchorEl={anchorEl}
+                    handleClose={handleCloseMenu}
+                    open={openMenu}
+                  />
                 </>
               </Header>
               <MainTop />

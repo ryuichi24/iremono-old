@@ -30,6 +30,10 @@ const signIn = async (request: SignInRequest) => {
   };
 };
 
+const signOut = async () => {
+  await apiClient.post(`${BASE_URL}/signout`);
+};
+
 const checkAuth = async () => {
   const res = await apiClient.get(`${BASE_URL}/check`);
   const result = res.data;
@@ -39,4 +43,4 @@ const checkAuth = async () => {
   };
 };
 
-export const authService = Object.freeze({ signUp, signIn, checkAuth });
+export const authService = Object.freeze({ signUp, signIn, signOut, checkAuth });
