@@ -23,6 +23,7 @@ export class RefreshTokenController extends Controller<RefreshTokenUseCase> {
 
     return this._ok(result, {}, [
       cookieHelper.makeRefreshTokenCookie(result.refreshToken.value, result.refreshToken.expiresIn),
+      cookieHelper.makeRefreshTokenCookieForSignOut(result.refreshToken.value, result.refreshToken.expiresIn),
     ]);
   }
 }

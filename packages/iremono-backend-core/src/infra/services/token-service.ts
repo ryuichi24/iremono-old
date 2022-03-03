@@ -41,6 +41,9 @@ export const constructTokenService = (tokenOptions: TokenOptions): TokenService 
       refreshTokenCache.delete(token);
       return userId;
     },
+    revokeRefreshToken: (token: string) => {
+      refreshTokenCache.delete(token);
+    },
     generateDownloadFileToken: (fileId: string) => {
       const token = crypto.randomBytes(40).toString('hex');
       downloadFileTokenCache.set(token, fileId, tokenOptions.expiresInForDownloadFileToken);

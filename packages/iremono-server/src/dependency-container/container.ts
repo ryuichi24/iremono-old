@@ -33,6 +33,7 @@ import {
   RestoreFileUseCase,
   RestoreFolderUseCase,
   SignInUseCase,
+  SignOutUseCase,
   SignUpUseCase,
   StreamVideoUseCase,
   UpdateFileUseCase,
@@ -64,6 +65,7 @@ import {
   StreamVideoController,
   RefreshTokenController,
   GetDownloadFileTokenController,
+  SignOutController,
 } from '../controllers';
 import { loggerFactory } from '../shared/utils/logger';
 
@@ -98,11 +100,13 @@ export const cryptoService = constructCryptoService();
 // User
 const signUpUseCase = new SignUpUseCase(userRepository, storageItemRepository, tokenService, bcryptService);
 const signInUseCase = new SignInUseCase(userRepository, tokenService, bcryptService);
+const signOutUseCase = new SignOutUseCase(tokenService);
 const checkAuthUseCase = new CheckAuthUseCase(userRepository);
 const refreshTokenUseCase = new RefreshTokenUseCase(tokenService);
 
 export const signUpController = new SignUpController(signUpUseCase, loggerFactory);
 export const signInController = new SignInController(signInUseCase, loggerFactory);
+export const signOutController = new SignOutController(signOutUseCase, loggerFactory);
 export const checkAuthController = new CheckAuthController(checkAuthUseCase, loggerFactory);
 export const refreshTokenController = new RefreshTokenController(refreshTokenUseCase, loggerFactory);
 
