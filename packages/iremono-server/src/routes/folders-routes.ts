@@ -2,7 +2,7 @@ import express from 'express';
 import {
   createFolderController,
   getFolderController,
-  jwtService,
+  tokenService,
   listAllAncestorsController,
   listItemsInFolderController,
   removeFolderController,
@@ -13,10 +13,10 @@ import { authHandler, makeExpressHandler } from '../shared/express-lib';
 
 export const foldersRouter = express
   .Router()
-  .post('/', authHandler(jwtService), makeExpressHandler(createFolderController))
-  .patch('/:id', authHandler(jwtService), makeExpressHandler(updateFolderController))
-  .post('/:id/remove', authHandler(jwtService), makeExpressHandler(removeFolderController))
-  .post('/:id/restore', authHandler(jwtService), makeExpressHandler(restoreFolderController))
-  .get('/:id/items', authHandler(jwtService), makeExpressHandler(listItemsInFolderController))
-  .get('/:id', authHandler(jwtService), makeExpressHandler(getFolderController))
-  .get('/:id/ancestors', authHandler(jwtService), makeExpressHandler(listAllAncestorsController));
+  .post('/', authHandler(tokenService), makeExpressHandler(createFolderController))
+  .patch('/:id', authHandler(tokenService), makeExpressHandler(updateFolderController))
+  .post('/:id/remove', authHandler(tokenService), makeExpressHandler(removeFolderController))
+  .post('/:id/restore', authHandler(tokenService), makeExpressHandler(restoreFolderController))
+  .get('/:id/items', authHandler(tokenService), makeExpressHandler(listItemsInFolderController))
+  .get('/:id', authHandler(tokenService), makeExpressHandler(getFolderController))
+  .get('/:id/ancestors', authHandler(tokenService), makeExpressHandler(listAllAncestorsController));

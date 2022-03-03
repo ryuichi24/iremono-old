@@ -21,6 +21,8 @@ export class SignUpController extends Controller<SignUpUseCase> {
       `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="new user has signed up"]`,
     );
 
-    return this._created(result, {}, [cookieHelper.makeAccessTokenCookie(result.accessToken, result.expiresIn)]);
+    return this._created(result, {}, [
+      cookieHelper.makeRefreshTokenCookie(result.refreshToken.value, result.refreshToken.expiresIn),
+    ]);
   }
 }

@@ -5,12 +5,12 @@ import { config } from './config';
 import { filesRouter, foldersRouter, authRouter, trashRouter, securityRouter } from './routes';
 import { cookieHandler, demoModeHandler, errorHandler } from './shared/express-lib';
 import { loggerFactory } from './shared/utils/logger';
-import { initMysqlDB } from './db';
+import { connectDB } from './db';
 
 const logger = loggerFactory.createLogger('main');
 
 const main = async () => {
-  await initMysqlDB();
+  await connectDB();
 
   const HOST = config.serverConfig.HOST;
   const PORT = config.serverConfig.PORT;

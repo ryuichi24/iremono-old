@@ -1,7 +1,7 @@
 import { UserDTO } from '../../../models';
 
 export interface SignUpResponseDTO {
-  accessToken: string;
-  expiresIn: string;
+  accessToken: { value: string; expiresIn: string };
+  refreshToken: { value: string; expiresIn: string };
   user: UserDTO;
 }

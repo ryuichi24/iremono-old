@@ -21,6 +21,8 @@ export class SignInController extends Controller<SignInUseCase> {
       `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has signed in"]`,
     );
 
-    return this._ok(result, {}, [cookieHelper.makeAccessTokenCookie(result.accessToken, result.expiresIn)]);
+    return this._ok(result, {}, [
+      cookieHelper.makeRefreshTokenCookie(result.refreshToken.value, result.refreshToken.expiresIn),
+    ]);
   }
 }

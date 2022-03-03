@@ -25,10 +25,11 @@ export class SignInUseCase implements UseCase<SignInRequestDTO, SignInResponseDT
     if (!isPasswordValid) throw new AuthError(`email or password is invalid`);
 
     const accessToken = this._tokenService.generateAccessToken({ id: user.id });
+    const refreshToken = this._tokenService.generateRefreshToken(user.id);
 
     return {
-      accessToken: accessToken.value,
-      expiresIn: accessToken.expiresIn,
+      accessToken,
+      refreshToken,
       user: makeUserDTO(user),
     };
   }

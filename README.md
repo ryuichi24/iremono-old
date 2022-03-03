@@ -38,10 +38,13 @@ SECURE_COOKIE=false
 LOGGING_MIN_LEVEL=1
 
 # secret for access token
-JWT_SECRET=6de0ed2016381b13b3728372e4a55fe2
+JWT_SECRET_FOR_ACCESS_TOKEN=6de0ed2016381b13b3728372e4a55fe2
 
-# expiry for the token
-JWT_EXPIRE_IN=900000
+# expiry for access token
+JWT_EXPIRE_IN_FOR_ACCESS_TOKEN=900000
+
+# expiry for refresh token
+EXPIRE_IN_FOR_REFRESH_TOKEN=86400000
 
 # name for media directory
 MEDIA_DIR_NAME=iremono_media
@@ -55,14 +58,28 @@ ENCRYPTION_KEY=543ab2e09c827998eb150526e42ea938
 # encryption key to encrypt client encryption key
 ENCRYPTION_KEY_FOR_CLIENT_ENCRYPTION_KEY=627b887ad683e569bc37c4b1e98156b4
 
-# credentials for database (currently support "MySQL")
-DB_HOST=localhost
-DB_USERNAME=root
-DB_PASSWORD=password
-DB_NAME=iremono_db
+# currently support "mysql" and "sqlite"
+DB_TYPE=sqlite
+
+# credentials for database
+DB_HOST=
+DB_USERNAME=
+DB_PASSWORD=
+
+# if sqlite selected, path and the database file name
+DB_NAME=../../iremono.db
+
 ```
 
 ### Initialize database
+
+#### SQLite
+
+```bash
+yarn init-sqlite-db-prod
+```
+
+#### MySQL
 
 ```bash
 yarn init-mysql-db-prod
@@ -91,6 +108,14 @@ yarn make-dev-env-file
 ```
 
 ### Initialize database
+
+#### SQLite
+
+```bash
+yarn init-sqlite-db-dev
+```
+
+#### MySQL
 
 ```bash
 yarn init-mysql-db-dev
