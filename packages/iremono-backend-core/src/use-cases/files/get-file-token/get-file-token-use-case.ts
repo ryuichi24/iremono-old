@@ -2,12 +2,10 @@ import { StorageItemRepository } from '../../../repositories';
 import { TokenService } from '../../../services';
 import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
-import { GetDownloadFileTokenRequestDTO } from './get-download-file-token-request-DTO';
-import { GetDownloadFileTokenResponseDTO } from './get-download-file-token-response-DTO';
+import { GetFileTokenRequestDTO } from './get-file-token-request-DTO';
+import { GetFileTokenResponseDTO } from './get-file-token-response-DTO';
 
-export class GetDownloadFileTokenUseCase
-  implements UseCase<GetDownloadFileTokenRequestDTO, GetDownloadFileTokenResponseDTO>
-{
+export class GetFileTokenUseCase implements UseCase<GetFileTokenRequestDTO, GetFileTokenResponseDTO> {
   private readonly _storageItemRepository: StorageItemRepository;
   private readonly _tokenService: TokenService;
 
@@ -16,7 +14,7 @@ export class GetDownloadFileTokenUseCase
     this._tokenService = tokenService;
   }
 
-  public async handle(dto: GetDownloadFileTokenRequestDTO): Promise<GetDownloadFileTokenResponseDTO> {
+  public async handle(dto: GetFileTokenRequestDTO): Promise<GetFileTokenResponseDTO> {
     const fileToDownload = await this._storageItemRepository.findOneById(dto.id);
 
     if (!fileToDownload) {
@@ -31,7 +29,17 @@ export class GetDownloadFileTokenUseCase
       throw new InvalidRequestError(`the owner does not match the file's owner`);
     }
 
-    const downloadFileToken = this._tokenService.generateDownloadFileToken(fileToDownload.id);
-    return { downloadFileToken };
+    let fileToken;
+
+    if (dto.tokenType === 'download') fileToken = this._tokenService.generateDownloadFileToken(fileToDownload.id);
+
+    if (dto.tokenType === 'stream') fileToken = this._tokenService.generateStreamFileToken(fileToDownload.id);
+
+    if (!fileToken) throw new InvalidRequestError(`the requested token type is invalid`);
+
+    return {
+      fileToken,
+      tokenType: dto.tokenType,
+    };
   }
 }

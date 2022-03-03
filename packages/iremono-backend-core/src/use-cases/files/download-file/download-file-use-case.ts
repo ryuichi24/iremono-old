@@ -30,6 +30,8 @@ export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, Down
       throw new InvalidRequestError('the file is in a trash.');
     }
 
+    this._tokenService.revokeDownloadFileToken(dto.downloadFileToken);
+
     const responseDto: DownloadFileResponseDTO = {
       name: fileToDownload.name,
       mimeType: fileToDownload.mimeType!,
