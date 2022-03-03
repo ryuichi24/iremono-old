@@ -102,10 +102,13 @@ const download = (request: DownloadFileRequest) => {
 
 interface DownloadImageFileRequest {
   fileId: string;
+  downloadFileToken: string;
 }
 
 const downloadImageFile = async (request: DownloadImageFileRequest) => {
-  const res = await apiClient.get(`${BASE_URL}/${request.fileId}/content`, { responseType: 'arraybuffer' });
+  const res = await apiClient.get(`${BASE_URL}/${request.fileId}/content?token=${request.downloadFileToken}`, {
+    responseType: 'arraybuffer',
+  });
   const result = res.data;
   const imgFileBlob = new Blob([result], { type: res.headers['content-type'] });
   const imgURL = URL.createObjectURL(imgFileBlob);

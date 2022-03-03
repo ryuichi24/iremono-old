@@ -10,9 +10,11 @@ export const ImageViewer = ({ file }: Props) => {
   const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
-    filesService.downloadImageFile({ fileId: file.id }).then((result) => {
+    (async () => {
+      const downloadFileToken = await filesService.getDownloadFileToken({ fileId: file.id });
+      const result = await filesService.downloadImageFile({ fileId: file.id, downloadFileToken });
       setImageUrl(result);
-    });
+    })();
   }, [file]);
   return (
     <Container>
