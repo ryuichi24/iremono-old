@@ -23,6 +23,7 @@ export class SignUpController extends Controller<SignUpUseCase> {
 
     return this._created(result, {}, [
       cookieHelper.makeRefreshTokenCookie(result.refreshToken.value, result.refreshToken.expiresIn),
+      cookieHelper.makeRefreshTokenCookieForSignOut(result.refreshToken.value, result.refreshToken.expiresIn),
     ]);
   }
 }

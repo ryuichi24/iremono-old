@@ -12,6 +12,7 @@ export interface TokenService {
   verifyAccessTokenToken(token: string): any;
   generateRefreshToken(userId: string): RefreshToken;
   verifyRefreshToken(token: string): string | null;
+  revokeRefreshToken(token: string): void;
   generateDownloadFileToken(fileId: string): DownloadFileToken;
   verifyDownloadFileToken(token: string): string | null;
 }
