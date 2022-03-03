@@ -11,7 +11,6 @@ export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, Down
 
   constructor(storageItemRepository: StorageItemRepository, tokenService: TokenService) {
     this._storageItemRepository = storageItemRepository;
-
     this._tokenService = tokenService;
   }
 

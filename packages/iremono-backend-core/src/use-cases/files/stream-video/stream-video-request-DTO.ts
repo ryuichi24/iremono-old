@@ -1,4 +1,4 @@
 export interface StreamVideoRequestDTO {
   id: string;
-  ownerId: string;
+  streamFileToken: string;
 }

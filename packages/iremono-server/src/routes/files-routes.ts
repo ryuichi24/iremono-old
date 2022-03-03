@@ -45,4 +45,4 @@ export const filesRouter = express
   .patch('/:id', authHandler(tokenService), makeExpressHandler(updateFileController))
   .post('/:id/remove', authHandler(tokenService), makeExpressHandler(removeFileController))
   .post('/:id/restore', authHandler(tokenService), makeExpressHandler(restoreFileController))
-  .get('/:id/video', authHandler(tokenService), makeExpressHandler(streamVideoController));
+  .get('/:id/video', makeExpressHandler(streamVideoController));

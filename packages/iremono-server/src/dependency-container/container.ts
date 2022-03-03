@@ -136,14 +136,11 @@ const downloadFileThumbnailUseCase = new DownloadFileThumbnailUseCase(storageIte
 const updateFileUseCase = new UpdateFileUseCase(storageItemRepository);
 const removeFileUseCase = new RemoveFileUseCase(storageItemRepository);
 const restoreFileUseCase = new RestoreFileUseCase(storageItemRepository);
-const streamVideoUseCase = new StreamVideoUseCase(storageItemRepository);
+const streamVideoUseCase = new StreamVideoUseCase(storageItemRepository, tokenService);
 
 export const uploadFileController = new UploadFileController(uploadFileUseCase, loggerFactory);
 export const downloadFileController = new DownloadFileController(downloadFileUseCase, cryptoService, loggerFactory);
-export const getFileTokenController = new GetFileTokenController(
-  getFileTokenUseCase,
-  loggerFactory,
-);
+export const getFileTokenController = new GetFileTokenController(getFileTokenUseCase, loggerFactory);
 export const downloadFileThumbnailController = new DownloadFileThumbnailController(
   downloadFileThumbnailUseCase,
   cryptoService,
