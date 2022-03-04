@@ -3,6 +3,7 @@ import { useSelectedStore } from '@/store/selected/use-selected-store';
 import { ImageViewer } from './ImageViewer';
 import { checkViewer, VIEWERS } from '@/utils/viewer-checker';
 import { VideoViewer } from './VideoViewer';
+import { DefaultViewer } from './DefaultViewer';
 
 export const Viewer = () => {
   const { selectedViewerItem } = useSelectedStore();
@@ -13,5 +14,5 @@ export const Viewer = () => {
   if (checkViewer(selectedViewerItem?.fileExtension) === VIEWERS.VIDEO)
     return <VideoViewer file={selectedViewerItem} />;
 
-  return <></>;
+  return <DefaultViewer file={selectedViewerItem} />;
 };
