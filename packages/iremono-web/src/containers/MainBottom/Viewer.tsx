@@ -14,5 +14,11 @@ export const Viewer = () => {
   if (checkViewer(selectedViewerItem?.fileExtension) === VIEWERS.VIDEO)
     return <VideoViewer file={selectedViewerItem} />;
 
-  return <DefaultViewer file={selectedViewerItem} />;
+  if (checkViewer(selectedViewerItem?.fileExtension) === VIEWERS.PDF)
+    return <DefaultViewer file={selectedViewerItem} />;
+
+  if (checkViewer(selectedViewerItem?.fileExtension) === VIEWERS.DEFAULT)
+    return <DefaultViewer file={selectedViewerItem} />;
+
+  return <></>;
 };

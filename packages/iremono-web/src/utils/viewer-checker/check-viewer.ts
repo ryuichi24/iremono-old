@@ -40,8 +40,8 @@ const imageExtensions = ['png', 'jpg', 'jpeg', 'svg', 'gif', 'bmp', 'tiff'];
 
 const pdfExtensions = ['pdf'];
 
-export const checkViewer = (extension: string): string => {
-  if (!extension) return VIEWERS.DEFAULT;
+export const checkViewer = (extension: string): string | null => {
+  if (!extension) return null;
   const lowered = extension.toLocaleLowerCase();
   if (videoExtensions.includes(lowered)) return VIEWERS.VIDEO;
   if (imageExtensions.includes(lowered)) return VIEWERS.IMAGE;
