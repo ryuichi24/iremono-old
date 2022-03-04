@@ -13,6 +13,7 @@ export const DefaultViewer = ({ file }: Props) => {
   return (
     <Container>
       <InsertDriveFileIcon sx={{ fontSize: '150px', color: 'common.grey' }} />
+      <Typography sx={{ color: 'text.secondary', fontWeight: '500' }}>{file.name}</Typography>
       <Typography sx={{ color: 'text.secondary' }}>
         iremono does not support the file type for preview. Please download and open it on your device.
       </Typography>
