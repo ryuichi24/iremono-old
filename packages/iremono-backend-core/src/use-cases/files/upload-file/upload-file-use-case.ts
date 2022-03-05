@@ -44,7 +44,7 @@ export class UploadFileUseCase implements UseCase<UploadFileRequestDTO, UploadFi
       thumbnailPath: dto.thumbnailPath,
       thumbnailSize: dto.thumbnailSize,
       thumbnailInitializationVector: dto.thumbnailInitializationVector,
-      isEncryptedWithClientKey: dto.isEncryptedWithClientKey,
+      isCryptoFolderItem: dto.isCryptoFolderItem,
     });
 
     const saved = await this._storageItemRepository.save(file);

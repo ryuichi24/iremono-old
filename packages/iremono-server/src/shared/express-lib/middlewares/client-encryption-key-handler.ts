@@ -29,7 +29,7 @@ export const clientEncryptionKeyHandler =
 
       if (!clientEncryptedEncryptionKey) return next();
 
-      req.uploadedFile.isEncryptedWithClientKey = true;
+      req.uploadedFile.isCryptoFolderItem = true;
 
       const userMediaDir = path.join(mediaDirName, req.user.id);
       const filesDir = path.join(userMediaDir, 'files');
@@ -39,7 +39,7 @@ export const clientEncryptionKeyHandler =
       if (!user) return next(new NotFoundError('the user is not found'));
       if (!user.encryptionKeyInitializationVector) return next(new BadRequestError('the encryption key is invalid'));
 
-      req.uploadedFile.isEncryptedWithClientKey = true;
+      req.uploadedFile.isCryptoFolderItem = true;
 
       const fileDest = path.join(filesDir, crypto.randomUUID());
       const encryptedWithClientKeyFileWriteStream = fs.createWriteStream(path.join(mediaDirPath, fileDest));

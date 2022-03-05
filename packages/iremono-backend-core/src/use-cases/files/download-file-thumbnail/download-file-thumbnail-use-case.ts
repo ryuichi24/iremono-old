@@ -29,7 +29,7 @@ export class DownloadFileThumbnailUseCase
       thumbnailInitializationVector: fileOfThumbnailToDownload.thumbnailInitializationVector!,
     };
 
-    if (fileOfThumbnailToDownload.isEncryptedWithClientKey) {
+    if (fileOfThumbnailToDownload.isCryptoFolderItem) {
       const user = await this._userRepository.findOneById(dto.ownerId);
       if (!user) throw new InvalidRequestError('the owner is not found');
 

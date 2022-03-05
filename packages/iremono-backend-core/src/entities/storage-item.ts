@@ -11,7 +11,7 @@ interface Props extends EntityProps {
   isFolder: boolean;
   isInTrash?: boolean;
   isRootFolder?: boolean;
-  isEncryptedWithClientKey?: boolean;
+  isCryptoFolderItem?: boolean;
   initializationVector?: string;
   hasThumbnail?: boolean;
   thumbnailPath?: string;
@@ -28,7 +28,7 @@ export class StorageItem extends Entity<Props> {
         ...props,
         isRootFolder: props.isRootFolder || false,
         isInTrash: props.isInTrash || false,
-        isEncryptedWithClientKey: props.isEncryptedWithClientKey || false,
+        isCryptoFolderItem: props.isCryptoFolderItem || false,
         lastViewedAt: props.lastViewedAt || new Date(),
       },
       id,
@@ -112,8 +112,8 @@ export class StorageItem extends Entity<Props> {
     return this._props.isRootFolder;
   }
 
-  get isEncryptedWithClientKey() {
-    return this._props.isEncryptedWithClientKey;
+  get isCryptoFolderItem() {
+    return this._props.isCryptoFolderItem;
   }
 
   get lastViewedAt() {
