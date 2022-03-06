@@ -3,7 +3,8 @@ import styled from 'styled-components';
 export const ListItemContainer = styled.div`
   display: flex;
   padding: 1rem;
-  border-radius: ${(props) => props.theme.shape.borderRadius};
+
+  border-bottom: 1px solid ${(props) => props.theme.palette.divider};
 
   cursor: pointer;
 

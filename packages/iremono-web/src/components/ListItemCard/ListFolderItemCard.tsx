@@ -2,6 +2,7 @@ import React from 'react';
 import FolderIcon from '@mui/icons-material/Folder';
 import Typography from '@mui/material/Typography';
 import { ListItemContainer } from './ListItemContainer';
+import styled from 'styled-components';
 
 interface Props {
   folder: any;
@@ -13,19 +14,25 @@ export const ListFolderItemCard = ({ folder, handleClick, handleDoubleClick }: P
   return (
     <>
       <ListItemContainer onClick={handleClick} onDoubleClick={handleDoubleClick}>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <FolderIcon sx={{ color: 'text.secondary' }} />
+        <FolderNameSection>
+          <FolderIcon sx={{ color: 'text.secondary', fontSize: '30px' }} />
           <Typography sx={{ color: 'text.secondary' }}>{folder.name}</Typography>
-        </div>
+        </FolderNameSection>
         <div>
           <Typography sx={{ color: 'text.secondary' }}>
             {new Date(folder.updatedAt).toISOString().split('T')[0]}
           </Typography>
         </div>
         <div>
-          <Typography sx={{ color: 'text.secondary' }}>{folder.fileSize || '-'}</Typography>
+          <Typography sx={{ color: 'text.secondary' }}>{folder.fileSize || ''}</Typography>
         </div>
       </ListItemContainer>
     </>
   );
 };
+
+const FolderNameSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;

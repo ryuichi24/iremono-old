@@ -27,10 +27,10 @@ export const StorageItemListContainer = ({ children, arrangeType }: Props) => {
                 <Typography sx={{ color: 'text.secondary' }}>Name</Typography>
               </div>
               <div>
-                <Typography sx={{ color: 'text.secondary' }}>Updated at</Typography>
+                <Typography sx={{ color: 'text.secondary' }}>Last modified</Typography>
               </div>
               <div>
-                <Typography sx={{ color: 'text.secondary' }}>Size </Typography>
+                <Typography sx={{ color: 'text.secondary' }}>File size </Typography>
               </div>
             </ListItemContainer>
             <ListItemSection>{items}</ListItemSection>

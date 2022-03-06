@@ -18,7 +18,7 @@ export const GridFileItemCard = ({ file, thumbnailURL, handleClick, handleDouble
           {thumbnailURL ? (
             <Thumbnail src={thumbnailURL} />
           ) : (
-            <ThumbnailAlt fileExtension={file.fileExtension} extensionTextSize={'40px'} />
+            <ThumbnailAlt fileExtension={file.fileExtension} extensionTextSize={'65px'} />
           )}
         </ThumbnailSection>
         <FileNameSection>
