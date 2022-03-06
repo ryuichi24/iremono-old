@@ -64,7 +64,7 @@ const ColumnFlexBase = styled(Box)`
 const Container = styled(ColumnFlexBase)`
   justify-content: space-between;
   height: 100%;
-  background-color: ${(props) => props.theme.palette.background.secondary};
+  background-color: ${(props) => props.theme.palette.background.primary};
 `;
 
 const MainActivity = styled(ColumnFlexBase)`

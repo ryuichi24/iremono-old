@@ -1,15 +1,20 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Box, Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+import GridViewIcon from '@mui/icons-material/GridView';
+import ViewListIcon from '@mui/icons-material/ViewList';
 import { Header } from '@/components/Header';
 import { trashService } from '@/services/trash-service';
 import { useTrashStore } from '@/store/trash/use-trash-store';
 import { TrashItemContextMenu } from './TrashItemContextMenu';
 import { FileTrashItem } from './FileTrashItem';
 import { FolderTrashItem } from './FolderTrashItem';
+import { StorageItemListContainer } from '@/components/StorageItemListContainer';
+import { useUIStore } from '@/store/ui/use-ui-store';
 
 export const Trash = () => {
   const { setTrashItems, folderTrashItemList, fileTrashItemList } = useTrashStore();
+  const { storageItemViewMode, toggleStorageItemViewMode } = useUIStore();
 
   useEffect(() => {
     trashService
@@ -24,34 +29,38 @@ export const Trash = () => {
     <Container>
       <Header isSubHeader={true}>
         <>
-          <Typography sx={{ color: 'text.primary' }} variant="h4" component="h2">
+          <Typography sx={{ color: 'text.primary' }} variant="h5" component="h2">
             Trash
           </Typography>
         </>
-        <></>
+        <>
+          <div style={{ marginRight: '1rem' }}>
+            {storageItemViewMode === 'grid' ? (
+              <ViewListIcon onClick={toggleStorageItemViewMode} sx={{ color: 'common.grey' }} />
+            ) : (
+              <GridViewIcon onClick={toggleStorageItemViewMode} sx={{ color: 'common.grey' }} />
+            )}
+          </div>
+        </>
       </Header>
 
       <StorageItemsContainer>
-        <FolderSection>
-          <SectionName>Folders</SectionName>
-          <FolderList>
+        <StorageItemListContainer arrangeType={storageItemViewMode}>
+          <>
             {folderTrashItemList.map((trashItem: any) => (
               <TrashItemContextMenu trashItem={trashItem} key={trashItem.id}>
-                <FolderTrashItem folderTrashItem={trashItem} />
+                <FolderTrashItem folderTrashItem={trashItem} arrangeType={storageItemViewMode} />
               </TrashItemContextMenu>
             ))}
-          </FolderList>
-        </FolderSection>
-        <FileSection>
-          <SectionName>Files</SectionName>
-          <FileList container>
+          </>
+          <>
             {fileTrashItemList.map((trashItem) => (
               <TrashItemContextMenu trashItem={trashItem} key={trashItem.id}>
-                <FileTrashItem fileTrashItem={trashItem} />
+                <FileTrashItem fileTrashItem={trashItem} arrangeType={storageItemViewMode} />
               </TrashItemContextMenu>
             ))}
-          </FileList>
-        </FileSection>
+          </>
+        </StorageItemListContainer>
       </StorageItemsContainer>
     </Container>
   );
@@ -64,29 +73,4 @@ const Container = styled('div')`
 const StorageItemsContainer = styled('div')`
   overflow: scroll;
   height: 80%;
-`;
-
-const FolderSection = styled(Box)`
-  padding: 1rem;
-`;
-
-const FolderList = styled(Box)`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-`;
-
-const FileSection = styled(Box)`
-  padding: 1rem;
-`;
-
-const FileList = styled(Grid)`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-`;
-
-const SectionName = styled(Typography)`
-  padding-bottom: 0.5rem;
-  color: ${(props) => props.theme.palette.text.secondary};
 `;

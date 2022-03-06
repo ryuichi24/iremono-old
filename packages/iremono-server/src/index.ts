@@ -2,7 +2,7 @@ import path from 'path';
 import express from 'express';
 import cors from 'cors';
 import { config } from './config';
-import { filesRouter, foldersRouter, authRouter, trashRouter, securityRouter } from './routes';
+import { filesRouter, foldersRouter, authRouter, trashRouter } from './routes';
 import { cookieHandler, demoModeHandler, errorHandler } from './shared/express-lib';
 import { loggerFactory } from './shared/utils/logger';
 import { connectDB } from './db';
@@ -23,7 +23,6 @@ const main = async () => {
   app.use('/api/folders', foldersRouter);
   app.use('/api/files', filesRouter);
   app.use('/api/trash', trashRouter);
-  app.use('/api/security', securityRouter);
 
   app.get('/api/health', async (_, res) => res.send('API is running'));
 

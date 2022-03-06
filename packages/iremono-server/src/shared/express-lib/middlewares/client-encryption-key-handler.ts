@@ -5,7 +5,6 @@ import path from 'path';
 import { UserRepository } from '@iremono/backend-core/src/repositories';
 import { CryptoService } from '@iremono/backend-core/src/services/crypto-service';
 import express from 'express';
-import { BadRequestError, NotFoundError } from '../../utils/errors';
 import { deleteFromFileSystem } from '@iremono/util';
 import { loggerFactory } from '../../utils/logger';
 
@@ -14,45 +13,30 @@ const logger = loggerFactory.createLogger('clientEncryptionKeyHandler');
 interface Options {
   mediaDirPath: string;
   mediaDirName: string;
-  encryptionKeyForClientEncryptionKey: string;
 }
 
 export const clientEncryptionKeyHandler =
-  (
-    { mediaDirPath, mediaDirName, encryptionKeyForClientEncryptionKey }: Options,
-    cryptoService: CryptoService,
-    userRepository: UserRepository,
-  ) =>
+  ({ mediaDirPath, mediaDirName }: Options, cryptoService: CryptoService) =>
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
-      const clientEncryptedEncryptionKey = req.query?.ceek || req.cookies?.ceek;
+      const clientEncryptionKey = req.uploadedFile.formData.encryptionKey;
 
-      if (!clientEncryptedEncryptionKey) return next();
+      if (!clientEncryptionKey) return next();
 
-      req.uploadedFile.isEncryptedWithClientKey = true;
+      req.uploadedFile.isCryptoFolderItem = true;
 
       const userMediaDir = path.join(mediaDirName, req.user.id);
       const filesDir = path.join(userMediaDir, 'files');
       const thumbnailsDir = path.join(userMediaDir, 'thumbnails');
 
-      const user = await userRepository.findOneById(req.user.id);
-      if (!user) return next(new NotFoundError('the user is not found'));
-      if (!user.encryptionKeyInitializationVector) return next(new BadRequestError('the encryption key is invalid'));
-
-      req.uploadedFile.isEncryptedWithClientKey = true;
+      req.uploadedFile.isCryptoFolderItem = true;
 
       const fileDest = path.join(filesDir, crypto.randomUUID());
       const encryptedWithClientKeyFileWriteStream = fs.createWriteStream(path.join(mediaDirPath, fileDest));
       const uploadedFileReadStream = fs.createReadStream(path.join(mediaDirPath, req.uploadedFile.filePath));
 
-      const clientKey = cryptoService.decryptInCBC(
-        clientEncryptedEncryptionKey,
-        encryptionKeyForClientEncryptionKey,
-        user.encryptionKeyInitializationVector!,
-      );
-
       const fileCipherWithClientKeyStream = cryptoService.generateCipherStreamInCBC(
-        clientKey,
+        clientEncryptionKey,
         req.uploadedFile.fileInitializationVector,
       );
 
@@ -70,10 +54,12 @@ export const clientEncryptionKeyHandler =
       const uploadedThumbnailReadStream = fs.createReadStream(
         path.join(mediaDirPath, req.uploadedFile.thumbnail.thumbnailPath),
       );
+
       const thumbnailCipherWithClientKeyStream = cryptoService.generateCipherStreamInCBC(
-        clientKey,
+        clientEncryptionKey,
         req.uploadedFile.thumbnail.thumbnailInitializationVector,
       );
+
       const thumbnailDest = path.join(thumbnailsDir, crypto.randomUUID());
       const thumbnailWriteStream = fs.createWriteStream(path.join(mediaDirPath, thumbnailDest));
 

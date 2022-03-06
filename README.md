@@ -49,6 +49,9 @@ EXPIRE_IN_FOR_REFRESH_TOKEN=86400000
 # expiry for the download file token
 EXPIRE_IN_FOR_DOWNLOAD_FILE_TOKEN=3600000
 
+# expiry for the stream file token
+EXPIRE_IN_FOR_STREAM_FILE_TOKEN=86400000
+
 # name for media directory
 MEDIA_DIR_NAME=iremono_media
 
@@ -71,8 +74,6 @@ DB_PASSWORD=
 
 # if sqlite selected, path and the database file name
 DB_NAME=../../iremono.db
-
-
 ```
 
 ### Initialize database

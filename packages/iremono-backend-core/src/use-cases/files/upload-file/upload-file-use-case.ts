@@ -32,6 +32,11 @@ export class UploadFileUseCase implements UseCase<UploadFileRequestDTO, UploadFi
 
     if (parentFolder.isInTrash) throw new InvalidRequestError('the parent folder is in a trash.');
 
+    if (parentFolder.isCryptoFolderItem && !dto.isCryptoFolderItem)
+      throw new InvalidRequestError(
+        'the parent folder is crypto folder but the uploaded file is not encrypted with client key.',
+      );
+
     const file = new StorageItem({
       name: dto.name,
       isFolder: false,
@@ -44,7 +49,7 @@ export class UploadFileUseCase implements UseCase<UploadFileRequestDTO, UploadFi
       thumbnailPath: dto.thumbnailPath,
       thumbnailSize: dto.thumbnailSize,
       thumbnailInitializationVector: dto.thumbnailInitializationVector,
-      isEncryptedWithClientKey: dto.isEncryptedWithClientKey,
+      isCryptoFolderItem: dto.isCryptoFolderItem,
     });
 
     const saved = await this._storageItemRepository.save(file);

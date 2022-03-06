@@ -4,4 +4,5 @@ export interface StreamVideoResponseDTO {
   fileSize: number;
   filePath: string;
   fileInitializationVector: string;
+  clientEncryptionKey?: string;
 }

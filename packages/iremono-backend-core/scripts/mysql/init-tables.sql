@@ -2,7 +2,6 @@ CREATE TABLE IF NOT EXISTS users (
     id VARCHAR(36) PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(128) NOT NULL,
-    encryption_key_initialization_vector VARCHAR(32),
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );

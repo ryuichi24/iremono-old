@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface AuthState {
   user: { userId: string | null; email: string | null };
   isAuthenticated: boolean;
+  clientEncryptionKey?: string;
 }
 
 const initialState: AuthState = {
@@ -21,6 +22,12 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.user.userId = payload.userId;
       state.user.email = payload.email;
+    },
+    setClientEncryptionKey: (
+      state,
+      { payload }: PayloadAction<{ clientEncryptionKey: AuthState['clientEncryptionKey'] }>,
+    ) => {
+      state.clientEncryptionKey = payload.clientEncryptionKey;
     },
     clearAuth: (state, _: PayloadAction<void>) => {
       state.isAuthenticated = false;

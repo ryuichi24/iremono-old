@@ -30,7 +30,7 @@ export const Header = ({ children, isSubHeader = false }: Props) => {
 };
 
 const Navbar = styled(AppBar)`
-  background-color: ${(props) => props.theme.palette.background.secondary};
+  background-color: ${(props) => props.theme.palette.background.primary};
   box-shadow: ${(props) => props.theme.shadows[7]};
 `;
 
