@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { formatBytes } from '@iremono/util/dist/format-bytes';
 import { Header } from '@/components/Header';
@@ -24,9 +24,9 @@ import { FolderPathNav } from './FolderPathNav';
 import { useSelectedStore } from '@/store/selected/use-selected-store';
 import { useUploadsStore } from '@/store/uploads/use-uploads-store';
 import { StorageItemListContainer } from '@/components/StorageItemListContainer';
-
 import GridViewIcon from '@mui/icons-material/GridView';
 import ViewListIcon from '@mui/icons-material/ViewList';
+import { useUIStore } from '@/store/ui/use-ui-store';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
@@ -39,6 +39,7 @@ export const Folders = () => {
   const { addFileGroup, addOneFileItem, fileGroupList } = useFilesStore();
   const { setSelectedCurrentFolder, selectedCurrentFolder } = useSelectedStore();
   const { addUploadItem, updateUploadItem } = useUploadsStore();
+  const { storageItemViewMode, toggleStorageItemViewMode } = useUIStore();
 
   const menuItems = [
     {
@@ -92,8 +93,11 @@ export const Folders = () => {
         </>
         <>
           <div style={{ marginRight: '1rem' }}>
-            <GridViewIcon sx={{ color: 'common.grey' }} />
-            <ViewListIcon sx={{ color: 'common.grey' }} />
+            {storageItemViewMode === 'grid' ? (
+              <ViewListIcon onClick={toggleStorageItemViewMode} sx={{ color: 'common.grey' }} />
+            ) : (
+              <GridViewIcon onClick={toggleStorageItemViewMode} sx={{ color: 'common.grey' }} />
+            )}
           </div>
           <div>
             <Button
@@ -164,7 +168,7 @@ export const Folders = () => {
       />
 
       <StorageItemsContainer>
-        <StorageItemListContainer arrangeType="grid" listName="Folders">
+        <StorageItemListContainer arrangeType={storageItemViewMode}>
           <>
             {folderGroupList
               ?.find((group) => group.parentId === selectedCurrentFolder?.id)
@@ -174,7 +178,7 @@ export const Folders = () => {
                   currentFolderId={selectedCurrentFolder?.id}
                   key={folder.id}
                 >
-                  <FolderItem folder={folder} arrangeType="grid" />
+                  <FolderItem folder={folder} arrangeType={storageItemViewMode} />
                 </StorageItemContextMenu>
               ))}
           </>
@@ -183,7 +187,7 @@ export const Folders = () => {
               ?.find((group) => group.parentId === selectedCurrentFolder?.id)
               ?.fileItems?.map((file) => (
                 <StorageItemContextMenu storageItem={file} currentFolderId={selectedCurrentFolder?.id} key={file.id}>
-                  <FileItem file={file} arrangeType="grid" />
+                  <FileItem file={file} arrangeType={storageItemViewMode} />
                 </StorageItemContextMenu>
               ))}
           </>

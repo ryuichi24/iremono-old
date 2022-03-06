@@ -8,6 +8,7 @@ import { selectedReducer } from './selected/selected-slice';
 import { uploadsReducer } from './uploads/uploads-slice';
 import { cryptoFilesReducer } from './crypto-files/crypto-files-slice';
 import { cryptoFoldersReducer } from './crypto-folders/crypto-folders-slice';
+import { uiReducer } from './ui/ui-slice';
 
 const combinedReducers = combineReducers({
   authState: authReducer,
@@ -18,6 +19,7 @@ const combinedReducers = combineReducers({
   trashState: trashReducer,
   selectedState: selectedReducer,
   uploadsState: uploadsReducer,
+  uiState: uiReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

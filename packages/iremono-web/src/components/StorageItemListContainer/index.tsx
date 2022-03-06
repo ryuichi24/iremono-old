@@ -5,11 +5,10 @@ import { ListItemContainer } from '../ListItemCard/ListItemContainer';
 
 interface Props {
   arrangeType: 'grid' | 'list';
-  listName: string;
   children: React.ReactNode;
 }
 
-export const StorageItemListContainer = ({ children, arrangeType, listName }: Props) => {
+export const StorageItemListContainer = ({ children, arrangeType }: Props) => {
   const items = React.Children.toArray(children);
   return (
     <>
