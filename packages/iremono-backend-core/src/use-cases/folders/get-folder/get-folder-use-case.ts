@@ -17,7 +17,10 @@ export class GetFolderUseCase implements UseCase<GetFolderRequestDTO, GetFolderR
     let folder;
 
     if (isRootFolder(dto.id)) {
-      folder = await this._storageItemRepository.findRootFolderByOwnerId(dto.ownerId);
+      folder =
+        dto.folderType === 'crypto'
+          ? await this._storageItemRepository.findCryptoRootFolderByOwnerId(dto.ownerId)
+          : await this._storageItemRepository.findRootFolderByOwnerId(dto.ownerId);
     }
 
     if (!isRootFolder(dto.id)) {

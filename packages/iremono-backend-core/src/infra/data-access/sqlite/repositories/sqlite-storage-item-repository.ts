@@ -94,6 +94,15 @@ export class SqliteStorageItemRepository extends SqliteRepository<StorageItem> i
     return this._toEntity(storageItem);
   }
 
+  public async findCryptoRootFolderByOwnerId(ownerId: string): Promise<StorageItem | null> {
+    const query =
+      'SELECT * FROM storage_items WHERE owner_id = ? AND is_root_folder = 1 AND is_encrypted_with_client_key = 1;';
+    const values = [ownerId];
+    const storageItem = await this._readOneQuery(query, values);
+    if (!storageItem) return null;
+    return this._toEntity(storageItem);
+  }
+
   public async findOneById(id: string): Promise<StorageItem | null> {
     const query = 'SELECT * FROM storage_items WHERE id = ?;';
     const values = [id];

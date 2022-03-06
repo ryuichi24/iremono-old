@@ -8,4 +8,5 @@ export interface StorageItemRepository {
   findAllDescendantsById(id: string, inTrash: boolean): Promise<StorageItem[]>;
   findAllAncestorsById(id: string): Promise<StorageItem[]>;
   findRootFolderByOwnerId(ownerId: string): Promise<StorageItem | null>;
+  findCryptoRootFolderByOwnerId(ownerId: string): Promise<StorageItem | null>;
 }

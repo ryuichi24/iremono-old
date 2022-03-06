@@ -98,6 +98,16 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
     return this._toEntity(storageItem);
   }
 
+  public async findCryptoRootFolderByOwnerId(ownerId: string): Promise<StorageItem | null> {
+    const query =
+      'SELECT * FROM storage_items WHERE owner_id = ? AND is_root_folder = 1 AND is_encrypted_with_client_key = 1;';
+    const values = [ownerId];
+    const result = await this._query(query, values);
+    const storageItem = (result as any)[0];
+    if (!storageItem) return null;
+    return this._toEntity(storageItem);
+  }
+
   public async findOneById(id: string): Promise<StorageItem | null> {
     const query = 'SELECT * FROM storage_items WHERE id = ?;';
     const values = [id];

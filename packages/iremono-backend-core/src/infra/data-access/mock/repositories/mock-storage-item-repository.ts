@@ -124,6 +124,14 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     return makeStorageItemEntityFromRow(foundRootFolder);
   };
 
+  const findCryptoRootFolderByOwnerId = async (ownerId: string) => {
+    const foundRootFolder = storageItemTable.find(
+      (item) => item.isRootFolder && item.ownerId === ownerId && item.isCryptoFolderItem,
+    );
+    if (!foundRootFolder) return null;
+    return makeStorageItemEntityFromRow(foundRootFolder);
+  };
+
   return {
     save,
     remove,
@@ -132,6 +140,7 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     findAllDescendantsById,
     findAllAncestorsById,
     findRootFolderByOwnerId,
+    findCryptoRootFolderByOwnerId,
   };
 };
 
