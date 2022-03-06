@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Box, Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Header } from '@/components/Header';
 import { trashService } from '@/services/trash-service';
 import { useTrashStore } from '@/store/trash/use-trash-store';
 import { TrashItemContextMenu } from './TrashItemContextMenu';
 import { FileTrashItem } from './FileTrashItem';
 import { FolderTrashItem } from './FolderTrashItem';
+import { StorageItemListContainer } from '@/components/StorageItemContainer';
 
 export const Trash = () => {
   const { setTrashItems, folderTrashItemList, fileTrashItemList } = useTrashStore();
@@ -32,26 +33,21 @@ export const Trash = () => {
       </Header>
 
       <StorageItemsContainer>
-        <FolderSection>
-          <SectionName>Folders</SectionName>
-          <FolderList>
-            {folderTrashItemList.map((trashItem: any) => (
-              <TrashItemContextMenu trashItem={trashItem} key={trashItem.id}>
-                <FolderTrashItem folderTrashItem={trashItem} />
-              </TrashItemContextMenu>
-            ))}
-          </FolderList>
-        </FolderSection>
-        <FileSection>
-          <SectionName>Files</SectionName>
-          <FileList container>
-            {fileTrashItemList.map((trashItem) => (
-              <TrashItemContextMenu trashItem={trashItem} key={trashItem.id}>
-                <FileTrashItem fileTrashItem={trashItem} />
-              </TrashItemContextMenu>
-            ))}
-          </FileList>
-        </FileSection>
+        <StorageItemListContainer arrangeType="grid" listName="Folders">
+          {folderTrashItemList.map((trashItem: any) => (
+            <TrashItemContextMenu trashItem={trashItem} key={trashItem.id}>
+              <FolderTrashItem folderTrashItem={trashItem} />
+            </TrashItemContextMenu>
+          ))}
+        </StorageItemListContainer>
+
+        <StorageItemListContainer arrangeType="grid" listName="Files">
+          {fileTrashItemList.map((trashItem) => (
+            <TrashItemContextMenu trashItem={trashItem} key={trashItem.id}>
+              <FileTrashItem fileTrashItem={trashItem} />
+            </TrashItemContextMenu>
+          ))}
+        </StorageItemListContainer>
       </StorageItemsContainer>
     </Container>
   );
@@ -64,29 +60,4 @@ const Container = styled('div')`
 const StorageItemsContainer = styled('div')`
   overflow: scroll;
   height: 80%;
-`;
-
-const FolderSection = styled(Box)`
-  padding: 1rem;
-`;
-
-const FolderList = styled(Box)`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-`;
-
-const FileSection = styled(Box)`
-  padding: 1rem;
-`;
-
-const FileList = styled(Grid)`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-`;
-
-const SectionName = styled(Typography)`
-  padding-bottom: 0.5rem;
-  color: ${(props) => props.theme.palette.text.secondary};
 `;
