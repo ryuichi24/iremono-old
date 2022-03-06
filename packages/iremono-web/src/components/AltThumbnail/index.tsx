@@ -11,9 +11,9 @@ interface Props {
 export const ThumbnailAlt = ({ fileExtension, extensionTextSize }: Props): JSX.Element => {
   return (
     <Container bgColor={stringToColor(fileExtension)}>
-      <ThumbnailAltText fontSize={extensionTextSize}>
-        <Typography fontWeight="fontWeightBold">{fileExtension.toUpperCase()}</Typography>
-      </ThumbnailAltText>
+      <Typography sx={{ fontSize: extensionTextSize, color: 'white' }} fontWeight="fontWeightBold">
+        {fileExtension.toUpperCase()}
+      </Typography>
     </Container>
   );
 };
@@ -24,12 +24,6 @@ const Container = styled.div<{ bgColor: string }>`
   align-items: center;
   border-radius: ${(props) => props.theme.shape.borderRadius};
   background-color: ${({ bgColor }) => bgColor};
-  width: 100px;
-  height: 100px;
-`;
-
-const ThumbnailAltText = styled.div<{ fontSize: string }>`
-  color: white;
-  font-size: ${({ fontSize }) => fontSize};
-  font-weight: 600;
+  width: 100%;
+  height: 100%;
 `;

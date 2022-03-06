@@ -4,7 +4,6 @@ import { ValidationError } from '../shared/utils/errors';
 interface Props extends EntityProps {
   email: string;
   password: string;
-  encryptionKeyInitializationVector?: string | null;
 }
 
 export class User extends Entity<Props> {
@@ -12,7 +11,7 @@ export class User extends Entity<Props> {
 
   public constructor(props: Props, id?: string) {
     const isNew = id === undefined;
-    super({ ...props, encryptionKeyInitializationVector: isNew ? null : props.encryptionKeyInitializationVector }, id);
+    super({ ...props }, id);
 
     this._isPasswordHashed = isNew ? false : true;
 
@@ -28,11 +27,6 @@ export class User extends Entity<Props> {
     this._props.updatedAt = new Date();
   }
 
-  public updateEncryptionKeyInitializationVector(encryptionKeyInitializationVector: string) {
-    this._props.encryptionKeyInitializationVector = encryptionKeyInitializationVector;
-    this._props.updatedAt = new Date();
-  }
-
   public async hashPassword(hashFunc: (plainPassword: string) => Promise<string>) {
     this._props.password = await hashFunc(this._props.password);
     this._isPasswordHashed = true;
@@ -45,10 +39,6 @@ export class User extends Entity<Props> {
   get hashedPassword() {
     if (!this._isPasswordHashed) throw new Error('password is not hashed.');
     return this._props.password;
-  }
-
-  get encryptionKeyInitializationVector() {
-    return this._props.encryptionKeyInitializationVector;
   }
 
   private _validateEmail(email: string) {

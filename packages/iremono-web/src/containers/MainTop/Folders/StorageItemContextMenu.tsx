@@ -23,7 +23,7 @@ export const StorageItemContextMenu = ({ children, storageItem, currentFolderId 
   const [openRemoveStorageItemForm, handleOpenRemoveStorageItemForm, handleCloseRemoveStorageItemForm] = useModal();
   return (
     <>
-      <div style={{ width: 'auto' }} onContextMenu={handleContextMenu}>
+      <div style={{ width: 'auto', height: 'auto' }} onContextMenu={handleContextMenu}>
         {children}
       </div>
 

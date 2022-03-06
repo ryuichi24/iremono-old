@@ -17,7 +17,7 @@ interface StorageItemRow {
   lastViewedAt: Date;
   initializationVector: string;
   isRootFolder: boolean;
-  isEncryptedWithClientKey: boolean;
+  isCryptoFolderItem: boolean;
   hasThumbnail: boolean;
   thumbnailPath?: string;
   thumbnailSize?: number;
@@ -55,7 +55,7 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     itemRowToUpdate.fileExtension = entity.fileExtension;
     itemRowToUpdate.isFolder = entity.isFolder;
     itemRowToUpdate.isInTrash = entity.isInTrash!;
-    itemRowToUpdate.isEncryptedWithClientKey = entity.isEncryptedWithClientKey!;
+    itemRowToUpdate.isCryptoFolderItem = entity.isCryptoFolderItem!;
     itemRowToUpdate.isRootFolder = entity.isRootFolder!;
     itemRowToUpdate.lastViewedAt = entity.lastViewedAt!;
     itemRowToUpdate.thumbnailPath = entity.thumbnailPath;
@@ -124,6 +124,14 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     return makeStorageItemEntityFromRow(foundRootFolder);
   };
 
+  const findCryptoRootFolderByOwnerId = async (ownerId: string) => {
+    const foundRootFolder = storageItemTable.find(
+      (item) => item.isRootFolder && item.ownerId === ownerId && item.isCryptoFolderItem,
+    );
+    if (!foundRootFolder) return null;
+    return makeStorageItemEntityFromRow(foundRootFolder);
+  };
+
   return {
     save,
     remove,
@@ -132,6 +140,7 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     findAllDescendantsById,
     findAllAncestorsById,
     findRootFolderByOwnerId,
+    findCryptoRootFolderByOwnerId,
   };
 };
 
@@ -150,7 +159,7 @@ const makeStorageItemEntityFromRow = (row: StorageItemRow): StorageItem =>
       lastViewedAt: row.lastViewedAt,
       initializationVector: row.initializationVector,
       isRootFolder: row.isRootFolder,
-      isEncryptedWithClientKey: row.isEncryptedWithClientKey,
+      isCryptoFolderItem: row.isCryptoFolderItem,
       hasThumbnail: row.hasThumbnail,
       thumbnailPath: row.thumbnailPath,
       thumbnailSize: row.thumbnailSize,
@@ -176,7 +185,7 @@ const makeStorageItemRowFromEntity = (entity: StorageItem, ancestors: (string | 
   lastViewedAt: entity.lastViewedAt!,
   initializationVector: entity.initializationVector!,
   isRootFolder: entity.isRootFolder!,
-  isEncryptedWithClientKey: entity.isEncryptedWithClientKey!,
+  isCryptoFolderItem: entity.isCryptoFolderItem!,
   hasThumbnail: entity.hasThumbnail,
   thumbnailPath: entity.thumbnailPath,
   thumbnailSize: entity.thumbnailSize,

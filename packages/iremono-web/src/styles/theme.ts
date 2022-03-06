@@ -9,8 +9,8 @@ export const getTheme = (currentMode: 'dark' | 'light' = 'light') =>
             background: {
               default: '#F9FAFC',
               paper: '#FFFFFF',
-              primary: '#f3f4f9',
-              secondary: '#FFFFFF',
+              primary: '#FFFFFF',
+              secondary: '#f3f4f9',
             },
             primary: {
               main: '#0061d5',
@@ -29,8 +29,8 @@ export const getTheme = (currentMode: 'dark' | 'light' = 'light') =>
             background: {
               default: '#F9FAFC',
               paper: '#FFFFFF',
-              primary: '#1e2732',
-              secondary: '#222b36',
+              primary: '#222b36',
+              secondary: '#1e2732',
             },
             primary: {
               main: '#0061d5',

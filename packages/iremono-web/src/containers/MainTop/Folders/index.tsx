@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { formatBytes } from '@iremono/util/dist/format-bytes';
 import { Header } from '@/components/Header';
@@ -23,6 +23,10 @@ import { FolderItem } from './FolderItem';
 import { FolderPathNav } from './FolderPathNav';
 import { useSelectedStore } from '@/store/selected/use-selected-store';
 import { useUploadsStore } from '@/store/uploads/use-uploads-store';
+import { StorageItemListContainer } from '@/components/StorageItemListContainer';
+import GridViewIcon from '@mui/icons-material/GridView';
+import ViewListIcon from '@mui/icons-material/ViewList';
+import { useUIStore } from '@/store/ui/use-ui-store';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
@@ -35,6 +39,7 @@ export const Folders = () => {
   const { addFileGroup, addOneFileItem, fileGroupList } = useFilesStore();
   const { setSelectedCurrentFolder, selectedCurrentFolder } = useSelectedStore();
   const { addUploadItem, updateUploadItem } = useUploadsStore();
+  const { storageItemViewMode, toggleStorageItemViewMode } = useUIStore();
 
   const menuItems = [
     {
@@ -87,6 +92,13 @@ export const Folders = () => {
           <FolderPathNav currentFolder={selectedCurrentFolder} />
         </>
         <>
+          <div style={{ marginRight: '1rem' }}>
+            {storageItemViewMode === 'grid' ? (
+              <ViewListIcon onClick={toggleStorageItemViewMode} sx={{ color: 'common.grey' }} />
+            ) : (
+              <GridViewIcon onClick={toggleStorageItemViewMode} sx={{ color: 'common.grey' }} />
+            )}
+          </div>
           <div>
             <Button
               variant="outlined"
@@ -156,9 +168,8 @@ export const Folders = () => {
       />
 
       <StorageItemsContainer>
-        <FolderSection>
-          <SectionName>Folders</SectionName>
-          <FolderList>
+        <StorageItemListContainer arrangeType={storageItemViewMode}>
+          <>
             {folderGroupList
               ?.find((group) => group.parentId === selectedCurrentFolder?.id)
               ?.folderItems?.map((folder: any) => (
@@ -167,23 +178,20 @@ export const Folders = () => {
                   currentFolderId={selectedCurrentFolder?.id}
                   key={folder.id}
                 >
-                  <FolderItem folder={folder} />
+                  <FolderItem folder={folder} arrangeType={storageItemViewMode} />
                 </StorageItemContextMenu>
               ))}
-          </FolderList>
-        </FolderSection>
-        <FileSection>
-          <SectionName>Files</SectionName>
-          <FileList container>
+          </>
+          <>
             {fileGroupList
               ?.find((group) => group.parentId === selectedCurrentFolder?.id)
               ?.fileItems?.map((file) => (
                 <StorageItemContextMenu storageItem={file} currentFolderId={selectedCurrentFolder?.id} key={file.id}>
-                  <FileItem file={file} />
+                  <FileItem file={file} arrangeType={storageItemViewMode} />
                 </StorageItemContextMenu>
               ))}
-          </FileList>
-        </FileSection>
+          </>
+        </StorageItemListContainer>
       </StorageItemsContainer>
     </Container>
   );
@@ -196,29 +204,4 @@ const Container = styled('div')`
 const StorageItemsContainer = styled('div')`
   overflow: scroll;
   height: 80%;
-`;
-
-const FolderSection = styled(Box)`
-  padding: 1rem;
-`;
-
-const FolderList = styled(Box)`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-`;
-
-const FileSection = styled(Box)`
-  padding: 1rem;
-`;
-
-const FileList = styled(Grid)`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-`;
-
-const SectionName = styled(Typography)`
-  padding-bottom: 0.5rem;
-  color: ${(props) => props.theme.palette.text.secondary};
 `;

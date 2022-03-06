@@ -37,6 +37,7 @@ export class CreateFolderUseCase implements UseCase<CreateFolderRequestDTO, Crea
       isFolder: true,
       ownerId: dto.ownerId,
       parentId: parentFolder.id,
+      isCryptoFolderItem: parentFolder.isCryptoFolderItem,
     });
 
     const saved = await this._storageItemRepository.save(folder);

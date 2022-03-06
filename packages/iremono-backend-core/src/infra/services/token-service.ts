@@ -1,7 +1,7 @@
 import { Cache } from '@iremono/util';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import { TokenService } from '../../services';
+import { DownloadFileTokenPayload, StreamFileTokenTokenPayload, TokenService } from '../../services';
 
 const refreshTokenCache = new Cache();
 const downloadFileTokenCache = new Cache();
@@ -46,9 +46,9 @@ export const constructTokenService = (tokenOptions: TokenOptions): TokenService 
     revokeRefreshToken: (token: string) => {
       refreshTokenCache.delete(token);
     },
-    generateDownloadFileToken: (fileId: string) => {
+    generateDownloadFileToken: (payload: DownloadFileTokenPayload) => {
       const token = crypto.randomBytes(40).toString('hex');
-      downloadFileTokenCache.set(token, fileId, tokenOptions.expiresInForDownloadFileToken);
+      downloadFileTokenCache.set(token, payload, tokenOptions.expiresInForDownloadFileToken);
       return {
         value: token,
         expiresIn: tokenOptions.expiresInForDownloadFileToken,
@@ -62,9 +62,9 @@ export const constructTokenService = (tokenOptions: TokenOptions): TokenService 
     revokeDownloadFileToken: (token: string) => {
       downloadFileTokenCache.delete(token);
     },
-    generateStreamFileToken: (fileId: string) => {
+    generateStreamFileToken: (payload: StreamFileTokenTokenPayload) => {
       const token = crypto.randomBytes(40).toString('hex');
-      streamFileTokenCache.set(token, fileId, tokenOptions.expiresInForDownloadFileToken);
+      streamFileTokenCache.set(token, payload, tokenOptions.expiresInForDownloadFileToken);
       return {
         value: token,
         expiresIn: tokenOptions.expiresInForStreamFileToken,

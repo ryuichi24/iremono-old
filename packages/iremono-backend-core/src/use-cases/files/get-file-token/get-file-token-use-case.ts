@@ -29,11 +29,23 @@ export class GetFileTokenUseCase implements UseCase<GetFileTokenRequestDTO, GetF
       throw new InvalidRequestError(`the owner does not match the file's owner`);
     }
 
+    if (fileToDownload.isCryptoFolderItem && !dto.clientEncryptionKey) {
+      throw new InvalidRequestError(`client encryption is not provided`);
+    }
+
     let fileToken;
 
-    if (dto.tokenType === 'download') fileToken = this._tokenService.generateDownloadFileToken(fileToDownload.id);
+    if (dto.tokenType === 'download')
+      fileToken = this._tokenService.generateDownloadFileToken({
+        fileId: fileToDownload.id,
+        clientEncryptionKey: dto.clientEncryptionKey,
+      });
 
-    if (dto.tokenType === 'stream') fileToken = this._tokenService.generateStreamFileToken(fileToDownload.id);
+    if (dto.tokenType === 'stream')
+      fileToken = this._tokenService.generateStreamFileToken({
+        fileId: fileToDownload.id,
+        clientEncryptionKey: dto.clientEncryptionKey,
+      });
 
     if (!fileToken) throw new InvalidRequestError(`the requested token type is invalid`);
 

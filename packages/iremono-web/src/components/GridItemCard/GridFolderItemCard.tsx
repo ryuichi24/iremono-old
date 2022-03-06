@@ -9,12 +9,14 @@ interface Props {
   handleClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-export const FolderItemCard = ({ folder, handleClick, handleDoubleClick }: Props) => {
+export const GridFolderItemCard = ({ folder, handleClick, handleDoubleClick }: Props) => {
   return (
-    <Container onClick={handleClick} onDoubleClick={handleDoubleClick}>
-      <FolderIcon sx={{ color: 'text.secondary' }} />
-      <Typography sx={{ color: 'text.secondary' }}>{folder.name}</Typography>
-    </Container>
+    <>
+      <Container onClick={handleClick} onDoubleClick={handleDoubleClick}>
+        <FolderIcon sx={{ color: 'text.secondary' }} />
+        <Typography sx={{ color: 'text.secondary' }}>{folder.name}</Typography>
+      </Container>
+    </>
   );
 };
 
@@ -28,7 +30,7 @@ const Container = styled('div')`
   border: 1px solid ${(props) => props.theme.palette.grey[300]};
   cursor: pointer;
   color: ${(props) => props.theme.palette.grey[900]};
-  background-color: ${(props) => props.theme.palette.background.secondary};
+  background-color: ${(props) => props.theme.palette.background.primary};
 
   &:hover {
     background-color: ${(props) => props.theme.palette.action.hover};

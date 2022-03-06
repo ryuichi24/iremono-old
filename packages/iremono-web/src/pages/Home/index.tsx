@@ -43,7 +43,7 @@ export const Home = () => {
                     sx={{ bgcolor: 'primary.main', color: 'white', width: '36px', height: '36px' }}
                     onClick={handleOpenMenu as any}
                   >
-                    {user.email[0].toUpperCase()}
+                    {user?.email[0]?.toUpperCase()}
                   </Avatar>
 
                   <PopupMenu

@@ -45,7 +45,7 @@ export const UploadStatusItem = ({ fileName, progress, uploadedSize, isCompleted
 const Container = styled.div`
   display: flex;
   gap: 0.5rem;
-  background-color: ${(props) => props.theme.palette.background.secondary};
+  background-color: ${(props) => props.theme.palette.background.primary};
   border-radius: 4px;
   align-items: center;
   padding: 0.5rem;
@@ -66,7 +66,7 @@ const UploadStatusDetailTopSection = styled.div`
 `;
 
 const ProgressBar = styled.div`
-  background-color: ${(props) => props.theme.palette.background.secondary};
+  background-color: ${(props) => props.theme.palette.background.primary};
   height: 0.5rem;
   width: 18rem;
   border-radius: 4px;

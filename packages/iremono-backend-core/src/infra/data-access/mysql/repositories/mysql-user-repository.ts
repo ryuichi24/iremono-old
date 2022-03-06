@@ -50,7 +50,6 @@ export class MysqlUserRepository extends MysqlRepository<User> implements UserRe
       {
         email: userRaw.email,
         password: userRaw.password,
-        encryptionKeyInitializationVector: userRaw.encryption_key_initialization_vector,
         createdAt: userRaw.created_at,
         updatedAt: userRaw.updated_at,
       },

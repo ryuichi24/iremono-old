@@ -98,6 +98,16 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
     return this._toEntity(storageItem);
   }
 
+  public async findCryptoRootFolderByOwnerId(ownerId: string): Promise<StorageItem | null> {
+    const query =
+      'SELECT * FROM storage_items WHERE owner_id = ? AND is_root_folder = 1 AND is_encrypted_with_client_key = 1;';
+    const values = [ownerId];
+    const result = await this._query(query, values);
+    const storageItem = (result as any)[0];
+    if (!storageItem) return null;
+    return this._toEntity(storageItem);
+  }
+
   public async findOneById(id: string): Promise<StorageItem | null> {
     const query = 'SELECT * FROM storage_items WHERE id = ?;';
     const values = [id];
@@ -129,7 +139,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
       entity.lastViewedAt,
       entity.initializationVector,
       entity.isRootFolder,
-      entity.isEncryptedWithClientKey,
+      entity.isCryptoFolderItem,
       entity.hasThumbnail,
       entity.thumbnailPath,
       entity.thumbnailSize,
@@ -159,7 +169,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
       entity.isInTrash,
       entity.lastViewedAt,
       entity.initializationVector,
-      entity.isEncryptedWithClientKey,
+      entity.isCryptoFolderItem,
       entity.hasThumbnail,
       entity.thumbnailPath,
       entity.thumbnailSize,
@@ -189,7 +199,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
         lastViewedAt: raw.last_viewed_at,
         initializationVector: raw.initialization_vector,
         isRootFolder: Boolean(raw.is_root_folder),
-        isEncryptedWithClientKey: Boolean(raw.is_encrypted_with_client_key),
+        isCryptoFolderItem: Boolean(raw.is_encrypted_with_client_key),
         hasThumbnail: Boolean(raw.has_thumbnail),
         thumbnailPath: raw.thumbnail_path,
         thumbnailSize: raw.thumbnail_size,

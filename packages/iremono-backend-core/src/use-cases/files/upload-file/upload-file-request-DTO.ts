@@ -9,5 +9,5 @@ export interface UploadFileRequestDTO {
   thumbnailPath: string;
   thumbnailSize: number;
   thumbnailInitializationVector: string;
-  isEncryptedWithClientKey: boolean;
+  isCryptoFolderItem: boolean;
 }

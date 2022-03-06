@@ -40,6 +40,6 @@ export const FolderExplore = () => {
 
 const Container = styled(Box)`
   padding: 0.5rem;
-  background-color: ${(props) => props.theme.palette.background.secondary};
+  background-color: ${(props) => props.theme.palette.background.primary};
   height: 100%;
 `;
