@@ -6,11 +6,15 @@ import { foldersReducer } from './folders/folders-slice';
 import { trashReducer } from './trash/trash-slice';
 import { selectedReducer } from './selected/selected-slice';
 import { uploadsReducer } from './uploads/uploads-slice';
+import { cryptoFilesReducer } from './crypto-files/crypto-files-slice';
+import { cryptoFoldersReducer } from './crypto-folders/crypto-folders-slice';
 
 const combinedReducers = combineReducers({
   authState: authReducer,
   filesState: filesReducer,
   foldersState: foldersReducer,
+  cryptoFilesState: cryptoFilesReducer,
+  cryptoFoldersState: cryptoFoldersReducer,
   trashState: trashReducer,
   selectedState: selectedReducer,
   uploadsState: uploadsReducer,
