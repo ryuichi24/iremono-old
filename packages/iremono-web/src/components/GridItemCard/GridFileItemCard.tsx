@@ -10,26 +10,28 @@ interface Props {
   handleDoubleClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-export const FileItemCard = ({ file, thumbnailURL, handleClick, handleDoubleClick }: Props) => {
+export const GridFileItemCard = ({ file, thumbnailURL, handleClick, handleDoubleClick }: Props) => {
   return (
-    <Container onClick={handleClick} onDoubleClick={handleDoubleClick}>
-      <ThumbnailSection>
-        {thumbnailURL ? (
-          <Thumbnail src={thumbnailURL} />
-        ) : (
-          <ThumbnailAlt fileExtension={file.fileExtension} extensionTextSize={'40px'} />
-        )}
-      </ThumbnailSection>
-      <FileNameSection>
-        <Typography noWrap sx={{ color: 'text.secondary' }}>
-          {file.name}
-        </Typography>
-      </FileNameSection>
-    </Container>
+    <>
+      <GridItemContainer onClick={handleClick} onDoubleClick={handleDoubleClick}>
+        <ThumbnailSection>
+          {thumbnailURL ? (
+            <Thumbnail src={thumbnailURL} />
+          ) : (
+            <ThumbnailAlt fileExtension={file.fileExtension} extensionTextSize={'40px'} />
+          )}
+        </ThumbnailSection>
+        <FileNameSection>
+          <Typography noWrap sx={{ color: 'text.secondary' }}>
+            {file.name}
+          </Typography>
+        </FileNameSection>
+      </GridItemContainer>
+    </>
   );
 };
 
-const Container = styled('div')`
+const GridItemContainer = styled('div')`
   border-radius: ${(props) => props.theme.shape.borderRadius};
   display: flex;
   flex-direction: column;
@@ -37,7 +39,7 @@ const Container = styled('div')`
   height: 290px;
   border: 1px solid ${(props) => props.theme.palette.grey[300]};
   cursor: pointer;
-  background-color: ${(props) => props.theme.palette.background.secondary};
+  background-color: ${(props) => props.theme.palette.background.primary};
   &:hover {
     background-color: ${(props) => props.theme.palette.action.hover};
   }

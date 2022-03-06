@@ -7,7 +7,7 @@ import { useTrashStore } from '@/store/trash/use-trash-store';
 import { TrashItemContextMenu } from './TrashItemContextMenu';
 import { FileTrashItem } from './FileTrashItem';
 import { FolderTrashItem } from './FolderTrashItem';
-import { StorageItemListContainer } from '@/components/StorageItemContainer';
+import { StorageItemListContainer } from '@/components/StorageItemListContainer';
 
 export const Trash = () => {
   const { setTrashItems, folderTrashItemList, fileTrashItemList } = useTrashStore();
@@ -36,7 +36,7 @@ export const Trash = () => {
         <StorageItemListContainer arrangeType="grid" listName="Folders">
           {folderTrashItemList.map((trashItem: any) => (
             <TrashItemContextMenu trashItem={trashItem} key={trashItem.id}>
-              <FolderTrashItem folderTrashItem={trashItem} />
+              <FolderTrashItem folderTrashItem={trashItem} arrangeType="grid" />
             </TrashItemContextMenu>
           ))}
         </StorageItemListContainer>
@@ -44,7 +44,7 @@ export const Trash = () => {
         <StorageItemListContainer arrangeType="grid" listName="Files">
           {fileTrashItemList.map((trashItem) => (
             <TrashItemContextMenu trashItem={trashItem} key={trashItem.id}>
-              <FileTrashItem fileTrashItem={trashItem} />
+              <FileTrashItem fileTrashItem={trashItem} arrangeType="grid" />
             </TrashItemContextMenu>
           ))}
         </StorageItemListContainer>

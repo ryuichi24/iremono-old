@@ -23,7 +23,10 @@ import { FolderItem } from './FolderItem';
 import { FolderPathNav } from './FolderPathNav';
 import { useSelectedStore } from '@/store/selected/use-selected-store';
 import { useUploadsStore } from '@/store/uploads/use-uploads-store';
-import { StorageItemListContainer } from '@/components/StorageItemContainer';
+import { StorageItemListContainer } from '@/components/StorageItemListContainer';
+
+import GridViewIcon from '@mui/icons-material/GridView';
+import ViewListIcon from '@mui/icons-material/ViewList';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
@@ -88,6 +91,10 @@ export const Folders = () => {
           <FolderPathNav currentFolder={selectedCurrentFolder} />
         </>
         <>
+          <div style={{ marginRight: '1rem' }}>
+            <GridViewIcon sx={{ color: 'common.grey' }} />
+            <ViewListIcon sx={{ color: 'common.grey' }} />
+          </div>
           <div>
             <Button
               variant="outlined"
@@ -158,23 +165,28 @@ export const Folders = () => {
 
       <StorageItemsContainer>
         <StorageItemListContainer arrangeType="grid" listName="Folders">
-          {folderGroupList
-            ?.find((group) => group.parentId === selectedCurrentFolder?.id)
-            ?.folderItems?.map((folder: any) => (
-              <StorageItemContextMenu storageItem={folder} currentFolderId={selectedCurrentFolder?.id} key={folder.id}>
-                <FolderItem folder={folder} />
-              </StorageItemContextMenu>
-            ))}
-        </StorageItemListContainer>
-
-        <StorageItemListContainer arrangeType="grid" listName="Files">
-          {fileGroupList
-            ?.find((group) => group.parentId === selectedCurrentFolder?.id)
-            ?.fileItems?.map((file) => (
-              <StorageItemContextMenu storageItem={file} currentFolderId={selectedCurrentFolder?.id} key={file.id}>
-                <FileItem file={file} />
-              </StorageItemContextMenu>
-            ))}
+          <>
+            {folderGroupList
+              ?.find((group) => group.parentId === selectedCurrentFolder?.id)
+              ?.folderItems?.map((folder: any) => (
+                <StorageItemContextMenu
+                  storageItem={folder}
+                  currentFolderId={selectedCurrentFolder?.id}
+                  key={folder.id}
+                >
+                  <FolderItem folder={folder} arrangeType="grid" />
+                </StorageItemContextMenu>
+              ))}
+          </>
+          <>
+            {fileGroupList
+              ?.find((group) => group.parentId === selectedCurrentFolder?.id)
+              ?.fileItems?.map((file) => (
+                <StorageItemContextMenu storageItem={file} currentFolderId={selectedCurrentFolder?.id} key={file.id}>
+                  <FileItem file={file} arrangeType="grid" />
+                </StorageItemContextMenu>
+              ))}
+          </>
         </StorageItemListContainer>
       </StorageItemsContainer>
     </Container>
