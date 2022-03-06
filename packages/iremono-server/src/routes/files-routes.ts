@@ -10,7 +10,6 @@ import {
   streamVideoController,
   updateFileController,
   uploadFileController,
-  userRepository,
   getFileTokenController,
 } from '../dependency-container';
 import { authHandler, clientEncryptionKeyHandler, makeExpressHandler, uploadHandler } from '../shared/express-lib';
@@ -32,10 +31,8 @@ export const filesRouter = express
       {
         mediaDirPath: config.mediaConfig.PATH_TO_MEDIA_DIR,
         mediaDirName: config.mediaConfig.MEDIA_DIR_NAME,
-        encryptionKeyForClientEncryptionKey: config.mediaConfig.ENCRYPTION_KEY_FOR_CLIENT_ENCRYPTION_KEY,
       },
       cryptoService,
-      userRepository,
     ),
     makeExpressHandler(uploadFileController),
   )

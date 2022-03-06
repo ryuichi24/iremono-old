@@ -1,6 +1,6 @@
 import { StorageItemRepository, UserRepository } from '../../../repositories';
 import { UseCase } from '../../../shared/use-case-lib';
-import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
+import { NotExistError } from '../../../shared/utils/errors';
 import { DownloadFileThumbnailRequestDTO } from './download-file-thumbnail-request-DTO';
 import { DownloadFileThumbnailResponseDTO } from './download-file-thumbnail-response-DTO';
 
@@ -8,11 +8,9 @@ export class DownloadFileThumbnailUseCase
   implements UseCase<DownloadFileThumbnailRequestDTO, DownloadFileThumbnailResponseDTO>
 {
   private readonly _storageItemRepository: StorageItemRepository;
-  private readonly _userRepository: UserRepository;
 
-  constructor(storageItemRepository: StorageItemRepository, userRepository: UserRepository) {
+  constructor(storageItemRepository: StorageItemRepository) {
     this._storageItemRepository = storageItemRepository;
-    this._userRepository = userRepository;
   }
 
   public async handle(dto: DownloadFileThumbnailRequestDTO): Promise<DownloadFileThumbnailResponseDTO> {
@@ -27,14 +25,8 @@ export class DownloadFileThumbnailUseCase
       thumbnailPath: fileOfThumbnailToDownload.thumbnailPath!,
       thumbnailSize: fileOfThumbnailToDownload.thumbnailSize!,
       thumbnailInitializationVector: fileOfThumbnailToDownload.thumbnailInitializationVector!,
+      clientEncryptionKey: dto.clientEncryptionKey,
     };
-
-    if (fileOfThumbnailToDownload.isCryptoFolderItem) {
-      const user = await this._userRepository.findOneById(dto.ownerId);
-      if (!user) throw new InvalidRequestError('the owner is not found');
-
-      responseDto.clientEncryptionKeyInitializationVector = user.encryptionKeyInitializationVector!;
-    }
 
     return responseDto;
   }

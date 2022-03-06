@@ -28,7 +28,6 @@ import {
   ListItemsInFolderUseCase,
   ListItemsInTrashUseCase,
   RefreshTokenUseCase,
-  RegisterEncryptionKeyUseCase,
   RemoveFileUseCase,
   RemoveFolderUseCase,
   RestoreFileUseCase,
@@ -60,7 +59,6 @@ import {
   ListItemsInTrashController,
   DeleteAllInTrashController,
   DownloadFileThumbnailController,
-  RegisterEncryptionKeyController,
   GetFolderController,
   ListAllAncestorsController,
   StreamVideoController,
@@ -138,7 +136,7 @@ export const listAllAncestorsController = new ListAllAncestorsController(listAll
 const uploadFileUseCase = new UploadFileUseCase(storageItemRepository);
 const downloadFileUseCase = new DownloadFileUseCase(storageItemRepository, tokenService);
 const getFileTokenUseCase = new GetFileTokenUseCase(storageItemRepository, tokenService);
-const downloadFileThumbnailUseCase = new DownloadFileThumbnailUseCase(storageItemRepository, userRepository);
+const downloadFileThumbnailUseCase = new DownloadFileThumbnailUseCase(storageItemRepository);
 const updateFileUseCase = new UpdateFileUseCase(storageItemRepository);
 const removeFileUseCase = new RemoveFileUseCase(storageItemRepository);
 const restoreFileUseCase = new RestoreFileUseCase(storageItemRepository);
@@ -170,12 +168,3 @@ export const deleteFolderInTrashController = new DeleteFolderInTrashController(
 );
 export const listItemsInTrashController = new ListItemsInTrashController(listItemsInTrashUseCase, loggerFactory);
 export const deleteAllInTrashController = new DeleteAllInTrashController(deleteAllInTrashUseCase, loggerFactory);
-
-// security
-const registerEncryptionKeyUseCase = new RegisterEncryptionKeyUseCase(userRepository);
-
-export const registerEncryptionKeyController = new RegisterEncryptionKeyController(
-  registerEncryptionKeyUseCase,
-  cryptoService,
-  loggerFactory,
-);
