@@ -1,28 +1,29 @@
-import { User, StorageItem } from '../../../entities';
+import { User } from '../../../entities';
 import { makeUserDTO } from '../../../models';
 import { UserRepository, StorageItemRepository } from '../../../repositories';
 import { HashService, TokenService } from '../../../services';
 import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError } from '../../../shared/utils/errors';
+import { CreateRootFolderUseCase } from '../../folders';
 import { SignUpRequestDTO } from './sign-up-request-DTO';
 import { SignUpResponseDTO } from './sign-up-response-DTO';
 
 export class SignUpUseCase implements UseCase<SignUpRequestDTO, SignUpResponseDTO> {
   private readonly _userRepository: UserRepository;
-  private readonly _storageItemRepository: StorageItemRepository;
   private readonly _tokenService: TokenService;
   private readonly _hashService: HashService;
+  private readonly _createRootFolderUseCase: CreateRootFolderUseCase;
 
   constructor(
     userRepository: UserRepository,
-    storageItemRepository: StorageItemRepository,
     tokenService: TokenService,
     hashService: HashService,
+    createRootFolderUseCase: CreateRootFolderUseCase,
   ) {
     this._userRepository = userRepository;
-    this._storageItemRepository = storageItemRepository;
     this._tokenService = tokenService;
     this._hashService = hashService;
+    this._createRootFolderUseCase = createRootFolderUseCase;
   }
 
   public async handle(dto: SignUpRequestDTO): Promise<SignUpResponseDTO> {
@@ -34,15 +35,7 @@ export class SignUpUseCase implements UseCase<SignUpRequestDTO, SignUpResponseDT
     const savedUser = await this._userRepository.save(user);
 
     // TODO: decouple root folder initialization with event emitter
-    const rootFolder = new StorageItem({
-      name: 'all files',
-      parentId: null,
-      isFolder: true,
-      isRootFolder: true,
-      ownerId: savedUser.id,
-    });
-
-    await this._storageItemRepository.save(rootFolder);
+    await this._createRootFolderUseCase.handle({ name: 'all_files', ownerId: savedUser.id, folderType: 'normal' });
 
     const accessToken = this._tokenService.generateAccessToken({ id: savedUser.id });
     const refreshToken = this._tokenService.generateRefreshToken(savedUser.id);

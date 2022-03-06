@@ -16,6 +16,7 @@ import {
 import {
   CheckAuthUseCase,
   CreateFolderUseCase,
+  CreateRootFolderUseCase,
   DeleteAllInTrashUseCase,
   DeleteFileInTrashUseCase,
   DeleteFolderInTrashUseCase,
@@ -99,7 +100,12 @@ export const tokenService = constructTokenService({
 export const cryptoService = constructCryptoService();
 
 // User
-const signUpUseCase = new SignUpUseCase(userRepository, storageItemRepository, tokenService, bcryptService);
+const signUpUseCase = new SignUpUseCase(
+  userRepository,
+  tokenService,
+  bcryptService,
+  new CreateRootFolderUseCase(storageItemRepository),
+);
 const signInUseCase = new SignInUseCase(userRepository, tokenService, bcryptService);
 const signOutUseCase = new SignOutUseCase(tokenService);
 const checkAuthUseCase = new CheckAuthUseCase(userRepository);
