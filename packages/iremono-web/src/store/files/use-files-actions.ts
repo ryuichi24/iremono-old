@@ -1,19 +1,17 @@
 import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '..';
 import { filesActions } from './files-slice';
 
-interface FilesStore {
-  fileGroupList: RootState['filesState']['fileGroupList'];
+interface FilesActions {
   addFileGroup: (args: { fileItems: any[]; parentId: string }) => void;
   addOneFileItem: (args: { fileItem: any; parentId: string }) => void;
   updateFileItem: (args: { fileItem: any; parentId: string }) => void;
   removeFileItem: (args: { fileItem: any; parentId: string }) => void;
 }
 
-export const useFilesStore = (): FilesStore => {
+export const useFilesActions = (): FilesActions => {
   const dispatch: AppDispatch = useDispatch();
-  const fileGroupList = useSelector((state: RootState) => state.filesState.fileGroupList);
 
   const addFileGroup = useCallback(
     (args: { fileItems: any[]; parentId: string }) => {
@@ -44,7 +42,6 @@ export const useFilesStore = (): FilesStore => {
   );
 
   return {
-    fileGroupList,
     addOneFileItem,
     addFileGroup,
     updateFileItem,

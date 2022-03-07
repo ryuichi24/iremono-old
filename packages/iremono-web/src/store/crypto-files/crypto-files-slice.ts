@@ -43,4 +43,4 @@ const cryptoFilesSlice = createSlice({
 });
 
 export const cryptoFilesActions = cryptoFilesSlice.actions;
-export const cryptoFilesReducer = cryptoFilesSlice.reducer;
+export default cryptoFilesSlice.reducer;

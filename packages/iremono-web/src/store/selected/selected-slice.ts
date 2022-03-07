@@ -35,4 +35,4 @@ const selectedSlice = createSlice({
 });
 
 export const selectedActions = selectedSlice.actions;
-export const selectedReducer = selectedSlice.reducer;
+export default selectedSlice.reducer;

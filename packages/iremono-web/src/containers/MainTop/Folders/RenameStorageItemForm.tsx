@@ -6,9 +6,9 @@ import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { foldersService } from '@/services/folders-service';
-import { useFoldersStore } from '@/store/folders/use-folders-store';
+import { useFoldersActions } from '@/store/folders/use-folders-actions';
 import { filesService } from '@/services/files-service';
-import { useFilesStore } from '@/store/files/use-files-store';
+import { useFilesActions } from '@/store/files/use-files-actions';
 
 interface Props {
   storageItem: any;
@@ -20,8 +20,8 @@ interface Props {
 export const RenameStorageItemForm = ({ storageItem, currentFolderId, open, handleClose }: Props) => {
   const [storageItemName, setStorageItemName] = useState(storageItem.name);
 
-  const { updateFolderItem } = useFoldersStore();
-  const { updateFileItem } = useFilesStore();
+  const { updateFolderItem } = useFoldersActions();
+  const { updateFileItem } = useFilesActions();
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();

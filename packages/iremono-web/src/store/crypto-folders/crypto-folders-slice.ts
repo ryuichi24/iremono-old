@@ -64,4 +64,4 @@ const cryptoFoldersSlice = createSlice({
 });
 
 export const cryptoFoldersActions = cryptoFoldersSlice.actions;
-export const cryptoFoldersReducer = cryptoFoldersSlice.reducer;
+export default cryptoFoldersSlice.reducer;

@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '..';
 
 interface FolderGroup {
   parentId: string;
@@ -26,7 +27,7 @@ const foldersSlice = createSlice({
           parentId: payload.folder.id,
           folderItems: payload.folderItems,
           isRootFolder: payload.folder.isRootFolder,
-          ancestors: payload.ancestors.slice().reverse(),
+          ancestors: payload.ancestors,
         };
         state.folderGroupList.push(folderGroup);
         return;
@@ -63,5 +64,26 @@ const foldersSlice = createSlice({
   },
 });
 
+// selectors
+export const folderGroupListSelector = createSelector(
+  (state: RootState) => state.foldersState,
+  (foldersState) => foldersState.folderGroupList,
+);
+
+export const folderGroupByIdSelector = createSelector(
+  [folderGroupListSelector, (state: RootState, parentId: string) => parentId],
+  (groupList, parentId) => groupList.find((group) => group.parentId === parentId),
+);
+
+export const rootFolderGroupSelector = createSelector([folderGroupListSelector], (groupList) =>
+  groupList.find((group) => group.isRootFolder),
+);
+
+export const ancestorsByFolderIdSelector = createSelector(
+  [folderGroupListSelector, (state: RootState, parentId: string) => parentId],
+  (groupList, parentId) => groupList.find((group) => group.parentId === parentId)?.ancestors,
+);
+
+//
 export const foldersActions = foldersSlice.actions;
-export const foldersReducer = foldersSlice.reducer;
+export default foldersSlice.reducer;

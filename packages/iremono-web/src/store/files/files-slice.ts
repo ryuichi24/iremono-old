@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createSelector } from '@reduxjs/toolkit';
+import { RootState } from '..';
 
 interface FilesState {
   fileGroupList: { parentId: string; fileItems: any[] }[];
@@ -42,5 +43,18 @@ const filesSlice = createSlice({
   },
 });
 
+// selectors
+export const fileGroupList = createSelector(
+  (state: RootState) => state.filesState,
+  (filesState) => filesState.fileGroupList,
+);
+
+export const fileGroupSelectedById = createSelector(
+  [fileGroupList, (state: RootState, parentId: string) => parentId],
+  (groupList, parentId) => groupList.find((group) => group.parentId === parentId),
+);
+
+//
+
 export const filesActions = filesSlice.actions;
-export const filesReducer = filesSlice.reducer;
+export default filesSlice.reducer;

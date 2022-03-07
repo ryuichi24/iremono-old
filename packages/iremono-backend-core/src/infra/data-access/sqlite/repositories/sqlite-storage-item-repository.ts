@@ -78,7 +78,7 @@ export class SqliteStorageItemRepository extends SqliteRepository<StorageItem> i
       INNER JOIN ancestors
               ON si.id = ancestors.parent_id
     )
-    SELECT * FROM ancestors WHERE id != ?
+    SELECT * FROM ancestors WHERE id != ? ORDER BY created_at ASC;
     `;
     const values = [id, id];
 

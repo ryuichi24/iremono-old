@@ -4,34 +4,25 @@ import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import FolderIcon from '@mui/icons-material/Folder';
-import { useFoldersStore } from '@/store/folders/use-folders-store';
 import { usePopupMenu } from '@/hooks/use-popup-menu';
 import { PopupMenu } from '@/components/PopupMenu';
+import { useAppSelector } from '@/store/redux-hooks';
+import { ancestorsByFolderIdSelector } from '@/store/folders/folders-slice';
 
 interface Props {
   currentFolder: any;
 }
 
 export const FolderPathNav = ({ currentFolder }: Props) => {
-  const { folderGroupList } = useFoldersStore();
-  const [ancestors, setAncestors] = useState<any[]>([]);
+  const ancestorsByFolderId =
+    (useAppSelector((state) => ancestorsByFolderIdSelector(state, currentFolder?.id)) as any[]) || [];
   const navigate = useNavigate();
   const [openMenu, anchorEl, handleOpenMenu, handleCloseMenu] = usePopupMenu();
 
-  useEffect(() => {
-    if (!currentFolder) return;
-
-    const ancestorFolders = folderGroupList?.find((group) => group.parentId === currentFolder?.id)?.ancestors;
-
-    if (!ancestorFolders) return;
-
-    setAncestors(ancestorFolders);
-  }, [folderGroupList, currentFolder]);
-
   return (
     <Container>
-      {ancestors.length < 4 ? (
-        ancestors.map((ancestor) => (
+      {ancestorsByFolderId?.length < 4 ? (
+        ancestorsByFolderId?.map((ancestor) => (
           <FolderPathItem key={ancestor.id}>
             <FolderPathName>
               <Typography
@@ -55,12 +46,12 @@ export const FolderPathNav = ({ currentFolder }: Props) => {
         <FolderPathItem>
           <FolderPathName>
             <Typography
-              onClick={() => navigate(`/folders/${ancestors[0]?.id}`)}
+              onClick={() => navigate(`/folders/${ancestorsByFolderId[0]?.id}`)}
               sx={{ color: 'text.secondary', cursor: 'pointer' }}
               variant="h5"
               component="h2"
             >
-              {ancestors[0]?.name}
+              {ancestorsByFolderId[0]?.name}
             </Typography>
           </FolderPathName>
 
@@ -72,8 +63,8 @@ export const FolderPathNav = ({ currentFolder }: Props) => {
 
           <MoreHorizIcon onClick={handleOpenMenu as any} sx={{ color: 'text.secondary', cursor: 'pointer' }} />
           <PopupMenu
-            menuItems={ancestors
-              .filter((ancestor, index) => index !== 0 && index !== ancestors.length - 1)
+            menuItems={ancestorsByFolderId
+              ?.filter((ancestor, index) => index !== 0 && index !== ancestorsByFolderId?.length - 1)
               .map((ancestor) => ({
                 text: ancestor.name,
                 icon: <FolderIcon fontSize="small" />,
@@ -95,12 +86,12 @@ export const FolderPathNav = ({ currentFolder }: Props) => {
 
           <FolderPathName>
             <Typography
-              onClick={() => navigate(`/folders/${ancestors[ancestors?.length - 1]?.id}`)}
+              onClick={() => navigate(`/folders/${ancestorsByFolderId[ancestorsByFolderId?.length - 1]?.id}`)}
               sx={{ color: 'text.secondary', cursor: 'pointer' }}
               variant="h5"
               component="h2"
             >
-              {ancestors[ancestors?.length - 1]?.name}
+              {ancestorsByFolderId[ancestorsByFolderId?.length - 1]?.name}
             </Typography>
           </FolderPathName>
 

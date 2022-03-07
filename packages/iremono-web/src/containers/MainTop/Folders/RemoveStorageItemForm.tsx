@@ -5,9 +5,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { foldersService } from '@/services/folders-service';
-import { useFoldersStore } from '@/store/folders/use-folders-store';
+import { useFoldersActions } from '@/store/folders/use-folders-actions';
 import { filesService } from '@/services/files-service';
-import { useFilesStore } from '@/store/files/use-files-store';
+import { useFilesActions } from '@/store/files/use-files-actions';
 import { Typography } from '@mui/material';
 
 interface Props {
@@ -18,8 +18,8 @@ interface Props {
 }
 
 export const RemoveStorageItemForm = ({ storageItem, currentFolderId, open, handleClose }: Props) => {
-  const { removeFolderItem } = useFoldersStore();
-  const { removeFileItem } = useFilesStore();
+  const { removeFolderItem } = useFoldersActions();
+  const { removeFileItem } = useFilesActions();
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();

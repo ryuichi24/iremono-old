@@ -44,4 +44,4 @@ const uploadsSlice = createSlice({
 });
 
 export const uploadsActions = uploadsSlice.actions;
-export const uploadsReducer = uploadsSlice.reducer;
+export default uploadsSlice.reducer;

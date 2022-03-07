@@ -1,19 +1,17 @@
 import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '..';
 import { foldersActions } from './folders-slice';
 
-interface foldersStore {
-  folderGroupList: RootState['foldersState']['folderGroupList'];
+interface FoldersActions {
   addFolderGroup: (args: { folderItems: any[]; folder: any; ancestors: any[] }) => void;
   addOneFolderItem: (args: { folderItem: any; parentId: string }) => void;
   updateFolderItem: (args: { folderItem: any; parentId: string }) => void;
   removeFolderItem: (args: { folderItem: any; parentId: string }) => void;
 }
 
-export const useFoldersStore = (): foldersStore => {
+export const useFoldersActions = (): FoldersActions => {
   const dispatch: AppDispatch = useDispatch();
-  const folderGroupList = useSelector((state: RootState) => state.foldersState.folderGroupList);
 
   const addFolderGroup = useCallback(
     (args: { folderItems: any[]; folder: any; ancestors: any[] }) => {
@@ -44,7 +42,6 @@ export const useFoldersStore = (): foldersStore => {
   );
 
   return {
-    folderGroupList,
     addFolderGroup,
     addOneFolderItem,
     updateFolderItem,

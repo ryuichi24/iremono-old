@@ -35,4 +35,4 @@ const trashSlice = createSlice({
 });
 
 export const trashActions = trashSlice.actions;
-export const trashReducer = trashSlice.reducer;
+export default trashSlice.reducer;

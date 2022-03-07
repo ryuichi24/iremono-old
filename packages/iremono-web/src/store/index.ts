@@ -1,14 +1,14 @@
-import { combineReducers, Store } from 'redux';
+import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
-import { authReducer } from '@/store/auth/auth-slice';
-import { filesReducer } from './files/files-slice';
-import { foldersReducer } from './folders/folders-slice';
-import { trashReducer } from './trash/trash-slice';
-import { selectedReducer } from './selected/selected-slice';
-import { uploadsReducer } from './uploads/uploads-slice';
-import { cryptoFilesReducer } from './crypto-files/crypto-files-slice';
-import { cryptoFoldersReducer } from './crypto-folders/crypto-folders-slice';
-import { uiReducer } from './ui/ui-slice';
+import authReducer from '@/store/auth/auth-slice';
+import filesReducer from './files/files-slice';
+import foldersReducer from './folders/folders-slice';
+import trashReducer from './trash/trash-slice';
+import selectedReducer from './selected/selected-slice';
+import uploadsReducer from './uploads/uploads-slice';
+import cryptoFilesReducer from './crypto-files/crypto-files-slice';
+import cryptoFoldersReducer from './crypto-folders/crypto-folders-slice';
+import uiReducer from './ui/ui-slice';
 
 const combinedReducers = combineReducers({
   authState: authReducer,

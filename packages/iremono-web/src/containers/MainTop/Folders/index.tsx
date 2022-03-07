@@ -9,8 +9,8 @@ import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import { foldersService } from '@/services/folders-service';
-import { useFoldersStore } from '@/store/folders/use-folders-store';
-import { useFilesStore } from '@/store/files/use-files-store';
+import { useFoldersActions } from '@/store/folders/use-folders-actions';
+import { useFilesActions } from '@/store/files/use-files-actions';
 import { PopupMenu } from '@/components/PopupMenu';
 import { usePopupMenu } from '@/hooks/use-popup-menu';
 import { NewFolderForm } from './NewFolderForm';
@@ -27,6 +27,9 @@ import { StorageItemListContainer } from '@/components/StorageItemListContainer'
 import GridViewIcon from '@mui/icons-material/GridView';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import { useUIStore } from '@/store/ui/use-ui-store';
+import { useAppSelector } from '@/store/redux-hooks';
+import { folderGroupByIdSelector } from '@/store/folders/folders-slice';
+import { fileGroupSelectedById } from '@/store/files/files-slice';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
@@ -35,11 +38,14 @@ export const Folders = () => {
   const [openNewFolderForm, handleOpenNewFolderForm, handleCloseNewFolderForm] = useModal();
   const fileUploaderRef: React.Ref<HTMLInputElement> = useRef(null);
   const [openMenu, anchorEl, handleOpenMenu, handleCloseMenu] = usePopupMenu();
-  const { addFolderGroup, folderGroupList } = useFoldersStore();
-  const { addFileGroup, addOneFileItem, fileGroupList } = useFilesStore();
+  const { addFolderGroup } = useFoldersActions();
+  const { addFileGroup, addOneFileItem } = useFilesActions();
   const { setSelectedCurrentFolder, selectedCurrentFolder } = useSelectedStore();
   const { addUploadItem, updateUploadItem } = useUploadsStore();
   const { storageItemViewMode, toggleStorageItemViewMode } = useUIStore();
+
+  const currentFolderGroup = useAppSelector((state) => folderGroupByIdSelector(state, selectedCurrentFolder?.id));
+  const currentFileGroup = useAppSelector((state) => fileGroupSelectedById(state, selectedCurrentFolder?.id));
 
   const menuItems = [
     {
@@ -70,9 +76,7 @@ export const Folders = () => {
       const currentFolder = await foldersService.get({ folderId: currentFolderId });
       setSelectedCurrentFolder({ selectedCurrentFolder: currentFolder });
 
-      const currentFolderGroup = folderGroupList.find((group) => group.parentId === currentFolder.id);
-
-      if (currentFolderGroup) return;
+      if (currentFolderGroup && currentFileGroup) return;
 
       const currentFolderItems = (await foldersService.listItems({ folderId: currentFolder.id })).entries;
       const folders = currentFolderItems.filter((item: any) => item.isFolder);
@@ -170,26 +174,18 @@ export const Folders = () => {
       <StorageItemsContainer>
         <StorageItemListContainer arrangeType={storageItemViewMode}>
           <>
-            {folderGroupList
-              ?.find((group) => group.parentId === selectedCurrentFolder?.id)
-              ?.folderItems?.map((folder: any) => (
-                <StorageItemContextMenu
-                  storageItem={folder}
-                  currentFolderId={selectedCurrentFolder?.id}
-                  key={folder.id}
-                >
-                  <FolderItem folder={folder} arrangeType={storageItemViewMode} />
-                </StorageItemContextMenu>
-              ))}
+            {currentFolderGroup?.folderItems?.map((folder: any) => (
+              <StorageItemContextMenu storageItem={folder} currentFolderId={selectedCurrentFolder?.id} key={folder.id}>
+                <FolderItem folder={folder} arrangeType={storageItemViewMode} />
+              </StorageItemContextMenu>
+            ))}
           </>
           <>
-            {fileGroupList
-              ?.find((group) => group.parentId === selectedCurrentFolder?.id)
-              ?.fileItems?.map((file) => (
-                <StorageItemContextMenu storageItem={file} currentFolderId={selectedCurrentFolder?.id} key={file.id}>
-                  <FileItem file={file} arrangeType={storageItemViewMode} />
-                </StorageItemContextMenu>
-              ))}
+            {currentFileGroup?.fileItems?.map((file) => (
+              <StorageItemContextMenu storageItem={file} currentFolderId={selectedCurrentFolder?.id} key={file.id}>
+                <FileItem file={file} arrangeType={storageItemViewMode} />
+              </StorageItemContextMenu>
+            ))}
           </>
         </StorageItemListContainer>
       </StorageItemsContainer>

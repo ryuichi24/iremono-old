@@ -80,7 +80,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
       INNER JOIN ancestors
               ON si.id = ancestors.parent_id
     )
-    SELECT * FROM ancestors WHERE id != ?
+    SELECT * FROM ancestors WHERE id != ? ORDER BY created_at ASC;
     `;
     const values = [id, id];
 

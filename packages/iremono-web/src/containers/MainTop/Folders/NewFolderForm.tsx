@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { foldersService } from '@/services/folders-service';
-import { useFoldersStore } from '@/store/folders/use-folders-store';
+import { useFoldersActions } from '@/store/folders/use-folders-actions';
 interface Props {
   currentFolderId: string;
   open: boolean;
@@ -16,7 +16,7 @@ interface Props {
 export const NewFolderForm = ({ currentFolderId, open, handleClose }: Props) => {
   const [folderName, setFolderName] = useState('Untitled folder');
 
-  const { addOneFolderItem } = useFoldersStore();
+  const { addOneFolderItem } = useFoldersActions();
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
