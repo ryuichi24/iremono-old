@@ -1,11 +1,10 @@
 import React from 'react';
-import { LockedCryptoFolders } from './LockedCryptoFolders';
+import { useAppSelector } from '@/store/redux-hooks';
+import { clientEncryptionKeySelector } from '@/store/auth/auth-slice';
 import { UnlockedCryptoFolders } from './UnlockedCryptoFolders';
+import { LockedCryptoFolders } from './LockedCryptoFolders';
 
-interface Props {
-  clientEncryptionKey?: string;
-}
-
-export const CryptoFolders = ({ clientEncryptionKey }: Props) => {
+export const CryptoFolders = () => {
+  const clientEncryptionKey = useAppSelector(clientEncryptionKeySelector);
   return <>{clientEncryptionKey ? <UnlockedCryptoFolders /> : <LockedCryptoFolders />}</>;
 };

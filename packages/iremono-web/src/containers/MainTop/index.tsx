@@ -10,13 +10,11 @@ import { Trash } from './Trash';
 import { Videos } from './Videos';
 import { useAppSelector } from '@/store/redux-hooks';
 import { showProgressSelector, uploadItemListSelector } from '@/store/uploads/uploads-slice';
-import { clientEncryptionKeySelector } from '@/store/auth/auth-slice';
 
 export const MainTop = () => {
   const { clearUploadItems } = useUploadsActions();
   const uploadItemList = useAppSelector(uploadItemListSelector);
   const showProgress = useAppSelector(showProgressSelector);
-  const clientEncryptionKey = useAppSelector(clientEncryptionKeySelector);
 
   return (
     <>
@@ -25,7 +23,7 @@ export const MainTop = () => {
           <Route path="/folders" element={<Folders />} />
           <Route path="/folders/:id" element={<Folders />} />
 
-          <Route path="/crypto-folders" element={<CryptoFolders clientEncryptionKey={clientEncryptionKey} />}></Route>
+          <Route path="/crypto-folders" element={<CryptoFolders />}></Route>
           <Route path="/books" element={<Books />} />
           <Route path="/videos" element={<Videos />} />
           <Route path="/trash" element={<Trash />} />
