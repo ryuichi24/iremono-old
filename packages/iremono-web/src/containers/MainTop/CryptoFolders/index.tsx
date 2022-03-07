@@ -1,5 +1,11 @@
 import React from 'react';
+import { LockedCryptoFolders } from './LockedCryptoFolders';
+import { UnlockedCryptoFolders } from './UnlockedCryptoFolders';
 
-export const CryptoFolders = () => {
-  return <div></div>;
+interface Props {
+  clientEncryptionKey?: string;
+}
+
+export const CryptoFolders = ({ clientEncryptionKey }: Props) => {
+  return <>{clientEncryptionKey ? <UnlockedCryptoFolders /> : <LockedCryptoFolders />}</>;
 };
