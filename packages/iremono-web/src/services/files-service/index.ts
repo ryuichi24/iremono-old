@@ -10,6 +10,7 @@ interface UploadFileRequest {
   initUpload: (uploadItemId: string, fileName: string, progress: number) => void;
   onUpload: (uploadItemId: string, progress: number, uploadedSize: number) => void;
   afterUpload: (uploadItemId: string, progress: number) => void;
+  encryptionKey?: string;
 }
 
 const upload = async (request: UploadFileRequest) => {
@@ -29,6 +30,7 @@ const upload = async (request: UploadFileRequest) => {
   formData.append('file', request.fileToUpload, request.fileToUpload.name);
   formData.append('fileSize', request.fileToUpload.size.toString());
   formData.append('parentId', request.parentId);
+  if (request.encryptionKey) formData.append('encryptionKey', request.parentId);
 
   request.initUpload(uploadId, request.fileToUpload.name, 0);
 
@@ -77,10 +79,13 @@ const restore = async (request: RestoreFileRequest) => {
 interface GetFileTokenRequest {
   fileId: string;
   tokenType: 'download' | 'stream';
+  encryptionKey?: string;
 }
 
 const getFileToken = async (request: GetFileTokenRequest) => {
-  const res = await apiClient.post(`${BASE_URL}/${request.fileId}/token?type=${request.tokenType}`);
+  const res = await apiClient.post(`${BASE_URL}/${request.fileId}/token?type=${request.tokenType}`, {
+    encryptionKey: request.encryptionKey,
+  });
   const { fileToken } = res.data;
   return fileToken.value;
 };
@@ -118,10 +123,14 @@ const downloadImageFile = async (request: DownloadImageFileRequest) => {
 
 interface DownloadFileThumbnailRequest {
   fileId: string;
+  encryptionKey?: string;
 }
 
 const downloadThumbnail = async (request: DownloadFileThumbnailRequest) => {
-  const res = await apiClient.get(`${BASE_URL}/${request.fileId}/thumbnail`, { responseType: 'arraybuffer' });
+  const res = await apiClient.get(`${BASE_URL}/${request.fileId}/thumbnail`, {
+    responseType: 'arraybuffer',
+    headers: { encryptionKey: request.encryptionKey! },
+  });
   const result = res.data;
   const imgFileBlob = new Blob([result], { type: res.headers['content-type'] });
   const imgURL = URL.createObjectURL(imgFileBlob);

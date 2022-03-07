@@ -67,10 +67,11 @@ const listAllAncestors = async (request: ListAllAncestorsRequest) => {
 
 interface GetFolderRequest {
   folderId: string;
+  folderType: 'crypto' | 'normal';
 }
 
 const get = async (request: GetFolderRequest) => {
-  const res = await apiClient.get(`${BASE_URL}/${request.folderId}`);
+  const res = await apiClient.get(`${BASE_URL}/${request.folderId}?type=${request.folderType || 'normal'}`);
   const result = res.data;
   return result;
 };
