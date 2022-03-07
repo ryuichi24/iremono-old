@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { filesService } from '@/services/files-service';
 import { Typography } from '@mui/material';
-import { useTrashStore } from '@/store/trash/use-trash-store';
+import { useTrashActions } from '@/store/trash/use-trash-actions';
 import { foldersService } from '@/services/folders-service';
 import { useFoldersActions } from '@/store/folders/use-folders-actions';
 import { useFilesActions } from '@/store/files/use-files-actions';
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const RestoreTrashItemForm = ({ trashItem, open, handleClose }: Props) => {
-  const { removeTrashItem } = useTrashStore();
+  const { removeTrashItem } = useTrashActions();
   const { addOneFolderItem } = useFoldersActions();
   const { addOneFileItem } = useFilesActions();
 

@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '..';
 
 interface TrashState {
   folderTrashItemList: any[];
@@ -33,6 +34,17 @@ export const trashSlice = createSlice({
     },
   },
 });
+
+// selectors
+export const folderTrashItemListSelector = createSelector(
+  (state: RootState) => state.trashState,
+  (trashState) => trashState.folderTrashItemList,
+);
+
+export const fileTrashItemListSelector = createSelector(
+  (state: RootState) => state.trashState,
+  (trashState) => trashState.fileTrashItemList,
+);
 
 export const trashActions = trashSlice.actions;
 export default trashSlice.reducer;

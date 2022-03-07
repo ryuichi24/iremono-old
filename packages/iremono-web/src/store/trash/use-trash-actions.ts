@@ -1,19 +1,15 @@
 import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '..';
 import { trashActions } from './trash-slice';
 
-interface TrashStore {
-  folderTrashItemList: RootState['trashState']['folderTrashItemList'];
-  fileTrashItemList: RootState['trashState']['fileTrashItemList'];
+interface TrashActions {
   setTrashItems: (arg: { trashItems: any[] }) => void;
   removeTrashItem: (arg: { trashItem: any }) => void;
 }
 
-export const useTrashStore = (): TrashStore => {
+export const useTrashActions = (): TrashActions => {
   const dispatch: AppDispatch = useDispatch();
-  const folderTrashItemList = useSelector((state: RootState) => state.trashState.folderTrashItemList);
-  const fileTrashItemList = useSelector((state: RootState) => state.trashState.fileTrashItemList);
 
   const setTrashItems = useCallback(
     (args: { trashItems: any[] }) => {
@@ -30,8 +26,6 @@ export const useTrashStore = (): TrashStore => {
   );
 
   return {
-    folderTrashItemList,
-    fileTrashItemList,
     setTrashItems,
     removeTrashItem,
   } as const;

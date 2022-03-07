@@ -5,7 +5,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
-import { useTrashStore } from '@/store/trash/use-trash-store';
+import { useTrashActions } from '@/store/trash/use-trash-actions';
 import { trashService } from '@/services/trash-service';
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const DeleteTrashItemForm = ({ trashItem, open, handleClose }: Props) => {
-  const { removeTrashItem } = useTrashStore();
+  const { removeTrashItem } = useTrashActions();
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();

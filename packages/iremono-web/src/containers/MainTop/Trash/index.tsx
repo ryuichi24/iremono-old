@@ -5,7 +5,7 @@ import GridViewIcon from '@mui/icons-material/GridView';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import { Header } from '@/components/Header';
 import { trashService } from '@/services/trash-service';
-import { useTrashStore } from '@/store/trash/use-trash-store';
+import { useTrashActions } from '@/store/trash/use-trash-actions';
 import { TrashItemContextMenu } from './TrashItemContextMenu';
 import { FileTrashItem } from './FileTrashItem';
 import { FolderTrashItem } from './FolderTrashItem';
@@ -13,11 +13,15 @@ import { StorageItemListContainer } from '@/components/StorageItemListContainer'
 import { useUIActions } from '@/store/ui/use-ui-actions';
 import { useAppSelector } from '@/store/redux-hooks';
 import { storageItemViewModeSelector } from '@/store/ui/ui-slice';
+import { fileTrashItemListSelector, folderTrashItemListSelector } from '@/store/trash/trash-slice';
 
 export const Trash = () => {
-  const { setTrashItems, folderTrashItemList, fileTrashItemList } = useTrashStore();
+  const { setTrashItems } = useTrashActions();
   const { toggleStorageItemViewMode } = useUIActions();
+
   const storageItemViewMode = useAppSelector(storageItemViewModeSelector);
+  const folderTrashItemList = useAppSelector(folderTrashItemListSelector);
+  const fileTrashItemList = useAppSelector(fileTrashItemListSelector);
 
   useEffect(() => {
     trashService
