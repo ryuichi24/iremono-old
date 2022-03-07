@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { filesService } from '@/services/files-service';
-import { useSelectedActions } from '@/store/selected/use-selected-actions';
+// presentational components
 import { ListItemCard } from '@/components/ListItemCard';
 import { GridItemCard } from '@/components/GridItemCard';
+// action hooks
+import { useSelectedActions } from '@/store/selected/use-selected-actions';
+// services
+import { filesService } from '@/services/files-service';
 
 interface Props {
   file: any;

@@ -1,14 +1,17 @@
 import React from 'react';
+// mui components
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import { foldersService } from '@/services/folders-service';
-import { useFoldersActions } from '@/store/folders/use-folders-actions';
-import { filesService } from '@/services/files-service';
-import { useFilesActions } from '@/store/files/use-files-actions';
 import { Typography } from '@mui/material';
+// action hooks
+import { useFoldersActions } from '@/store/folders/use-folders-actions';
+import { useFilesActions } from '@/store/files/use-files-actions';
+// services
+import { foldersService } from '@/services/folders-service';
+import { filesService } from '@/services/files-service';
 
 interface Props {
   storageItem: any;

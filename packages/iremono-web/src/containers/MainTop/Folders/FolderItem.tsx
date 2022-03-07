@@ -1,8 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelectedActions } from '@/store/selected/use-selected-actions';
+// presentational components
 import { ListItemCard } from '@/components/ListItemCard';
 import { GridItemCard } from '@/components/GridItemCard';
+// action hooks
+import { useSelectedActions } from '@/store/selected/use-selected-actions';
 
 interface Props {
   folder: any;

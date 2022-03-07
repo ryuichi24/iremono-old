@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
+// mui components
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import { foldersService } from '@/services/folders-service';
+// action hooks
 import { useFoldersActions } from '@/store/folders/use-folders-actions';
+// services
+import { foldersService } from '@/services/folders-service';
+
 interface Props {
   currentFolderId: string;
   open: boolean;

@@ -1,11 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+// mui components
 import Typography from '@mui/material/Typography';
+// mui icons
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import FolderIcon from '@mui/icons-material/Folder';
-import { usePopupMenu } from '@/hooks/use-popup-menu';
+// // presentational components
 import { PopupMenu } from '@/components/PopupMenu';
+// hooks
+import { usePopupMenu } from '@/hooks/use-popup-menu';
+// selectors
 import { useAppSelector } from '@/store/redux-hooks';
 import { ancestorsByFolderIdSelector } from '@/store/folders/folders-slice';
 
