@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '..';
 
 interface AuthState {
   user: { userId: string | null; email: string | null };
@@ -36,6 +37,22 @@ export const authSlice = createSlice({
     },
   },
 });
+
+// selectors
+export const userSelector = createSelector(
+  (state: RootState) => state.authState,
+  (authState) => authState.user,
+);
+
+export const isAuthenticatedSelector = createSelector(
+  (state: RootState) => state.authState,
+  (authState) => authState.isAuthenticated,
+);
+
+export const clientEncryptionKeySelector = createSelector(
+  (state: RootState) => state.authState,
+  (authState) => authState.clientEncryptionKey,
+);
 
 export const authActions = authSlice.actions;
 export default authSlice.reducer;

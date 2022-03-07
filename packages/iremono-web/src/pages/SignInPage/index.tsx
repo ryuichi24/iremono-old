@@ -11,13 +11,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { authService } from '@/services/auth-service';
-import { useAuthStore } from '@/store/auth/use-auth-store';
+import { useAuthActions } from '@/store/auth/use-auth-actions';
 
 export const SignInPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { setAuth } = useAuthStore();
+  const { setAuth } = useAuthActions();
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
