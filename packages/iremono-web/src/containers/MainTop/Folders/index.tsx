@@ -22,7 +22,7 @@ import { FileItem } from './FileItem';
 import { FolderItem } from './FolderItem';
 import { FolderPathNav } from './FolderPathNav';
 import { useSelectedStore } from '@/store/selected/use-selected-store';
-import { useUploadsStore } from '@/store/uploads/use-uploads-store';
+import { useUploadsActions } from '@/store/uploads/use-uploads-actions';
 import { StorageItemListContainer } from '@/components/StorageItemListContainer';
 import GridViewIcon from '@mui/icons-material/GridView';
 import ViewListIcon from '@mui/icons-material/ViewList';
@@ -42,7 +42,7 @@ export const Folders = () => {
   const { addFolderGroup } = useFoldersActions();
   const { addFileGroup, addOneFileItem } = useFilesActions();
   const { setSelectedCurrentFolder, selectedCurrentFolder } = useSelectedStore();
-  const { addUploadItem, updateUploadItem } = useUploadsStore();
+  const { addUploadItem, updateUploadItem } = useUploadsActions();
   const { toggleStorageItemViewMode } = useUIActions();
   const storageItemViewMode = useAppSelector(storageItemViewModeSelector);
 

@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '..';
 
 interface UploadItem {
   id: string;
@@ -42,6 +43,17 @@ export const uploadsSlice = createSlice({
     },
   },
 });
+
+// selectors
+export const uploadItemListSelector = createSelector(
+  (state: RootState) => state.uploadsState,
+  (uploadsState) => uploadsState.uploadItemList,
+);
+
+export const showProgressSelector = createSelector(
+  (state: RootState) => state.uploadsState,
+  (uploadsState) => uploadsState.showProgress,
+);
 
 export const uploadsActions = uploadsSlice.actions;
 export default uploadsSlice.reducer;
