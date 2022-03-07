@@ -23,7 +23,10 @@ export const FileItem = ({ file, arrangeType }: Props) => {
         .then((result) => {
           setThumbnailURL(result);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          setThumbnailURL('');
+        });
     }
   }, []);
   return (
