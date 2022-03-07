@@ -10,11 +10,14 @@ import { TrashItemContextMenu } from './TrashItemContextMenu';
 import { FileTrashItem } from './FileTrashItem';
 import { FolderTrashItem } from './FolderTrashItem';
 import { StorageItemListContainer } from '@/components/StorageItemListContainer';
-import { useUIStore } from '@/store/ui/use-ui-store';
+import { useUIActions } from '@/store/ui/use-ui-actions';
+import { useAppSelector } from '@/store/redux-hooks';
+import { storageItemViewModeSelector } from '@/store/ui/ui-slice';
 
 export const Trash = () => {
   const { setTrashItems, folderTrashItemList, fileTrashItemList } = useTrashStore();
-  const { storageItemViewMode, toggleStorageItemViewMode } = useUIStore();
+  const { toggleStorageItemViewMode } = useUIActions();
+  const storageItemViewMode = useAppSelector(storageItemViewModeSelector);
 
   useEffect(() => {
     trashService

@@ -26,10 +26,11 @@ import { useUploadsStore } from '@/store/uploads/use-uploads-store';
 import { StorageItemListContainer } from '@/components/StorageItemListContainer';
 import GridViewIcon from '@mui/icons-material/GridView';
 import ViewListIcon from '@mui/icons-material/ViewList';
-import { useUIStore } from '@/store/ui/use-ui-store';
+import { useUIActions } from '@/store/ui/use-ui-actions';
 import { useAppSelector } from '@/store/redux-hooks';
 import { folderGroupByIdSelector } from '@/store/folders/folders-slice';
 import { fileGroupSelectedById } from '@/store/files/files-slice';
+import { storageItemViewModeSelector } from '@/store/ui/ui-slice';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
@@ -42,7 +43,8 @@ export const Folders = () => {
   const { addFileGroup, addOneFileItem } = useFilesActions();
   const { setSelectedCurrentFolder, selectedCurrentFolder } = useSelectedStore();
   const { addUploadItem, updateUploadItem } = useUploadsStore();
-  const { storageItemViewMode, toggleStorageItemViewMode } = useUIStore();
+  const { toggleStorageItemViewMode } = useUIActions();
+  const storageItemViewMode = useAppSelector(storageItemViewModeSelector);
 
   const currentFolderGroup = useAppSelector((state) => folderGroupByIdSelector(state, selectedCurrentFolder?.id));
   const currentFileGroup = useAppSelector((state) => fileGroupSelectedById(state, selectedCurrentFolder?.id));
@@ -174,7 +176,7 @@ export const Folders = () => {
       <StorageItemsContainer>
         <StorageItemListContainer arrangeType={storageItemViewMode}>
           <>
-            {currentFolderGroup?.folderItems?.map((folder: any) => (
+            {currentFolderGroup?.folderItems?.map((folder) => (
               <StorageItemContextMenu storageItem={folder} currentFolderId={selectedCurrentFolder?.id} key={folder.id}>
                 <FolderItem folder={folder} arrangeType={storageItemViewMode} />
               </StorageItemContextMenu>

@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../index';
 
 interface UIState {
   storageItemViewMode: 'grid' | 'list';
@@ -17,6 +18,12 @@ export const uiSlice = createSlice({
     },
   },
 });
+
+// selectors
+export const storageItemViewModeSelector = createSelector(
+  (state: RootState) => state.uiState,
+  (uiState) => uiState.storageItemViewMode,
+);
 
 export const uiActions = uiSlice.actions;
 export default uiSlice.reducer;
