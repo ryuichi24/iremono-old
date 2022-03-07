@@ -21,7 +21,7 @@ import { StorageItemContextMenu } from './StorageItemContextMenu';
 import { FileItem } from './FileItem';
 import { FolderItem } from './FolderItem';
 import { FolderPathNav } from './FolderPathNav';
-import { useSelectedStore } from '@/store/selected/use-selected-store';
+import { useSelectedActions } from '@/store/selected/use-selected-actions';
 import { useUploadsActions } from '@/store/uploads/use-uploads-actions';
 import { StorageItemListContainer } from '@/components/StorageItemListContainer';
 import GridViewIcon from '@mui/icons-material/GridView';
@@ -31,6 +31,7 @@ import { useAppSelector } from '@/store/redux-hooks';
 import { folderGroupByIdSelector } from '@/store/folders/folders-slice';
 import { fileGroupSelectedById } from '@/store/files/files-slice';
 import { storageItemViewModeSelector } from '@/store/ui/ui-slice';
+import { selectedCurrentFolderSelector } from '@/store/selected/selected-slice';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
@@ -39,13 +40,15 @@ export const Folders = () => {
   const [openNewFolderForm, handleOpenNewFolderForm, handleCloseNewFolderForm] = useModal();
   const fileUploaderRef: React.Ref<HTMLInputElement> = useRef(null);
   const [openMenu, anchorEl, handleOpenMenu, handleCloseMenu] = usePopupMenu();
+
   const { addFolderGroup } = useFoldersActions();
   const { addFileGroup, addOneFileItem } = useFilesActions();
-  const { setSelectedCurrentFolder, selectedCurrentFolder } = useSelectedStore();
+  const { setSelectedCurrentFolder } = useSelectedActions();
   const { addUploadItem, updateUploadItem } = useUploadsActions();
   const { toggleStorageItemViewMode } = useUIActions();
-  const storageItemViewMode = useAppSelector(storageItemViewModeSelector);
 
+  const storageItemViewMode = useAppSelector(storageItemViewModeSelector);
+  const selectedCurrentFolder = useAppSelector(selectedCurrentFolderSelector);
   const currentFolderGroup = useAppSelector((state) => folderGroupByIdSelector(state, selectedCurrentFolder?.id));
   const currentFileGroup = useAppSelector((state) => fileGroupSelectedById(state, selectedCurrentFolder?.id));
 

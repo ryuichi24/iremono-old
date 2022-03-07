@@ -8,7 +8,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import { Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelectedStore } from '@/store/selected/use-selected-store';
+import { useSelectedActions } from '@/store/selected/use-selected-actions';
 import { useFilesActions } from '@/store/files/use-files-actions';
 import { useAppSelector } from '@/store/redux-hooks';
 import { folderGroupByIdSelector } from '@/store/folders/folders-slice';
@@ -20,7 +20,7 @@ interface Props {
 export const FolderTreeItem = ({ item }: Props) => {
   const { addFolderGroup } = useFoldersActions();
   const { addFileGroup } = useFilesActions();
-  const { setSelectedCurrentFolder } = useSelectedStore();
+  const { setSelectedCurrentFolder } = useSelectedActions();
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const params = useParams<{ id: string }>();

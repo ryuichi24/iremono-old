@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { filesService } from '@/services/files-service';
-import { useSelectedStore } from '@/store/selected/use-selected-store';
+import { useSelectedActions } from '@/store/selected/use-selected-actions';
 import { ListItemCard } from '@/components/ListItemCard';
 import { GridItemCard } from '@/components/GridItemCard';
 
@@ -11,7 +11,7 @@ interface Props {
 
 export const FileItem = ({ file, arrangeType }: Props) => {
   const [thumbnailURL, setThumbnailURL] = useState('');
-  const { setSelectedItem, setSelectedViewerItem } = useSelectedStore();
+  const { setSelectedItem, setSelectedViewerItem } = useSelectedActions();
 
   useEffect(() => {
     if (file.hasThumbnail) {

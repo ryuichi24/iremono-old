@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '..';
 
 interface SelectedState {
   selectedItem: any | null;
@@ -33,6 +34,22 @@ export const selectedSlice = createSlice({
     },
   },
 });
+
+// selectors
+export const selectedItemSelector = createSelector(
+  (state: RootState) => state.selectedState,
+  (selectedState) => selectedState.selectedItem,
+);
+
+export const selectedViewerItemSelector = createSelector(
+  (state: RootState) => state.selectedState,
+  (selectedState) => selectedState.selectedViewerItem,
+);
+
+export const selectedCurrentFolderSelector = createSelector(
+  (state: RootState) => state.selectedState,
+  (selectedState) => selectedState.selectedCurrentFolder,
+);
 
 export const selectedActions = selectedSlice.actions;
 export default selectedSlice.reducer;
