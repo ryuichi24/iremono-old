@@ -10,7 +10,7 @@ const initialState: TrashState = {
   fileTrashItemList: [],
 };
 
-const trashSlice = createSlice({
+export const trashSlice = createSlice({
   name: 'trashSlice',
   initialState,
   reducers: {

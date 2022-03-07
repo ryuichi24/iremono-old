@@ -9,7 +9,7 @@ const initialState: FilesState = {
   fileGroupList: [],
 };
 
-const filesSlice = createSlice({
+export const filesSlice = createSlice({
   name: 'filesSlice',
   initialState,
   reducers: {

@@ -12,7 +12,7 @@ const initialState: SelectedState = {
   selectedCurrentFolder: null,
 };
 
-const selectedSlice = createSlice({
+export const selectedSlice = createSlice({
   name: 'selectedSlice',
   initialState,
   reducers: {

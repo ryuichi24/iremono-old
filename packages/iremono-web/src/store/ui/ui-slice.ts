@@ -8,7 +8,7 @@ const initialState: UIState = {
   storageItemViewMode: 'grid',
 };
 
-const uiSlice = createSlice({
+export const uiSlice = createSlice({
   name: 'uiSlice',
   initialState,
   reducers: {

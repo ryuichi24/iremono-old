@@ -18,7 +18,7 @@ const initialState: UploadsState = {
   showProgress: false,
 };
 
-const uploadsSlice = createSlice({
+export const uploadsSlice = createSlice({
   name: 'uploadsSlice',
   initialState,
   reducers: {

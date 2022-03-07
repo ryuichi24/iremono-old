@@ -16,7 +16,7 @@ const initialState: FoldersState = {
   folderGroupList: [],
 };
 
-const foldersSlice = createSlice({
+export const foldersSlice = createSlice({
   name: 'foldersSlice',
   initialState,
   reducers: {

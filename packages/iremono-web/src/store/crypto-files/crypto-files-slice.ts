@@ -8,7 +8,7 @@ const initialState: CryptoFilesState = {
   fileGroupList: [],
 };
 
-const cryptoFilesSlice = createSlice({
+export const cryptoFilesSlice = createSlice({
   name: 'cryptoFilesSlice',
   initialState,
   reducers: {

@@ -15,7 +15,7 @@ const initialState: CryptoFoldersState = {
   folderGroupList: [],
 };
 
-const cryptoFoldersSlice = createSlice({
+export const cryptoFoldersSlice = createSlice({
   name: 'cryptoFoldersSlice',
   initialState,
   reducers: {
