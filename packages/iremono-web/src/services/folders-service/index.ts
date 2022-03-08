@@ -21,6 +21,7 @@ interface CreateRootFolderRequest {
 const createRootFolder = async (request: CreateRootFolderRequest) => {
   const res = await apiClient.post(`${BASE_URL}/root?type=${request.folderType}`, {
     encryptionKey: request.encryptionKey,
+    name: 'Crypto folder',
   });
   const result = res.data;
   return result;
