@@ -25,7 +25,7 @@ export class CreateRootFolderUseCase implements UseCase<CreateRootFolderRequestD
     if (alreadyExists) throw new InvalidRequestError('root folder for the user already exists.');
 
     const folder = new StorageItem({
-      name: dto.name || 'all_files',
+      name: dto.name || 'all files',
       isFolder: true,
       ownerId: dto.ownerId,
       parentId: null,
