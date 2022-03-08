@@ -23,7 +23,9 @@ export const MainTop = () => {
           <Route path="/folders" element={<Folders />} />
           <Route path="/folders/:id" element={<Folders />} />
 
-          <Route path="/crypto-folders" element={<CryptoFolders />}></Route>
+          <Route path="/crypto-folders" element={<CryptoFolders />} />
+          <Route path="/crypto-folders/:id" element={<CryptoFolders />} />
+
           <Route path="/books" element={<Books />} />
           <Route path="/videos" element={<Videos />} />
           <Route path="/trash" element={<Trash />} />

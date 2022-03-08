@@ -31,7 +31,7 @@ export const FolderPathNav = ({ currentFolder }: Props) => {
           <FolderPathItem key={ancestor.id}>
             <FolderPathName>
               <Typography
-                onClick={() => navigate(`/folders/${ancestor.id}`)}
+                onClick={() => navigate(`/crypto-folders/${ancestor.id}`)}
                 sx={{ color: 'text.secondary', cursor: 'pointer' }}
                 variant="h5"
                 component="h2"
@@ -51,7 +51,7 @@ export const FolderPathNav = ({ currentFolder }: Props) => {
         <FolderPathItem>
           <FolderPathName>
             <Typography
-              onClick={() => navigate(`/folders/${ancestorsByFolderId[0]?.id}`)}
+              onClick={() => navigate(`/crypto-folders/${ancestorsByFolderId[0]?.id}`)}
               sx={{ color: 'text.secondary', cursor: 'pointer' }}
               variant="h5"
               component="h2"
@@ -75,7 +75,7 @@ export const FolderPathNav = ({ currentFolder }: Props) => {
                 icon: <FolderIcon fontSize="small" />,
                 action: () => {
                   handleCloseMenu();
-                  navigate(`/folders/${ancestor.id}`);
+                  navigate(`/crypto-folders/${ancestor.id}`);
                 },
               }))}
             anchorEl={anchorEl}
@@ -91,7 +91,7 @@ export const FolderPathNav = ({ currentFolder }: Props) => {
 
           <FolderPathName>
             <Typography
-              onClick={() => navigate(`/folders/${ancestorsByFolderId[ancestorsByFolderId?.length - 1]?.id}`)}
+              onClick={() => navigate(`/crypto-folders/${ancestorsByFolderId[ancestorsByFolderId?.length - 1]?.id}`)}
               sx={{ color: 'text.secondary', cursor: 'pointer' }}
               variant="h5"
               component="h2"

@@ -23,7 +23,7 @@ export const FolderItem = ({ folder, arrangeType }: Props) => {
           handleClick={() => setSelectedItem({ selectedItem: folder })}
           handleDoubleClick={() => {
             setSelectedCurrentFolder(folder);
-            navigate(`/folders/${folder.id}`);
+            navigate(`/crypto-folders/${folder.id}`);
           }}
         />
       ) : (
@@ -32,7 +32,7 @@ export const FolderItem = ({ folder, arrangeType }: Props) => {
           handleClick={() => setSelectedItem({ selectedItem: folder })}
           handleDoubleClick={() => {
             setSelectedCurrentFolder(folder);
-            navigate(`/folders/${folder.id}`);
+            navigate(`/crypto-folders/${folder.id}`);
           }}
         />
       )}

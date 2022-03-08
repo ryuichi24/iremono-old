@@ -6,6 +6,7 @@ interface FolderGroup {
   folderItems: any[];
   ancestors: any[];
   isRootFolder: boolean;
+  isCryptoFolder: boolean;
 }
 
 interface FoldersState {
@@ -27,6 +28,7 @@ export const foldersSlice = createSlice({
           parentId: payload.folder.id,
           folderItems: payload.folderItems,
           isRootFolder: payload.folder.isRootFolder,
+          isCryptoFolder: payload.folder.isCryptoFolderItem,
           ancestors: payload.ancestors,
         };
         state.folderGroupList.push(folderGroup);
@@ -77,6 +79,10 @@ export const folderGroupByIdSelector = createSelector(
 
 export const rootFolderGroupSelector = createSelector([folderGroupListSelector], (groupList) =>
   groupList.find((group) => group.isRootFolder),
+);
+
+export const rootCryptoFolderGroupSelector = createSelector([folderGroupListSelector], (groupList) =>
+  groupList.find((group) => group.isRootFolder && group.isCryptoFolder),
 );
 
 export const ancestorsByFolderIdSelector = createSelector(
