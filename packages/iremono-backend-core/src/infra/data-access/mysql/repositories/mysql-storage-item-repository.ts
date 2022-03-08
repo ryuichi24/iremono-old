@@ -124,7 +124,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
                     last_viewed_at, initialization_vector, is_root_folder, is_crypto_folder_item, client_encryption_key_hash, has_thumbnail,
                     thumbnail_path, thumbnail_size, thumbnail_initialization_vector, created_at, updated_at)
                     VALUES 
-                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
     const values = [
       entity.id,
       entity.name,

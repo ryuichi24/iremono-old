@@ -35,7 +35,7 @@ export class SignUpUseCase implements UseCase<SignUpRequestDTO, SignUpResponseDT
     const savedUser = await this._userRepository.save(user);
 
     // TODO: decouple root folder initialization with event emitter
-    await this._createRootFolderUseCase.handle({ name: 'all_files', ownerId: savedUser.id, folderType: 'normal' });
+    await this._createRootFolderUseCase.handle({ name: 'all files', ownerId: savedUser.id, folderType: 'normal' });
 
     const accessToken = this._tokenService.generateAccessToken({ id: savedUser.id });
     const refreshToken = this._tokenService.generateRefreshToken(savedUser.id);
