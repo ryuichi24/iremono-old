@@ -67,7 +67,7 @@ const listAllAncestors = async (request: ListAllAncestorsRequest) => {
 
 interface GetFolderRequest {
   folderId: string;
-  folderType: 'crypto' | 'normal';
+  folderType?: 'crypto' | 'normal';
 }
 
 const get = async (request: GetFolderRequest) => {

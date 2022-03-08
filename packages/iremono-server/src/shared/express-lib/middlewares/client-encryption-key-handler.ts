@@ -20,6 +20,8 @@ export const clientEncryptionKeyHandler =
     try {
       const clientEncryptionKey = req.uploadedFile.formData.encryptionKey;
 
+      logger.debug(req.uploadedFile.formData);
+
       if (!clientEncryptionKey) return next();
 
       req.uploadedFile.isCryptoFolderItem = true;

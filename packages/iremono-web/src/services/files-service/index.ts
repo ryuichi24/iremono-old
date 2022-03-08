@@ -30,7 +30,7 @@ const upload = async (request: UploadFileRequest) => {
   formData.append('file', request.fileToUpload, request.fileToUpload.name);
   formData.append('fileSize', request.fileToUpload.size.toString());
   formData.append('parentId', request.parentId);
-  if (request.encryptionKey) formData.append('encryptionKey', request.parentId);
+  if (request.encryptionKey) formData.append('encryptionKey', request.encryptionKey);
 
   request.initUpload(uploadId, request.fileToUpload.name, 0);
 
@@ -129,7 +129,7 @@ interface DownloadFileThumbnailRequest {
 const downloadThumbnail = async (request: DownloadFileThumbnailRequest) => {
   const res = await apiClient.get(`${BASE_URL}/${request.fileId}/thumbnail`, {
     responseType: 'arraybuffer',
-    headers: { encryptionKey: request.encryptionKey! },
+    headers: { 'encryption-key': request.encryptionKey || '' },
   });
   const result = res.data;
   const imgFileBlob = new Blob([result], { type: res.headers['content-type'] });

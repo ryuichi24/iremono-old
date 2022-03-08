@@ -20,6 +20,7 @@ export interface HttpResponse {
   statusCode: number;
   body: any;
   readableStream: Readable | null;
+  streamCaughtErr: Error | null;
   headers: Headers;
   hasHeaders: boolean;
   cookies: Cookie[];

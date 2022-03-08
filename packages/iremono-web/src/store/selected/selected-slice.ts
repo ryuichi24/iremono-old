@@ -5,12 +5,14 @@ interface SelectedState {
   selectedItem: any | null;
   selectedViewerItem: any | null;
   selectedCurrentFolder: any | null;
+  selectedCurrentCryptoFolder: any | null;
 }
 
 const initialState: SelectedState = {
   selectedItem: null,
   selectedViewerItem: null,
   selectedCurrentFolder: null,
+  selectedCurrentCryptoFolder: null,
 };
 
 export const selectedSlice = createSlice({
@@ -32,6 +34,12 @@ export const selectedSlice = createSlice({
     ) => {
       state.selectedCurrentFolder = payload.selectedCurrentFolder;
     },
+    setSelectedCurrentCryptoFolder: (
+      state,
+      { payload }: PayloadAction<{ selectedCurrentCryptoFolder: SelectedState['selectedCurrentCryptoFolder'] }>,
+    ) => {
+      state.selectedCurrentCryptoFolder = payload.selectedCurrentCryptoFolder;
+    },
   },
 });
 
@@ -49,6 +57,11 @@ export const selectedViewerItemSelector = createSelector(
 export const selectedCurrentFolderSelector = createSelector(
   (state: RootState) => state.selectedState,
   (selectedState) => selectedState.selectedCurrentFolder,
+);
+
+export const selectedCurrentCryptoFolderSelector = createSelector(
+  (state: RootState) => state.selectedState,
+  (selectedState) => selectedState.selectedCurrentCryptoFolder,
 );
 
 export const selectedActions = selectedSlice.actions;

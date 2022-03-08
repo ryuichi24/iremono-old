@@ -5,6 +5,6 @@ import { UnlockedCryptoFolders } from './UnlockedCryptoFolders';
 import { LockedCryptoFolders } from './LockedCryptoFolders';
 
 export const CryptoFolders = () => {
-  const clientEncryptionKey = useAppSelector(clientEncryptionKeySelector);
-  return <>{clientEncryptionKey ? <UnlockedCryptoFolders /> : <LockedCryptoFolders />}</>;
+  const encryptionKey = useAppSelector(clientEncryptionKeySelector);
+  return <>{encryptionKey ? <UnlockedCryptoFolders /> : <LockedCryptoFolders />}</>;
 };
