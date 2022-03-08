@@ -101,7 +101,7 @@ export const UnlockedCryptoFolders = () => {
 
       addFolderGroup({ folderItems: folders, folder: currentFolder, ancestors });
       addFileGroup({ fileItems: files, parentId: currentFolder.id });
-    })();
+    })().catch((err) => console.log(err));
   }, [currentFolderId]);
 
   const handleUploadChange: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
