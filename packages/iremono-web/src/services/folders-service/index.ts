@@ -26,6 +26,18 @@ const createRootFolder = async (request: CreateRootFolderRequest) => {
   return result;
 };
 
+interface VerifyClientEncryptionKeyRequest {
+  encryptionKey?: string;
+}
+
+const verifyClientEncryptionKey = async (request: VerifyClientEncryptionKeyRequest) => {
+  const res = await apiClient.post(`${BASE_URL}/root/verify-key`, {
+    encryptionKey: request.encryptionKey,
+  });
+  const result = res.data;
+  return result;
+};
+
 interface UpdateFolderRequest {
   folderId: string;
   folderProperties: {
@@ -98,4 +110,5 @@ export const foldersService = Object.freeze({
   listItems,
   listAllAncestors,
   get,
+  verifyClientEncryptionKey,
 });

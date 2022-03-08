@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { useAuthActions } from '@/store/auth/use-auth-actions';
+import { foldersService } from '@/services/folders-service';
 
 interface Props {
   open: boolean;
@@ -23,7 +24,13 @@ export const EnterEncryptionKeyForm = ({ open, handleClose }: Props) => {
       return;
     }
 
-    setClientEncryptionKey({ clientEncryptionKey: encryptionKey });
+    foldersService
+      .verifyClientEncryptionKey({ encryptionKey })
+      .then((result) => setClientEncryptionKey({ clientEncryptionKey: encryptionKey }))
+      .catch((err) => {
+        alert('cannot decrypt files with the provided key.');
+        setEncryptionKey('');
+      });
   };
   return (
     <Dialog open={open} onClose={handleClose}>
