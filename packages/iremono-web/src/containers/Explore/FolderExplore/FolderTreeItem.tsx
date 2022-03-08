@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useFoldersStore } from '@/store/folders/use-folders-store';
+import { useFoldersActions } from '@/store/folders/use-folders-actions';
 import { foldersService } from '@/services/folders-service';
 import styled from 'styled-components';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -8,25 +8,27 @@ import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import { Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelectedStore } from '@/store/selected/use-selected-store';
-import { useFilesStore } from '@/store/files/use-files-store';
+import { useSelectedActions } from '@/store/selected/use-selected-actions';
+import { useFilesActions } from '@/store/files/use-files-actions';
+import { useAppSelector } from '@/store/redux-hooks';
+import { folderGroupByIdSelector } from '@/store/folders/folders-slice';
 
 interface Props {
   item: any;
 }
 
 export const FolderTreeItem = ({ item }: Props) => {
-  const { folderGroupList, addFolderGroup } = useFoldersStore();
-  const { addFileGroup } = useFilesStore();
-  const { setSelectedCurrentFolder } = useSelectedStore();
+  const { addFolderGroup } = useFoldersActions();
+  const { addFileGroup } = useFilesActions();
+  const { setSelectedCurrentFolder } = useSelectedActions();
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const params = useParams<{ id: string }>();
 
+  const currentFolderGroup = useAppSelector((state) => folderGroupByIdSelector(state, item.id));
+
   const handleClick = async () => {
     setIsOpen(!isOpen);
-
-    const currentFolderGroup = folderGroupList.find((group) => group.parentId === item.id);
 
     if (currentFolderGroup) return;
 
@@ -67,9 +69,8 @@ export const FolderTreeItem = ({ item }: Props) => {
         </FolderName>
       </FolderItemWrapper>
       <Collapsible isOpen={isOpen}>
-        {folderGroupList
-          .find((group) => group.parentId === item.id)
-          ?.folderItems?.filter((item) => item.isFolder)
+        {currentFolderGroup?.folderItems
+          ?.filter((item) => item.isFolder)
           .map((item) => (
             <FolderTreeItem item={item} key={item.id} />
           ))}

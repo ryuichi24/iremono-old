@@ -36,7 +36,6 @@ export class SignUpUseCase implements UseCase<SignUpRequestDTO, SignUpResponseDT
 
     // TODO: decouple root folder initialization with event emitter
     await this._createRootFolderUseCase.handle({ name: 'all_files', ownerId: savedUser.id, folderType: 'normal' });
-    await this._createRootFolderUseCase.handle({ name: 'all_files', ownerId: savedUser.id, folderType: 'crypto' });
 
     const accessToken = this._tokenService.generateAccessToken({ id: savedUser.id });
     const refreshToken = this._tokenService.generateRefreshToken(savedUser.id);

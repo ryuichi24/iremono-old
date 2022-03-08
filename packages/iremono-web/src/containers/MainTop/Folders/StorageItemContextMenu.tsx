@@ -1,15 +1,21 @@
 import React from 'react';
-import { ContextMenu, ContextMenuItem } from '@/components/ContextMenu';
-import { useContextMenu } from '@/hooks/use-context-menu';
+// mui components
 import { Typography } from '@mui/material';
-import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+// mui icons
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import { filesService } from '@/services/files-service';
+import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
+import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+// child components
 import { RenameStorageItemForm } from './RenameStorageItemForm';
-import { useModal } from '@/hooks/use-modal';
 import { RemoveStorageItemForm } from './RemoveStorageItemForm';
+// presentational components
+import { ContextMenu, ContextMenuItem } from '@/components/ContextMenu';
+import { useContextMenu } from '@/hooks/use-context-menu';
+// hooks
+import { useModal } from '@/hooks/use-modal';
+// services
+import { filesService } from '@/services/files-service';
 
 interface Props {
   children: React.ReactNode;

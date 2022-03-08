@@ -1,8 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelectedStore } from '@/store/selected/use-selected-store';
+// presentational components
 import { ListItemCard } from '@/components/ListItemCard';
 import { GridItemCard } from '@/components/GridItemCard';
+// action hooks
+import { useSelectedActions } from '@/store/selected/use-selected-actions';
 
 interface Props {
   folder: any;
@@ -11,7 +13,7 @@ interface Props {
 
 export const FolderItem = ({ folder, arrangeType }: Props) => {
   const navigate = useNavigate();
-  const { setSelectedItem, setSelectedCurrentFolder } = useSelectedStore();
+  const { setSelectedItem, setSelectedCurrentFolder } = useSelectedActions();
 
   return (
     <>

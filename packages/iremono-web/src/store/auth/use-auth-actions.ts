@@ -1,22 +1,17 @@
 import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../';
+import { useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '..';
 import { authActions } from './auth-slice';
 
-interface AuthStore {
-  user: RootState['authState']['user'];
-  clientEncryptionKey: RootState['authState']['clientEncryptionKey'];
-  isAuthenticated: RootState['authState']['isAuthenticated'];
+interface AuthActions {
   setAuth: (args: { userId: string; email: string }) => void;
   clearAuth: () => void;
   setClientEncryptionKey: (args: { clientEncryptionKey: RootState['authState']['clientEncryptionKey'] }) => void;
+  setHasCryptoFolder: (args: { hasCryptoFolder: boolean }) => void;
 }
 
-export const useAuthStore = (): AuthStore => {
+export const useAuthActions = (): AuthActions => {
   const dispatch: AppDispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.authState.user);
-  const isAuthenticated = useSelector((state: RootState) => state.authState.isAuthenticated);
-  const clientEncryptionKey = useSelector((state: RootState) => state.authState.clientEncryptionKey);
 
   const setAuth = useCallback((args: { userId: string; email: string }) => {
     dispatch(authActions.setAuth(args));
@@ -29,9 +24,13 @@ export const useAuthStore = (): AuthStore => {
     [],
   );
 
+  const setHasCryptoFolder = useCallback((args: { hasCryptoFolder: boolean }) => {
+    dispatch(authActions.setHasCryptoFolder(args));
+  }, []);
+
   const clearAuth = useCallback(() => {
     dispatch(authActions.clearAuth());
   }, [dispatch]);
 
-  return { user, isAuthenticated, setAuth, clearAuth, clientEncryptionKey, setClientEncryptionKey } as const;
+  return { setAuth, clearAuth, setClientEncryptionKey, setHasCryptoFolder } as const;
 };

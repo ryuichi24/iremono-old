@@ -1,32 +1,45 @@
 import React, { useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button } from '@mui/material';
+import { useParams } from 'react-router-dom';
+// mui icons
 import AddIcon from '@mui/icons-material/Add';
-import { formatBytes } from '@iremono/util/dist/format-bytes';
-import { Header } from '@/components/Header';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-import { foldersService } from '@/services/folders-service';
-import { useFoldersStore } from '@/store/folders/use-folders-store';
-import { useFilesStore } from '@/store/files/use-files-store';
-import { PopupMenu } from '@/components/PopupMenu';
-import { usePopupMenu } from '@/hooks/use-popup-menu';
-import { NewFolderForm } from './NewFolderForm';
-import { useModal } from '@/hooks/use-modal';
-import { Uploader } from '@/components/Uploader';
-import { filesService } from '@/services/files-service';
+import GridViewIcon from '@mui/icons-material/GridView';
+import ViewListIcon from '@mui/icons-material/ViewList';
+// child components
 import { StorageItemContextMenu } from './StorageItemContextMenu';
+import { NewFolderForm } from './NewFolderForm';
 import { FileItem } from './FileItem';
 import { FolderItem } from './FolderItem';
 import { FolderPathNav } from './FolderPathNav';
-import { useSelectedStore } from '@/store/selected/use-selected-store';
-import { useUploadsStore } from '@/store/uploads/use-uploads-store';
+// presentational components
 import { StorageItemListContainer } from '@/components/StorageItemListContainer';
-import GridViewIcon from '@mui/icons-material/GridView';
-import ViewListIcon from '@mui/icons-material/ViewList';
-import { useUIStore } from '@/store/ui/use-ui-store';
+import { Header } from '@/components/Header';
+import { PrimaryButton } from '@/components/PrimaryButton';
+import { PopupMenu } from '@/components/PopupMenu';
+import { Uploader } from '@/components/Uploader';
+// hooks
+import { useModal } from '@/hooks/use-modal';
+import { usePopupMenu } from '@/hooks/use-popup-menu';
+// action hooks
+import { useFilesActions } from '@/store/files/use-files-actions';
+import { useFoldersActions } from '@/store/folders/use-folders-actions';
+import { useSelectedActions } from '@/store/selected/use-selected-actions';
+import { useUploadsActions } from '@/store/uploads/use-uploads-actions';
+import { useUIActions } from '@/store/ui/use-ui-actions';
+// selectors
+import { useAppSelector } from '@/store/redux-hooks';
+import { folderGroupByIdSelector } from '@/store/folders/folders-slice';
+import { fileGroupSelectedById } from '@/store/files/files-slice';
+import { storageItemViewModeSelector } from '@/store/ui/ui-slice';
+import { selectedCurrentFolderSelector } from '@/store/selected/selected-slice';
+// services
+import { filesService } from '@/services/files-service';
+import { foldersService } from '@/services/folders-service';
+// utils
+import { formatBytes } from '@iremono/util/dist/format-bytes';
 
 export const Folders = () => {
   const params = useParams<{ id: string }>();
@@ -35,11 +48,17 @@ export const Folders = () => {
   const [openNewFolderForm, handleOpenNewFolderForm, handleCloseNewFolderForm] = useModal();
   const fileUploaderRef: React.Ref<HTMLInputElement> = useRef(null);
   const [openMenu, anchorEl, handleOpenMenu, handleCloseMenu] = usePopupMenu();
-  const { addFolderGroup, folderGroupList } = useFoldersStore();
-  const { addFileGroup, addOneFileItem, fileGroupList } = useFilesStore();
-  const { setSelectedCurrentFolder, selectedCurrentFolder } = useSelectedStore();
-  const { addUploadItem, updateUploadItem } = useUploadsStore();
-  const { storageItemViewMode, toggleStorageItemViewMode } = useUIStore();
+
+  const { addFolderGroup } = useFoldersActions();
+  const { addFileGroup, addOneFileItem } = useFilesActions();
+  const { setSelectedCurrentFolder } = useSelectedActions();
+  const { addUploadItem, updateUploadItem } = useUploadsActions();
+  const { toggleStorageItemViewMode } = useUIActions();
+
+  const storageItemViewMode = useAppSelector(storageItemViewModeSelector);
+  const selectedCurrentFolder = useAppSelector(selectedCurrentFolderSelector);
+  const currentFolderGroup = useAppSelector((state) => folderGroupByIdSelector(state, selectedCurrentFolder?.id));
+  const currentFileGroup = useAppSelector((state) => fileGroupSelectedById(state, selectedCurrentFolder?.id));
 
   const menuItems = [
     {
@@ -70,9 +89,7 @@ export const Folders = () => {
       const currentFolder = await foldersService.get({ folderId: currentFolderId });
       setSelectedCurrentFolder({ selectedCurrentFolder: currentFolder });
 
-      const currentFolderGroup = folderGroupList.find((group) => group.parentId === currentFolder.id);
-
-      if (currentFolderGroup) return;
+      if (currentFolderGroup && currentFileGroup) return;
 
       const currentFolderItems = (await foldersService.listItems({ folderId: currentFolder.id })).entries;
       const folders = currentFolderItems.filter((item: any) => item.isFolder);
@@ -82,8 +99,44 @@ export const Folders = () => {
 
       addFolderGroup({ folderItems: folders, folder: currentFolder, ancestors });
       addFileGroup({ fileItems: files, parentId: currentFolder.id });
-    })();
+    })().catch((err) => console.log(err));
   }, [currentFolderId]);
+
+  const handleUploadChange: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
+    if (!e.currentTarget.value) return;
+
+    const result = await filesService.upload({
+      parentId: selectedCurrentFolder?.id,
+      fileToUpload: e.target.files![0], // eslint-disable-line @typescript-eslint/no-non-null-assertion
+      initUpload: (uploadItemId, fileName, progress) => {
+        addUploadItem({
+          uploadItem: {
+            id: uploadItemId,
+            fileName,
+            progress,
+            isCompleted: false,
+          },
+        });
+      },
+      onUpload: (uploadItemId, progress, uploadedSize) => {
+        updateUploadItem({
+          uploadItem: { id: uploadItemId, progress, uploadedSize: formatBytes(uploadedSize) },
+        });
+      },
+      afterUpload: (uploadItemId, progress) => {
+        updateUploadItem({
+          uploadItem: {
+            id: uploadItemId,
+            progress,
+            isCompleted: true,
+          },
+        });
+      },
+    });
+
+    addOneFileItem({ fileItem: result, parentId: selectedCurrentFolder?.id });
+    e.target.value = '';
+  };
 
   return (
     <Container>
@@ -100,21 +153,7 @@ export const Folders = () => {
             )}
           </div>
           <div>
-            <Button
-              variant="outlined"
-              startIcon={<AddIcon />}
-              onClick={handleOpenMenu}
-              sx={{
-                maxWidth: '110px',
-                maxHeight: '50px',
-                minWidth: '110px',
-                minHeight: '50px',
-                backgroundColor: 'background.secondary',
-              }}
-            >
-              New
-            </Button>
-
+            <PrimaryButton buttonText="New" startIcon={<AddIcon />} onClick={handleOpenMenu} />
             <PopupMenu menuItems={menuItems} anchorEl={anchorEl} handleClose={handleCloseMenu} open={openMenu} />
           </div>
         </>
@@ -125,71 +164,24 @@ export const Folders = () => {
         currentFolderId={selectedCurrentFolder?.id}
         handleClose={handleCloseNewFolderForm}
       />
-      <Uploader
-        onChange={(e) => {
-          if (!e.currentTarget.value) return;
 
-          filesService
-            .upload({
-              parentId: selectedCurrentFolder?.id,
-              fileToUpload: e.target.files![0], // eslint-disable-line @typescript-eslint/no-non-null-assertion
-              initUpload: (uploadItemId, fileName, progress) => {
-                addUploadItem({
-                  uploadItem: {
-                    id: uploadItemId,
-                    fileName,
-                    progress,
-                    isCompleted: false,
-                  },
-                });
-              },
-              onUpload: (uploadItemId, progress, uploadedSize) => {
-                updateUploadItem({
-                  uploadItem: { id: uploadItemId, progress, uploadedSize: formatBytes(uploadedSize) },
-                });
-              },
-              afterUpload: (uploadItemId, progress) => {
-                updateUploadItem({
-                  uploadItem: {
-                    id: uploadItemId,
-                    progress,
-                    isCompleted: true,
-                  },
-                });
-              },
-            })
-            .then((result) => {
-              addOneFileItem({ fileItem: result, parentId: selectedCurrentFolder?.id });
-              e.target.value = '';
-            })
-            .catch((err) => console.log(err));
-        }}
-        ref={fileUploaderRef}
-      />
+      <Uploader onChange={handleUploadChange} ref={fileUploaderRef} />
 
       <StorageItemsContainer>
         <StorageItemListContainer arrangeType={storageItemViewMode}>
           <>
-            {folderGroupList
-              ?.find((group) => group.parentId === selectedCurrentFolder?.id)
-              ?.folderItems?.map((folder: any) => (
-                <StorageItemContextMenu
-                  storageItem={folder}
-                  currentFolderId={selectedCurrentFolder?.id}
-                  key={folder.id}
-                >
-                  <FolderItem folder={folder} arrangeType={storageItemViewMode} />
-                </StorageItemContextMenu>
-              ))}
+            {currentFolderGroup?.folderItems?.map((folder) => (
+              <StorageItemContextMenu storageItem={folder} currentFolderId={selectedCurrentFolder?.id} key={folder.id}>
+                <FolderItem folder={folder} arrangeType={storageItemViewMode} />
+              </StorageItemContextMenu>
+            ))}
           </>
           <>
-            {fileGroupList
-              ?.find((group) => group.parentId === selectedCurrentFolder?.id)
-              ?.fileItems?.map((file) => (
-                <StorageItemContextMenu storageItem={file} currentFolderId={selectedCurrentFolder?.id} key={file.id}>
-                  <FileItem file={file} arrangeType={storageItemViewMode} />
-                </StorageItemContextMenu>
-              ))}
+            {currentFileGroup?.fileItems?.map((file) => (
+              <StorageItemContextMenu storageItem={file} currentFolderId={selectedCurrentFolder?.id} key={file.id}>
+                <FileItem file={file} arrangeType={storageItemViewMode} />
+              </StorageItemContextMenu>
+            ))}
           </>
         </StorageItemListContainer>
       </StorageItemsContainer>

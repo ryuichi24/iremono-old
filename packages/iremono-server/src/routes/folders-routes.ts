@@ -8,12 +8,16 @@ import {
   removeFolderController,
   restoreFolderController,
   updateFolderController,
+  createRootFolderController,
+  verifyClientEncryptionKeyController,
 } from '../dependency-container';
 import { authHandler, makeExpressHandler } from '../shared/express-lib';
 
 export const foldersRouter = express
   .Router()
   .post('/', authHandler(tokenService), makeExpressHandler(createFolderController))
+  .post('/root', authHandler(tokenService), makeExpressHandler(createRootFolderController))
+  .post('/root/verify-key', authHandler(tokenService), makeExpressHandler(verifyClientEncryptionKeyController))
   .patch('/:id', authHandler(tokenService), makeExpressHandler(updateFolderController))
   .post('/:id/remove', authHandler(tokenService), makeExpressHandler(removeFolderController))
   .post('/:id/restore', authHandler(tokenService), makeExpressHandler(restoreFolderController))

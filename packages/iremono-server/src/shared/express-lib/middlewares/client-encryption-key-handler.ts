@@ -2,7 +2,6 @@ import crypto from 'crypto';
 import fs from 'fs';
 import stream from 'stream';
 import path from 'path';
-import { UserRepository } from '@iremono/backend-core/src/repositories';
 import { CryptoService } from '@iremono/backend-core/src/services/crypto-service';
 import express from 'express';
 import { deleteFromFileSystem } from '@iremono/util';
@@ -20,6 +19,8 @@ export const clientEncryptionKeyHandler =
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       const clientEncryptionKey = req.uploadedFile.formData.encryptionKey;
+
+      logger.debug(req.uploadedFile.formData);
 
       if (!clientEncryptionKey) return next();
 

@@ -5,3 +5,4 @@ export * from './is-object';
 export * from './format-bytes';
 export * from './string-to-color';
 export * from './cache';
+export * from './capitalize-first-letter';

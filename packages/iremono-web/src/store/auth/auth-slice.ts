@@ -1,17 +1,20 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '..';
 
 interface AuthState {
   user: { userId: string | null; email: string | null };
   isAuthenticated: boolean;
+  hasCryptoFolder: boolean;
   clientEncryptionKey?: string;
 }
 
 const initialState: AuthState = {
   user: { userId: null, email: null },
+  hasCryptoFolder: false,
   isAuthenticated: false,
 };
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
   name: 'authSlice',
   initialState,
   reducers: {
@@ -28,6 +31,10 @@ const authSlice = createSlice({
       { payload }: PayloadAction<{ clientEncryptionKey: AuthState['clientEncryptionKey'] }>,
     ) => {
       state.clientEncryptionKey = payload.clientEncryptionKey;
+      state.hasCryptoFolder = true;
+    },
+    setHasCryptoFolder: (state, { payload }: PayloadAction<{ hasCryptoFolder: boolean }>) => {
+      state.hasCryptoFolder = payload.hasCryptoFolder;
     },
     clearAuth: (state, _: PayloadAction<void>) => {
       state.isAuthenticated = false;
@@ -37,5 +44,26 @@ const authSlice = createSlice({
   },
 });
 
+// selectors
+export const userSelector = createSelector(
+  (state: RootState) => state.authState,
+  (authState) => authState.user,
+);
+
+export const isAuthenticatedSelector = createSelector(
+  (state: RootState) => state.authState,
+  (authState) => authState.isAuthenticated,
+);
+
+export const hasCryptoFolderSelector = createSelector(
+  (state: RootState) => state.authState,
+  (authState) => authState.hasCryptoFolder,
+);
+
+export const clientEncryptionKeySelector = createSelector(
+  (state: RootState) => state.authState,
+  (authState) => authState.clientEncryptionKey,
+);
+
 export const authActions = authSlice.actions;
-export const authReducer = authSlice.reducer;
+export default authSlice.reducer;
