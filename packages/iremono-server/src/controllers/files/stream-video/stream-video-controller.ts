@@ -56,6 +56,7 @@ export class StreamVideoController extends Controller<StreamVideoUseCase> {
       config.mediaConfig.ENCRYPTION_KEY,
       currentInitVector,
     );
+
     decipherStream.setAutoPadding(false);
 
     const skipStream = new SkipStream({ skipLength: start - fixedStart });
@@ -67,7 +68,18 @@ export class StreamVideoController extends Controller<StreamVideoUseCase> {
       })
       .on('error', (err) => console.log(err));
 
-    const videoReadStream = readStream.pipe(decipherStream).pipe(skipStream);
+    let videoReadStream;
+
+    if (result.clientEncryptionKey) {
+      const decipherWithClientKeyStream = this._cryptoService.generateDecipherStreamInCBC(
+        result.clientEncryptionKey,
+        result.fileInitializationVector,
+      );
+
+      videoReadStream = readStream.pipe(decipherWithClientKeyStream).pipe(decipherStream).pipe(skipStream);
+    } else {
+      videoReadStream = readStream.pipe(decipherStream).pipe(skipStream);
+    }
 
     this._logger.info(
       'user has requested for streaming video',

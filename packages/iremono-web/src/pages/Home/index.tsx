@@ -10,17 +10,20 @@ import { Activity } from '@/containers/Activity';
 import { Explore } from '@/containers/Explore';
 import { MainTop } from '@/containers/MainTop';
 import { MainBottom } from '@/containers/MainBottom';
-import { useAuthStore } from '@/store/auth/use-auth-store';
+import { useAuthActions } from '@/store/auth/use-auth-actions';
 import { Header } from '@/components/Header';
 import { PopupMenu } from '@/components/PopupMenu';
 import { usePopupMenu } from '@/hooks/use-popup-menu';
 import { authService } from '@/services/auth-service';
+import { useAppSelector } from '@/store/redux-hooks';
+import { userSelector } from '@/store/auth/auth-slice';
 
 export const Home = () => {
   const [isSidebarPositionLeft, setsSidebarPositionLeft] = useState(true);
   const [openMenu, anchorEl, handleOpenMenu, handleCloseMenu] = usePopupMenu();
   const muiTheme = useTheme();
-  const { user, clearAuth } = useAuthStore();
+  const { clearAuth } = useAuthActions();
+  const user = useAppSelector(userSelector);
 
   return (
     <HomeContainer>

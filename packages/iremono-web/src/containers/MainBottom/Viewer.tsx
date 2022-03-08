@@ -1,12 +1,13 @@
 import React from 'react';
-import { useSelectedStore } from '@/store/selected/use-selected-store';
 import { ImageViewer } from './ImageViewer';
 import { checkViewer, VIEWERS } from '@/utils/viewer-checker';
 import { VideoViewer } from './VideoViewer';
 import { DefaultViewer } from './DefaultViewer';
+import { useAppSelector } from '@/store/redux-hooks';
+import { selectedViewerItemSelector } from '@/store/selected/selected-slice';
 
 export const Viewer = () => {
-  const { selectedViewerItem } = useSelectedStore();
+  const selectedViewerItem = useAppSelector(selectedViewerItemSelector);
 
   if (checkViewer(selectedViewerItem?.fileExtension) === VIEWERS.IMAGE)
     return <ImageViewer file={selectedViewerItem} />;

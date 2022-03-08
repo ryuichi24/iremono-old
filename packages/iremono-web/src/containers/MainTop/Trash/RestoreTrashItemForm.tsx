@@ -6,10 +6,10 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { filesService } from '@/services/files-service';
 import { Typography } from '@mui/material';
-import { useTrashStore } from '@/store/trash/use-trash-store';
+import { useTrashActions } from '@/store/trash/use-trash-actions';
 import { foldersService } from '@/services/folders-service';
-import { useFoldersStore } from '@/store/folders/use-folders-store';
-import { useFilesStore } from '@/store/files/use-files-store';
+import { useFoldersActions } from '@/store/folders/use-folders-actions';
+import { useFilesActions } from '@/store/files/use-files-actions';
 
 interface Props {
   trashItem: any;
@@ -18,9 +18,9 @@ interface Props {
 }
 
 export const RestoreTrashItemForm = ({ trashItem, open, handleClose }: Props) => {
-  const { removeTrashItem } = useTrashStore();
-  const { addOneFolderItem } = useFoldersStore();
-  const { addOneFileItem } = useFilesStore();
+  const { removeTrashItem } = useTrashActions();
+  const { addOneFolderItem } = useFoldersActions();
+  const { addOneFileItem } = useFilesActions();
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();

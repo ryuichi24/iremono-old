@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { filesService } from '@/services/files-service';
-import { useSelectedStore } from '@/store/selected/use-selected-store';
+// presentational components
 import { ListItemCard } from '@/components/ListItemCard';
 import { GridItemCard } from '@/components/GridItemCard';
+// action hooks
+import { useSelectedActions } from '@/store/selected/use-selected-actions';
+// services
+import { filesService } from '@/services/files-service';
 
 interface Props {
   file: any;
@@ -11,7 +14,7 @@ interface Props {
 
 export const FileItem = ({ file, arrangeType }: Props) => {
   const [thumbnailURL, setThumbnailURL] = useState('');
-  const { setSelectedItem, setSelectedViewerItem } = useSelectedStore();
+  const { setSelectedItem, setSelectedViewerItem } = useSelectedActions();
 
   useEffect(() => {
     if (file.hasThumbnail) {
@@ -20,7 +23,10 @@ export const FileItem = ({ file, arrangeType }: Props) => {
         .then((result) => {
           setThumbnailURL(result);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          setThumbnailURL('');
+        });
     }
   }, []);
   return (

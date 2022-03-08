@@ -1,19 +1,21 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
-import { useFoldersStore } from '@/store/folders/use-folders-store';
+import { useFoldersActions } from '@/store/folders/use-folders-actions';
 import { foldersService } from '@/services/folders-service';
 import { FolderTreeItem } from './FolderTreeItem';
-import { useFilesStore } from '@/store/files/use-files-store';
+import { useFilesActions } from '@/store/files/use-files-actions';
+import { useAppSelector } from '@/store/redux-hooks';
+import { rootFolderGroupSelector } from '@/store/folders/folders-slice';
 
 export const FolderExplore = () => {
-  const { folderGroupList, addFolderGroup } = useFoldersStore();
-  const { addFileGroup } = useFilesStore();
+  const { addFolderGroup } = useFoldersActions();
+  const { addFileGroup } = useFilesActions();
+
+  const rootFolderGroup = useAppSelector(rootFolderGroupSelector);
 
   useEffect(() => {
     (async () => {
-      const rootFolderGroup = folderGroupList.find((group) => group.isRootFolder);
-
       if (rootFolderGroup) return;
 
       const rootFolder = await foldersService.get({ folderId: '0' });
@@ -28,9 +30,8 @@ export const FolderExplore = () => {
 
   return (
     <Container>
-      {folderGroupList
-        .find((group) => group.isRootFolder)
-        ?.folderItems?.filter((item) => item.isFolder)
+      {rootFolderGroup?.folderItems
+        ?.filter((item) => item.isFolder)
         .map((item) => (
           <FolderTreeItem item={item} key={item.id} />
         ))}

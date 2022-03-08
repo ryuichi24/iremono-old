@@ -3,12 +3,12 @@ import { HttpRequest } from '../../../shared/controller-lib';
 
 export const makeGetFileTokenRequestDTO = ({
   user,
-  body: { clientEncryptionKey },
+  body: { encryptionKey },
   params: { id },
   query: { type },
 }: HttpRequest): GetFileTokenRequestDTO => ({
   ownerId: user.id,
   id,
   tokenType: type,
-  clientEncryptionKey: clientEncryptionKey,
+  clientEncryptionKey: encryptionKey,
 });

@@ -28,8 +28,12 @@ const deleteAll = async () => {
   return result;
 };
 
-const listItems = async () => {
-  const res = await apiClient.get(`${BASE_URL}/items`);
+interface ListItemsRequest {
+  folderType: 'normal' | 'crypto';
+}
+
+const listItems = async (request: ListItemsRequest) => {
+  const res = await apiClient.get(`${BASE_URL}/items?type=${request.folderType}`);
   const result = res.data;
   return result;
 };

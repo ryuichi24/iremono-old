@@ -13,7 +13,16 @@ export class ListItemsInTrashUseCase implements UseCase<ListItemsInTrashRequestD
   }
 
   public async handle(dto: ListItemsInTrashRequestDTO): Promise<ListItemsInTrashResponseDTO> {
-    const rootFolder = await this._storageItemRepository.findRootFolderByOwnerId(dto.ownerId);
+    let rootFolder;
+
+    if (dto.folderType === 'normal') {
+      rootFolder = await this._storageItemRepository.findRootFolderByOwnerId(dto.ownerId);
+    }
+
+    if (dto.folderType === 'crypto') {
+      rootFolder = await this._storageItemRepository.findCryptoRootFolderByOwnerId(dto.ownerId);
+    }
+
     if (!rootFolder) throw new NotExistError('the root folder does not exists.');
 
     const trashItems = await this._storageItemRepository.findAllDescendantsById(rootFolder.id, true);

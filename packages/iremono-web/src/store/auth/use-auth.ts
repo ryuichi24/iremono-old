@@ -1,11 +1,14 @@
 import { authService } from '@/services/auth-service';
 import { useEffect, useState } from 'react';
-import { useAuthStore } from './use-auth-store';
+import { useAppSelector } from '../redux-hooks';
+import { isAuthenticatedSelector } from './auth-slice';
+import { useAuthActions } from './use-auth-actions';
 
 export const useAuth = () => {
   const [loading, toggleLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { isAuthenticated, setAuth, clearAuth } = useAuthStore();
+  const { setAuth, clearAuth } = useAuthActions();
+  const isAuthenticated = useAppSelector(isAuthenticatedSelector);
 
   useEffect(() => {
     authService

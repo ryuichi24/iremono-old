@@ -39,6 +39,7 @@ import {
   UpdateFileUseCase,
   UpdateFolderUseCase,
   UploadFileUseCase,
+  VerifyClientEncryptionKeyUseCase,
 } from '@iremono/backend-core/dist/use-cases';
 import {
   CreateFolderController,
@@ -65,6 +66,8 @@ import {
   RefreshTokenController,
   GetFileTokenController,
   SignOutController,
+  CreateRootFolderController,
+  VerifyClientEncryptionKeyController,
 } from '../controllers';
 import { loggerFactory } from '../shared/utils/logger';
 
@@ -102,7 +105,7 @@ const signUpUseCase = new SignUpUseCase(
   userRepository,
   tokenService,
   bcryptService,
-  new CreateRootFolderUseCase(storageItemRepository),
+  new CreateRootFolderUseCase(storageItemRepository, bcryptService),
 );
 const signInUseCase = new SignInUseCase(userRepository, tokenService, bcryptService);
 const signOutUseCase = new SignOutUseCase(tokenService);
@@ -117,6 +120,8 @@ export const refreshTokenController = new RefreshTokenController(refreshTokenUse
 
 // folders
 const createFolderUseCase = new CreateFolderUseCase(storageItemRepository);
+const createRootFolderUseCase = new CreateRootFolderUseCase(storageItemRepository, bcryptService);
+const verifyClientEncryptionKeyUseCase = new VerifyClientEncryptionKeyUseCase(storageItemRepository, bcryptService);
 const updateFolderUseCase = new UpdateFolderUseCase(storageItemRepository);
 const removeFolderUseCase = new RemoveFolderUseCase(storageItemRepository);
 const restoreFolderUseCase = new RestoreFolderUseCase(storageItemRepository);
@@ -125,6 +130,11 @@ const getFolderUserCase = new GetFolderUseCase(storageItemRepository);
 const listAllAncestorsUserCase = new ListAllAncestorsUseCase(storageItemRepository);
 
 export const createFolderController = new CreateFolderController(createFolderUseCase, loggerFactory);
+export const createRootFolderController = new CreateRootFolderController(createRootFolderUseCase, loggerFactory);
+export const verifyClientEncryptionKeyController = new VerifyClientEncryptionKeyController(
+  verifyClientEncryptionKeyUseCase,
+  loggerFactory,
+);
 export const updateFolderController = new UpdateFolderController(updateFolderUseCase, loggerFactory);
 export const removeFolderController = new RemoveFolderController(removeFolderUseCase, loggerFactory);
 export const restoreFolderController = new RestoreFolderController(restoreFolderUseCase, loggerFactory);

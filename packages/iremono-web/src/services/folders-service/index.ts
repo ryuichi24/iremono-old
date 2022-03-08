@@ -13,6 +13,32 @@ const create = async (request: CreateFolderRequest) => {
   return result;
 };
 
+interface CreateRootFolderRequest {
+  encryptionKey?: string;
+  folderType: 'normal' | 'crypto';
+}
+
+const createRootFolder = async (request: CreateRootFolderRequest) => {
+  const res = await apiClient.post(`${BASE_URL}/root?type=${request.folderType}`, {
+    encryptionKey: request.encryptionKey,
+    name: 'Crypto folder',
+  });
+  const result = res.data;
+  return result;
+};
+
+interface VerifyClientEncryptionKeyRequest {
+  encryptionKey?: string;
+}
+
+const verifyClientEncryptionKey = async (request: VerifyClientEncryptionKeyRequest) => {
+  const res = await apiClient.post(`${BASE_URL}/root/verify-key`, {
+    encryptionKey: request.encryptionKey,
+  });
+  const result = res.data;
+  return result;
+};
+
 interface UpdateFolderRequest {
   folderId: string;
   folderProperties: {
@@ -67,12 +93,23 @@ const listAllAncestors = async (request: ListAllAncestorsRequest) => {
 
 interface GetFolderRequest {
   folderId: string;
+  folderType?: 'crypto' | 'normal';
 }
 
 const get = async (request: GetFolderRequest) => {
-  const res = await apiClient.get(`${BASE_URL}/${request.folderId}`);
+  const res = await apiClient.get(`${BASE_URL}/${request.folderId}?type=${request.folderType || 'normal'}`);
   const result = res.data;
   return result;
 };
 
-export const foldersService = Object.freeze({ create, update, remove, restore, listItems, listAllAncestors, get });
+export const foldersService = Object.freeze({
+  create,
+  createRootFolder,
+  update,
+  remove,
+  restore,
+  listItems,
+  listAllAncestors,
+  get,
+  verifyClientEncryptionKey,
+});

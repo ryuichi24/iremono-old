@@ -1,36 +1,51 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import GridViewIcon from '@mui/icons-material/GridView';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import { Header } from '@/components/Header';
 import { trashService } from '@/services/trash-service';
-import { useTrashStore } from '@/store/trash/use-trash-store';
+import { useTrashActions } from '@/store/trash/use-trash-actions';
 import { TrashItemContextMenu } from './TrashItemContextMenu';
 import { FileTrashItem } from './FileTrashItem';
 import { FolderTrashItem } from './FolderTrashItem';
 import { StorageItemListContainer } from '@/components/StorageItemListContainer';
-import { useUIStore } from '@/store/ui/use-ui-store';
+import { useUIActions } from '@/store/ui/use-ui-actions';
+import { useAppSelector } from '@/store/redux-hooks';
+import { storageItemViewModeSelector } from '@/store/ui/ui-slice';
+import { fileTrashItemListSelector, folderTrashItemListSelector } from '@/store/trash/trash-slice';
+import { clientEncryptionKeySelector } from '@/store/auth/auth-slice';
+import { capitalizeFirstLetter } from '@iremono/util/dist/capitalize-first-letter';
 
 export const Trash = () => {
-  const { setTrashItems, folderTrashItemList, fileTrashItemList } = useTrashStore();
-  const { storageItemViewMode, toggleStorageItemViewMode } = useUIStore();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const folderType = (searchParams.get('type') || 'normal') as 'normal' | 'crypto';
+  const { setTrashItems } = useTrashActions();
+  const { toggleStorageItemViewMode } = useUIActions();
+
+  const encryptionKey = useAppSelector(clientEncryptionKeySelector);
+  const storageItemViewMode = useAppSelector(storageItemViewModeSelector);
+  const folderTrashItemList = useAppSelector(folderTrashItemListSelector);
+  const fileTrashItemList = useAppSelector(fileTrashItemListSelector);
 
   useEffect(() => {
+    if (!encryptionKey && folderType === 'crypto') return navigate('/trash');
     trashService
-      .listItems()
+      .listItems({ folderType: folderType })
       .then((result) => {
         setTrashItems({ trashItems: result.entries });
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [folderType]);
 
   return (
     <Container>
       <Header isSubHeader={true}>
         <>
           <Typography sx={{ color: 'text.primary' }} variant="h5" component="h2">
-            Trash
+            {capitalizeFirstLetter(folderType)} Trash
           </Typography>
         </>
         <>

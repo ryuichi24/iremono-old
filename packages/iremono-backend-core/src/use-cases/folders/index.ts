@@ -6,3 +6,4 @@ export * from './list-items-in-folder';
 export * from './get-folder';
 export * from './list-all-ancestors';
 export * from './create-root-folder';
+export * from './verify-client-encryption-key';

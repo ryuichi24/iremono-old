@@ -1,26 +1,22 @@
 import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../';
+import { useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '..';
 import { selectedActions } from './selected-slice';
 
 type SelectedItem = RootState['selectedState']['selectedItem'];
 type SelectedViewerItem = RootState['selectedState']['selectedViewerItem'];
 type SelectedCurrentFolder = RootState['selectedState']['selectedCurrentFolder'];
+type SelectedCurrentCryptoFolder = RootState['selectedState']['selectedCurrentCryptoFolder'];
 
-interface SelectedStore {
-  selectedItem: SelectedItem;
-  selectedViewerItem: SelectedViewerItem;
-  selectedCurrentFolder: SelectedCurrentFolder;
+interface SelectedActions {
   setSelectedItem: (args: { selectedItem: SelectedItem }) => void;
   setSelectedViewerItem: (args: { selectedViewerItem: SelectedViewerItem }) => void;
   setSelectedCurrentFolder: (args: { selectedCurrentFolder: SelectedCurrentFolder }) => void;
+  setSelectedCurrentCryptoFolder: (args: { selectedCurrentCryptoFolder: SelectedCurrentCryptoFolder }) => void;
 }
 
-export const useSelectedStore = (): SelectedStore => {
+export const useSelectedActions = (): SelectedActions => {
   const dispatch: AppDispatch = useDispatch();
-  const selectedItem = useSelector((state: RootState) => state.selectedState.selectedItem);
-  const selectedViewerItem = useSelector((state: RootState) => state.selectedState.selectedViewerItem);
-  const selectedCurrentFolder = useSelector((state: RootState) => state.selectedState.selectedCurrentFolder);
 
   const setSelectedItem = useCallback((args: { selectedItem: SelectedItem }) => {
     dispatch(selectedActions.setSelectedItem(args));
@@ -34,12 +30,17 @@ export const useSelectedStore = (): SelectedStore => {
     dispatch(selectedActions.setSelectedCurrentFolder(args));
   }, []);
 
+  const setSelectedCurrentCryptoFolder = useCallback(
+    (args: { selectedCurrentCryptoFolder: SelectedCurrentCryptoFolder }) => {
+      dispatch(selectedActions.setSelectedCurrentCryptoFolder(args));
+    },
+    [],
+  );
+
   return {
-    selectedItem,
-    selectedViewerItem,
-    selectedCurrentFolder,
     setSelectedItem,
     setSelectedViewerItem,
     setSelectedCurrentFolder,
+    setSelectedCurrentCryptoFolder,
   } as const;
 };
