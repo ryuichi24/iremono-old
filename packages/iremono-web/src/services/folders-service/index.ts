@@ -13,6 +13,19 @@ const create = async (request: CreateFolderRequest) => {
   return result;
 };
 
+interface CreateRootFolderRequest {
+  encryptionKey?: string;
+  folderType: 'normal' | 'crypto';
+}
+
+const createRootFolder = async (request: CreateRootFolderRequest) => {
+  const res = await apiClient.post(`${BASE_URL}/root?type=${request.folderType}`, {
+    encryptionKey: request.encryptionKey,
+  });
+  const result = res.data;
+  return result;
+};
+
 interface UpdateFolderRequest {
   folderId: string;
   folderProperties: {
@@ -76,4 +89,13 @@ const get = async (request: GetFolderRequest) => {
   return result;
 };
 
-export const foldersService = Object.freeze({ create, update, remove, restore, listItems, listAllAncestors, get });
+export const foldersService = Object.freeze({
+  create,
+  createRootFolder,
+  update,
+  remove,
+  restore,
+  listItems,
+  listAllAncestors,
+  get,
+});

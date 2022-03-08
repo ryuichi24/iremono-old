@@ -12,6 +12,7 @@ interface Props extends EntityProps {
   isInTrash?: boolean;
   isRootFolder?: boolean;
   isCryptoFolderItem?: boolean;
+  clientEncryptionKey?: string;
   initializationVector?: string;
   hasThumbnail?: boolean;
   thumbnailPath?: string;
@@ -21,6 +22,8 @@ interface Props extends EntityProps {
 }
 
 export class StorageItem extends Entity<Props> {
+  private _isClientEncryptionKeyHashed: boolean;
+
   public constructor(props: Props, id?: string) {
     const isNew = id === undefined;
     super(
@@ -33,6 +36,8 @@ export class StorageItem extends Entity<Props> {
       },
       id,
     );
+
+    this._isClientEncryptionKeyHashed = isNew ? false : true;
 
     if (isNew) {
       //
@@ -61,6 +66,11 @@ export class StorageItem extends Entity<Props> {
 
   public view() {
     this._props.lastViewedAt = new Date();
+  }
+
+  public async hashClientEncryptionKey(hashFunc: (plainEncryptionKey: string) => Promise<string>) {
+    this._props.clientEncryptionKey = await hashFunc(this._props.clientEncryptionKey!);
+    this._isClientEncryptionKeyHashed = true;
   }
 
   get name() {
@@ -93,6 +103,7 @@ export class StorageItem extends Entity<Props> {
 
   get fileExtension() {
     if (this._props.fileExtension) return this._props.fileExtension;
+    if (this._props.isFolder) return undefined;
 
     const name = this._props.name;
     const indexOfExtension = name.lastIndexOf('.');
@@ -110,6 +121,12 @@ export class StorageItem extends Entity<Props> {
 
   get isRootFolder() {
     return this._props.isRootFolder;
+  }
+
+  get clientEncryptionKeyHash() {
+    if (!this._props.isCryptoFolderItem || !this._props.isRootFolder) return undefined;
+    if (!this._isClientEncryptionKeyHashed) throw new Error('client encryption key is not hashed.');
+    return this._props.clientEncryptionKey;
   }
 
   get isCryptoFolderItem() {

@@ -7,6 +7,7 @@ interface AuthActions {
   setAuth: (args: { userId: string; email: string }) => void;
   clearAuth: () => void;
   setClientEncryptionKey: (args: { clientEncryptionKey: RootState['authState']['clientEncryptionKey'] }) => void;
+  setHasCryptoFolder: (args: { hasCryptoFolder: boolean }) => void;
 }
 
 export const useAuthActions = (): AuthActions => {
@@ -23,9 +24,13 @@ export const useAuthActions = (): AuthActions => {
     [],
   );
 
+  const setHasCryptoFolder = useCallback((args: { hasCryptoFolder: boolean }) => {
+    dispatch(authActions.setHasCryptoFolder(args));
+  }, []);
+
   const clearAuth = useCallback(() => {
     dispatch(authActions.clearAuth());
   }, [dispatch]);
 
-  return { setAuth, clearAuth, setClientEncryptionKey } as const;
+  return { setAuth, clearAuth, setClientEncryptionKey, setHasCryptoFolder } as const;
 };

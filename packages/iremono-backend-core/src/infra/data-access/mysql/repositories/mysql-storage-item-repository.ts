@@ -20,14 +20,14 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
   public async findAllDescendantsById(id: string, inTrash: boolean): Promise<StorageItem[]> {
     const query = `WITH RECURSIVE descendants (
         id, name, parent_id, is_folder, is_in_trash, 
-        file_path, file_size, last_viewed_at, initialization_vector, is_encrypted_with_client_key,
+        file_path, file_size, last_viewed_at, initialization_vector, is_crypto_folder_item,
         has_thumbnail, thumbnail_path, thumbnail_size, thumbnail_initialization_vector, created_at, 
         updated_at, owner_id
       ) 
       AS 
       (
       SELECT     id, name, parent_id, is_folder, is_in_trash,
-                 file_path, file_size, last_viewed_at, initialization_vector, is_encrypted_with_client_key,
+                 file_path, file_size, last_viewed_at, initialization_vector, is_crypto_folder_item,
                  has_thumbnail, thumbnail_path, thumbnail_size, thumbnail_initialization_vector, created_at, 
                  updated_at, owner_id
       FROM       storage_items
@@ -36,7 +36,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
       UNION ALL
 
       SELECT     si.id, si.name, si.parent_id, si.is_folder, si.is_in_trash,
-                 si.file_path, si.file_size, si.last_viewed_at, si.initialization_vector, si.is_encrypted_with_client_key,
+                 si.file_path, si.file_size, si.last_viewed_at, si.initialization_vector, si.is_crypto_folder_item,
                  si.has_thumbnail, si.thumbnail_path, si.thumbnail_size, si.thumbnail_initialization_vector, si.created_at, 
                  si.updated_at, si.owner_id
 
@@ -56,14 +56,14 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
   public async findAllAncestorsById(id: string): Promise<StorageItem[]> {
     const query = `WITH RECURSIVE ancestors (
         id, name, parent_id, is_folder, is_in_trash, 
-        file_path, file_size, last_viewed_at, initialization_vector, is_encrypted_with_client_key,
+        file_path, file_size, last_viewed_at, initialization_vector, is_crypto_folder_item,
         has_thumbnail, thumbnail_path, thumbnail_size, thumbnail_initialization_vector, created_at, 
         updated_at, owner_id
       ) 
       AS 
       (
       SELECT     id, name, parent_id, is_folder, is_in_trash,
-                 file_path, file_size, last_viewed_at, initialization_vector, is_encrypted_with_client_key,
+                 file_path, file_size, last_viewed_at, initialization_vector, is_crypto_folder_item,
                  has_thumbnail, thumbnail_path, thumbnail_size, thumbnail_initialization_vector, created_at, 
                  updated_at, owner_id
       FROM       storage_items
@@ -72,7 +72,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
       UNION ALL
 
       SELECT     si.id, si.name, si.parent_id, si.is_folder, si.is_in_trash,
-                 si.file_path, si.file_size, si.last_viewed_at, si.initialization_vector, si.is_encrypted_with_client_key,
+                 si.file_path, si.file_size, si.last_viewed_at, si.initialization_vector, si.is_crypto_folder_item,
                  si.has_thumbnail, si.thumbnail_path, si.thumbnail_size, si.thumbnail_initialization_vector, si.created_at, 
                  si.updated_at, si.owner_id
 
@@ -100,7 +100,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
 
   public async findCryptoRootFolderByOwnerId(ownerId: string): Promise<StorageItem | null> {
     const query =
-      'SELECT * FROM storage_items WHERE owner_id = ? AND is_root_folder = 1 AND is_encrypted_with_client_key = 1;';
+      'SELECT * FROM storage_items WHERE owner_id = ? AND is_root_folder = 1 AND is_crypto_folder_item = 1;';
     const values = [ownerId];
     const result = await this._query(query, values);
     const storageItem = (result as any)[0];
@@ -121,7 +121,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
     const query = `INSERT INTO storage_items
                    (id, name, parent_id, owner_id, file_path,
                     file_size, mime_type, file_extension, is_folder, is_in_trash,
-                    last_viewed_at, initialization_vector, is_root_folder, is_encrypted_with_client_key, has_thumbnail,
+                    last_viewed_at, initialization_vector, is_root_folder, is_crypto_folder_item, client_encryption_key_hash, has_thumbnail,
                     thumbnail_path, thumbnail_size, thumbnail_initialization_vector, created_at, updated_at)
                     VALUES 
                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
@@ -140,6 +140,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
       entity.initializationVector,
       entity.isRootFolder,
       entity.isCryptoFolderItem,
+      entity.clientEncryptionKeyHash,
       entity.hasThumbnail,
       entity.thumbnailPath,
       entity.thumbnailSize,
@@ -157,7 +158,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
     const query = `UPDATE storage_items 
                    SET
                    name = ?, parent_id = ?, file_path = ?, file_size = ?, is_in_trash = ?,
-                   last_viewed_at = ?, initialization_vector = ?, is_encrypted_with_client_key = ?, has_thumbnail = ?, thumbnail_path = ?,
+                   last_viewed_at = ?, initialization_vector = ?, is_crypto_folder_item = ?, client_encryption_key_hash = ?, has_thumbnail = ?, thumbnail_path = ?,
                    thumbnail_size = ?, thumbnail_initialization_vector = ?, created_at = ?, updated_at = ?
                    WHERE 
                    id = ?;`;
@@ -170,6 +171,7 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
       entity.lastViewedAt,
       entity.initializationVector,
       entity.isCryptoFolderItem,
+      entity.clientEncryptionKeyHash,
       entity.hasThumbnail,
       entity.thumbnailPath,
       entity.thumbnailSize,
@@ -199,7 +201,8 @@ export class MysqlStorageItemRepository extends MysqlRepository<StorageItem> imp
         lastViewedAt: raw.last_viewed_at,
         initializationVector: raw.initialization_vector,
         isRootFolder: Boolean(raw.is_root_folder),
-        isCryptoFolderItem: Boolean(raw.is_encrypted_with_client_key),
+        isCryptoFolderItem: Boolean(raw.is_crypto_folder_item),
+        clientEncryptionKey: raw.client_encryption_key_hash,
         hasThumbnail: Boolean(raw.has_thumbnail),
         thumbnailPath: raw.thumbnail_path,
         thumbnailSize: raw.thumbnail_size,
