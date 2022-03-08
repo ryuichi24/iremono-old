@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const EnterEncryptionKeyForm = ({ open, handleClose }: Props) => {
-  const [encryptionKey, setEncryptionKey] = useState('');
+  const [encryptionKey, setEncryptionKey] = useState('c1851ee191c7458a1be272bef22882c8');
   const { setClientEncryptionKey } = useAuthActions();
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
