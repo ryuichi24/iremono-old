@@ -7,8 +7,9 @@ export const demoModeHandler = () => (req: express.Request, res: express.Respons
     ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method) &&
     req.path !== '/api/auth/signin' &&
     req.path !== '/api/auth/signout' &&
-    !(/\/api\/files\/.+\/token/.test(req.path)) &&
-    req.path !== '/api/auth/refresh-token'
+    !/\/api\/files\/.+\/token/.test(req.path) &&
+    req.path !== '/api/auth/refresh-token' &&
+    req.path !== '/api/folders/root/verify-key'
   ) {
     return res.status(405).json({
       error: {
