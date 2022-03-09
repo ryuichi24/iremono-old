@@ -50,7 +50,6 @@ const ThumbnailContainer = styled.div`
 `;
 
 const Thumbnail = styled.img`
-  border-radius: ${(props) => props.theme.shape.borderRadius} ${(props) => props.theme.shape.borderRadius} 0px 0px;
   width: 100%;
   height: 100%;
   object-fit: cover;
