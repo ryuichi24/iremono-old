@@ -1,7 +1,6 @@
-import { GetFileTokenUseCase } from '@iremono/backend-core/dist/use-cases';
+import { GetFileTokenRequestDTO, GetFileTokenUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeGetFileTokenRequestDTO } from './make-get-file-token-request-DTO';
 
 export class GetFileTokenController extends Controller<GetFileTokenUseCase> {
   private readonly _logger: Logger;
@@ -12,7 +11,12 @@ export class GetFileTokenController extends Controller<GetFileTokenUseCase> {
   }
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeGetFileTokenRequestDTO(request);
+    const dto: GetFileTokenRequestDTO = {
+      ownerId: request.user?.id,
+      id: request.params?.id,
+      tokenType: request.query?.type,
+    };
+
     const result = await this._useCase.handle(dto);
 
     this._logger.info(

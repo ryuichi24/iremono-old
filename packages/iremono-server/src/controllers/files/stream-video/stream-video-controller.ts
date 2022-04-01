@@ -1,10 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import { CryptoService } from '@iremono/backend-core/dist/services/crypto-service';
-import { StreamVideoUseCase } from '@iremono/backend-core/dist/use-cases';
+import { StreamVideoRequestDTO, StreamVideoUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeStreamVideoRequestDTO } from './make-download-file-thumbnail-request-DTO';
 import { config } from '../../../config';
 import { SkipStream } from '../../../shared/utils/skip-stream';
 
@@ -19,7 +18,11 @@ export class StreamVideoController extends Controller<StreamVideoUseCase> {
   }
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeStreamVideoRequestDTO(request);
+    const dto: StreamVideoRequestDTO = {
+      streamFileToken: request.query?.token,
+      id: request.params?.id,
+    };
+
     const result = await this._useCase.handle(dto);
 
     const streamRange = request.headers.range || 'bytes=0-';

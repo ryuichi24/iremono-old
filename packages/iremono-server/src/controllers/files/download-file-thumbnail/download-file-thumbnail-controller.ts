@@ -1,10 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import { CryptoService } from '@iremono/backend-core/dist/services/crypto-service';
-import { DownloadFileThumbnailUseCase } from '@iremono/backend-core/dist/use-cases';
+import { DownloadFileThumbnailRequestDTO, DownloadFileThumbnailUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeDownloadFileThumbnailRequestDTO } from './make-download-file-thumbnail-request-DTO';
 import { config } from '../../../config';
 
 export class DownloadFileThumbnailController extends Controller<DownloadFileThumbnailUseCase> {
@@ -18,7 +17,12 @@ export class DownloadFileThumbnailController extends Controller<DownloadFileThum
   }
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeDownloadFileThumbnailRequestDTO(request);
+    const dto: DownloadFileThumbnailRequestDTO = {
+      ownerId: request.user?.id,
+      id: request.params?.id,
+      clientEncryptionKey: request.headers['encryption-key'],
+    };
+
     const result = await this._useCase.handle(dto);
 
     const readStream = fs.createReadStream(path.join(config.mediaConfig.PATH_TO_MEDIA_DIR, result.thumbnailPath));

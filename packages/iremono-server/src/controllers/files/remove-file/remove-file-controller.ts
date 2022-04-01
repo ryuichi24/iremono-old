@@ -1,7 +1,6 @@
-import { RemoveFileUseCase } from '@iremono/backend-core/dist/use-cases';
+import { RemoveFileRequestDTO, RemoveFileUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeRemoveFileRequestDTO } from './make-remove-file-request-DTO';
 
 export class RemoveFileController extends Controller<RemoveFileUseCase> {
   private readonly _logger: Logger;
@@ -12,7 +11,11 @@ export class RemoveFileController extends Controller<RemoveFileUseCase> {
   }
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeRemoveFileRequestDTO(request);
+    const dto: RemoveFileRequestDTO = {
+      id: request.params?.id,
+      ownerId: request.user?.id,
+    };
+
     await this._useCase.handle(dto);
 
     this._logger.info(

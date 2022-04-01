@@ -1,10 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import { CryptoService } from '@iremono/backend-core/dist/services/crypto-service';
-import { DownloadFileUseCase } from '@iremono/backend-core/dist/use-cases';
+import { DownloadFileRequestDTO, DownloadFileUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeDownloadFileRequestDTO } from './make-download-file-request-DTO';
 import { config } from '../../../config';
 
 export class DownloadFileController extends Controller<DownloadFileUseCase> {
@@ -18,7 +17,14 @@ export class DownloadFileController extends Controller<DownloadFileUseCase> {
   }
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeDownloadFileRequestDTO(request);
+    const { id } = request.params;
+    const { token } = request.query;
+
+    const dto: DownloadFileRequestDTO = {
+      downloadFileToken: token,
+      id,
+    };
+
     const result = await this._useCase.handle(dto);
 
     this._logger.debug(result);
