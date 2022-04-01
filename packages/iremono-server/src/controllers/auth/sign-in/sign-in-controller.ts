@@ -1,8 +1,7 @@
-import { SignInUseCase } from '@iremono/backend-core/dist/use-cases/auth/sign-in';
+import { SignInRequestDTO, SignInUseCase } from '@iremono/backend-core/dist/use-cases/auth/sign-in';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { cookieHelper } from '../../../shared/utils/cookie-helper';
-import { makeSignInRequestDTO } from './make-sign-in-request-DTO';
 
 export class SignInController extends Controller<SignInUseCase> {
   private readonly _logger: Logger;
@@ -13,7 +12,9 @@ export class SignInController extends Controller<SignInUseCase> {
   }
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeSignInRequestDTO(request);
+    const { email, password } = request.body;
+    const dto: SignInRequestDTO = { email, password };
+
     const result = await this._useCase.handle(dto);
 
     this._logger.info(

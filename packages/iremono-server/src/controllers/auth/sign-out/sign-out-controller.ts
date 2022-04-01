@@ -1,8 +1,7 @@
-import { SignOutUseCase } from '@iremono/backend-core/dist/use-cases/auth/sign-out';
+import { SignOutRequestDTO, SignOutUseCase } from '@iremono/backend-core/dist/use-cases/auth/sign-out';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { cookieHelper } from '../../../shared/utils/cookie-helper';
-import { makeSignOutRequestDTO } from './make-sign-out-request-DTO';
 
 export class SignOutController extends Controller<SignOutUseCase> {
   private readonly _logger: Logger;
@@ -13,7 +12,10 @@ export class SignOutController extends Controller<SignOutUseCase> {
   }
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeSignOutRequestDTO(request);
+    const { refreshToken } = request.cookies;
+
+    const dto: SignOutRequestDTO = { refreshToken };
+
     const result = await this._useCase.handle(dto);
 
     this._logger.info(

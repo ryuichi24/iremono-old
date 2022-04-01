@@ -1,8 +1,7 @@
-import { RefreshTokenUseCase } from '@iremono/backend-core/dist/use-cases/auth/refresh-token';
+import { RefreshTokenRequestDTO, RefreshTokenUseCase } from '@iremono/backend-core/dist/use-cases/auth/refresh-token';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { cookieHelper } from '../../../shared/utils/cookie-helper';
-import { makeRefreshTokenRequestDTO } from './make-refresh-token-request-DTO';
 
 export class RefreshTokenController extends Controller<RefreshTokenUseCase> {
   private readonly _logger: Logger;
@@ -13,7 +12,12 @@ export class RefreshTokenController extends Controller<RefreshTokenUseCase> {
   }
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeRefreshTokenRequestDTO(request);
+    const { refreshToken } = request.body;
+
+    const dto: RefreshTokenRequestDTO = {
+      refreshToken: refreshToken || request.cookies?.refreshToken,
+    };
+
     const result = await this._useCase.handle(dto);
 
     this._logger.info(

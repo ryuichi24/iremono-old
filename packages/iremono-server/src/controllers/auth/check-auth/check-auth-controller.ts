@@ -1,7 +1,6 @@
-import { CheckAuthUseCase } from '@iremono/backend-core/src/use-cases';
+import { CheckAuthRequestDTO, CheckAuthUseCase } from '@iremono/backend-core/src/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeCheckAuthRequestDTO } from './make-check-auth-DTO';
 
 export class CheckAuthController extends Controller<CheckAuthUseCase> {
   private readonly _logger: Logger;
@@ -12,7 +11,12 @@ export class CheckAuthController extends Controller<CheckAuthUseCase> {
   }
 
   async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeCheckAuthRequestDTO(request);
+    const { id } = request.user;
+
+    const dto: CheckAuthRequestDTO = {
+      id,
+    };
+
     const result = await this._useCase.handle(dto);
 
     this._logger.info(
