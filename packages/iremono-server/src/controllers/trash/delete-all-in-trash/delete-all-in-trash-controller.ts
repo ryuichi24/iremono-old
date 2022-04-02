@@ -1,9 +1,8 @@
 import path from 'path';
-import { DeleteAllInTrashUseCase } from '@iremono/backend-core/dist/use-cases';
+import { DeleteAllInTrashRequestDTO, DeleteAllInTrashUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { deleteFromFileSystem } from '@iremono/util/dist/file-system';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeDeleteAllInTrashRequestDTO } from './make-delete-all-in-trash-request-DTO';
 import { config } from '../../../config';
 
 export class DeleteAllInTrashController extends Controller<DeleteAllInTrashUseCase> {
@@ -14,8 +13,11 @@ export class DeleteAllInTrashController extends Controller<DeleteAllInTrashUseCa
     this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeDeleteAllInTrashRequestDTO(request);
+  async handle({ user, fullPath, method, host, ip }: HttpRequest): Promise<HttpResponse> {
+    const dto: DeleteAllInTrashRequestDTO = {
+      ownerId: user.id,
+    };
+
     const result = await this._useCase.handle(dto);
 
     await Promise.all(
@@ -28,7 +30,7 @@ export class DeleteAllInTrashController extends Controller<DeleteAllInTrashUseCa
 
     this._logger.info(
       'user has deleted all in trash',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has deleted all in trash"]`,
+      `[path="${fullPath}", method="${method}", host="${host}", ip="${ip}", message="user has deleted all in trash"]`,
     );
 
     return this._noContent();
