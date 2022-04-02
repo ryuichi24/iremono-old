@@ -6,8 +6,9 @@ import { filesRouter, foldersRouter, authRouter, trashRouter } from './routes';
 import { cookieHandler, errorHandler } from './shared/express-lib';
 import { loggerFactory } from './shared/utils/logger';
 import { connectDB } from './db';
+import { loggerHandler } from './shared/express-lib/middlewares/logger-handler';
 
-const logger = loggerFactory.createLogger('main');
+const logger = loggerFactory.createLogger('server');
 
 const main = async () => {
   await connectDB();
@@ -17,7 +18,7 @@ const main = async () => {
 
   const app = express();
 
-  app.use([express.json(), cookieHandler(), cors({ credentials: true, origin: true })]);
+  app.use([express.json(), cookieHandler(), cors({ credentials: true, origin: true }), loggerHandler(logger)]);
 
   app.use('/api/auth', authRouter);
   app.use('/api/folders', foldersRouter);

@@ -1,24 +1,18 @@
-import { RemoveFolderUseCase } from '@iremono/backend-core/dist/use-cases';
-import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
+import { RemoveFolderRequestDTO, RemoveFolderUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeRemoveFolderRequestDTO } from './make-remove-folder-request-DTO';
 
 export class RemoveFolderController extends Controller<RemoveFolderUseCase> {
-  private readonly _logger: Logger;
-  
-  constructor(useCase: RemoveFolderUseCase, loggerFactory: LoggerFactory) {
+  constructor(useCase: RemoveFolderUseCase) {
     super(useCase);
-    this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeRemoveFolderRequestDTO(request);
-    await this._useCase.handle(dto);
+  async handle({ params, user }: HttpRequest): Promise<HttpResponse> {
+    const dto: RemoveFolderRequestDTO = {
+      id: params?.id,
+      ownerId: user?.id,
+    };
 
-    this._logger.info(
-      'user has removed a folder',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has removed a folder"]`,
-    );
+    await this._useCase.handle(dto);
 
     return this._noContent();
   }

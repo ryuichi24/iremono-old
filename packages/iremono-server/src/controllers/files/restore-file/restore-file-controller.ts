@@ -1,24 +1,18 @@
-import { RestoreFileUseCase } from '@iremono/backend-core/dist/use-cases';
-import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
+import { RestoreFileRequestDTO, RestoreFileUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeRestoreFileRequestDTO } from './make-restore-file-request-DTO';
 
 export class RestoreFileController extends Controller<RestoreFileUseCase> {
-  private readonly _logger: Logger;
-
-  constructor(useCase: RestoreFileUseCase, loggerFactory: LoggerFactory) {
+  constructor(useCase: RestoreFileUseCase) {
     super(useCase);
-    this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeRestoreFileRequestDTO(request);
-    await this._useCase.handle(dto);
+  async handle({ params, user }: HttpRequest): Promise<HttpResponse> {
+    const dto: RestoreFileRequestDTO = {
+      id: params?.id,
+      ownerId: user?.id,
+    };
 
-    this._logger.info(
-      'user has restored a file',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has restored a file"]`,
-    );
+    await this._useCase.handle(dto);
 
     return this._noContent();
   }

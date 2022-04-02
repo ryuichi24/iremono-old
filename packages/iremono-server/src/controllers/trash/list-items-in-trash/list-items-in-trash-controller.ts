@@ -1,24 +1,18 @@
-import { ListItemsInTrashUseCase } from '@iremono/backend-core/dist/use-cases';
-import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
+import { ListItemsInTrashRequestDTO, ListItemsInTrashUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeListItemsInTrashRequestDTO } from './make-list-items-in-trash-request-DTO';
 
 export class ListItemsInTrashController extends Controller<ListItemsInTrashUseCase> {
-  private readonly _logger: Logger;
-
-  constructor(useCase: ListItemsInTrashUseCase, loggerFactory: LoggerFactory) {
+  constructor(useCase: ListItemsInTrashUseCase) {
     super(useCase);
-    this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeListItemsInTrashRequestDTO(request);
-    const result = await this._useCase.handle(dto);
+  async handle({ query, user }: HttpRequest): Promise<HttpResponse> {
+    const dto: ListItemsInTrashRequestDTO = {
+      ownerId: user.id,
+      folderType: (query?.type as 'normal' | 'crypto') || 'normal',
+    };
 
-    this._logger.info(
-      'user has requested for items in trash',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has requested for items in trash"]`,
-    );
+    const result = await this._useCase.handle(dto);
 
     return this._ok(result);
   }

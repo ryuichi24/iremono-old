@@ -1,24 +1,20 @@
-import { UpdateFileUseCase } from '@iremono/backend-core/dist/use-cases';
-import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
+import { UpdateFileRequestDTO, UpdateFileUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeUpdateFileRequestDTO } from './make-update-file-request-DTO';
 
 export class UpdateFileController extends Controller<UpdateFileUseCase> {
-  private readonly _logger: Logger;
-  
-  constructor(useCase: UpdateFileUseCase, loggerFactory: LoggerFactory) {
+  constructor(useCase: UpdateFileUseCase) {
     super(useCase);
-    this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeUpdateFileRequestDTO(request);
-    const result = await this._useCase.handle(dto);
+  async handle({ body: { name, parentId }, params, user }: HttpRequest): Promise<HttpResponse> {
+    const dto: UpdateFileRequestDTO = {
+      name,
+      parentId,
+      ownerId: user?.id,
+      id: params?.id,
+    };
 
-    this._logger.info(
-      'user has updated the file',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has updated the file"]`,
-    );
+    const result = await this._useCase.handle(dto);
 
     return this._ok(result);
   }

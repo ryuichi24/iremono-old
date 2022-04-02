@@ -1,28 +1,28 @@
 import fs from 'fs';
 import path from 'path';
 import { CryptoService } from '@iremono/backend-core/dist/services/crypto-service';
-import { StreamVideoUseCase } from '@iremono/backend-core/dist/use-cases';
-import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
+import { StreamVideoRequestDTO, StreamVideoUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeStreamVideoRequestDTO } from './make-download-file-thumbnail-request-DTO';
 import { config } from '../../../config';
 import { SkipStream } from '../../../shared/utils/skip-stream';
 
 export class StreamVideoController extends Controller<StreamVideoUseCase> {
-  private readonly _logger: Logger;
   private readonly _cryptoService: CryptoService;
 
-  constructor(useCase: StreamVideoUseCase, cryptoService: CryptoService, loggerFactory: LoggerFactory) {
+  constructor(useCase: StreamVideoUseCase, cryptoService: CryptoService) {
     super(useCase);
     this._cryptoService = cryptoService;
-    this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeStreamVideoRequestDTO(request);
+  async handle({ params, query, headers, fullPath, method, host, ip }: HttpRequest): Promise<HttpResponse> {
+    const dto: StreamVideoRequestDTO = {
+      streamFileToken: query?.token,
+      id: params?.id,
+    };
+
     const result = await this._useCase.handle(dto);
 
-    const streamRange = request.headers.range || 'bytes=0-';
+    const streamRange = headers.range || 'bytes=0-';
     const parsedFileSize = parseInt(result.fileSize.toString(), 10);
     const startEnd = streamRange.replace(/bytes=/, '').split('-');
     const [start, end] = startEnd.map((part) => (part ? parseInt(part, 10) : parsedFileSize - 1));
@@ -80,11 +80,6 @@ export class StreamVideoController extends Controller<StreamVideoUseCase> {
     } else {
       videoReadStream = readStream.pipe(decipherStream).pipe(skipStream);
     }
-
-    this._logger.info(
-      'user has requested for streaming video',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has requested for streaming video"]`,
-    );
 
     return this._streamVideo(videoReadStream, {
       'Content-Range': `bytes ${start}-${end}/${parsedFileSize}`,

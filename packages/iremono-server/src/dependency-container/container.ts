@@ -112,11 +112,11 @@ const signOutUseCase = new SignOutUseCase(tokenService);
 const checkAuthUseCase = new CheckAuthUseCase(userRepository);
 const refreshTokenUseCase = new RefreshTokenUseCase(tokenService);
 
-export const signUpController = new SignUpController(signUpUseCase, loggerFactory);
-export const signInController = new SignInController(signInUseCase, loggerFactory);
-export const signOutController = new SignOutController(signOutUseCase, loggerFactory);
-export const checkAuthController = new CheckAuthController(checkAuthUseCase, loggerFactory);
-export const refreshTokenController = new RefreshTokenController(refreshTokenUseCase, loggerFactory);
+export const signUpController = new SignUpController(signUpUseCase);
+export const signInController = new SignInController(signInUseCase);
+export const signOutController = new SignOutController(signOutUseCase);
+export const checkAuthController = new CheckAuthController(checkAuthUseCase);
+export const refreshTokenController = new RefreshTokenController(refreshTokenUseCase);
 
 // folders
 const createFolderUseCase = new CreateFolderUseCase(storageItemRepository);
@@ -129,18 +129,17 @@ const listItemsInFolderUserCase = new ListItemsInFolderUseCase(storageItemReposi
 const getFolderUserCase = new GetFolderUseCase(storageItemRepository);
 const listAllAncestorsUserCase = new ListAllAncestorsUseCase(storageItemRepository);
 
-export const createFolderController = new CreateFolderController(createFolderUseCase, loggerFactory);
-export const createRootFolderController = new CreateRootFolderController(createRootFolderUseCase, loggerFactory);
+export const createFolderController = new CreateFolderController(createFolderUseCase);
+export const createRootFolderController = new CreateRootFolderController(createRootFolderUseCase);
 export const verifyClientEncryptionKeyController = new VerifyClientEncryptionKeyController(
   verifyClientEncryptionKeyUseCase,
-  loggerFactory,
 );
-export const updateFolderController = new UpdateFolderController(updateFolderUseCase, loggerFactory);
-export const removeFolderController = new RemoveFolderController(removeFolderUseCase, loggerFactory);
-export const restoreFolderController = new RestoreFolderController(restoreFolderUseCase, loggerFactory);
-export const listItemsInFolderController = new ListItemsInFolderController(listItemsInFolderUserCase, loggerFactory);
-export const getFolderController = new GetFolderController(getFolderUserCase, loggerFactory);
-export const listAllAncestorsController = new ListAllAncestorsController(listAllAncestorsUserCase, loggerFactory);
+export const updateFolderController = new UpdateFolderController(updateFolderUseCase);
+export const removeFolderController = new RemoveFolderController(removeFolderUseCase);
+export const restoreFolderController = new RestoreFolderController(restoreFolderUseCase);
+export const listItemsInFolderController = new ListItemsInFolderController(listItemsInFolderUserCase);
+export const getFolderController = new GetFolderController(getFolderUserCase);
+export const listAllAncestorsController = new ListAllAncestorsController(listAllAncestorsUserCase);
 
 // files
 const uploadFileUseCase = new UploadFileUseCase(storageItemRepository);
@@ -152,18 +151,17 @@ const removeFileUseCase = new RemoveFileUseCase(storageItemRepository);
 const restoreFileUseCase = new RestoreFileUseCase(storageItemRepository);
 const streamVideoUseCase = new StreamVideoUseCase(storageItemRepository, tokenService);
 
-export const uploadFileController = new UploadFileController(uploadFileUseCase, loggerFactory);
-export const downloadFileController = new DownloadFileController(downloadFileUseCase, cryptoService, loggerFactory);
-export const getFileTokenController = new GetFileTokenController(getFileTokenUseCase, loggerFactory);
+export const uploadFileController = new UploadFileController(uploadFileUseCase);
+export const downloadFileController = new DownloadFileController(downloadFileUseCase, cryptoService);
+export const getFileTokenController = new GetFileTokenController(getFileTokenUseCase);
 export const downloadFileThumbnailController = new DownloadFileThumbnailController(
   downloadFileThumbnailUseCase,
   cryptoService,
-  loggerFactory,
 );
-export const updateFileController = new UpdateFileController(updateFileUseCase, loggerFactory);
-export const removeFileController = new RemoveFileController(removeFileUseCase, loggerFactory);
-export const restoreFileController = new RestoreFileController(restoreFileUseCase, loggerFactory);
-export const streamVideoController = new StreamVideoController(streamVideoUseCase, cryptoService, loggerFactory);
+export const updateFileController = new UpdateFileController(updateFileUseCase);
+export const removeFileController = new RemoveFileController(removeFileUseCase);
+export const restoreFileController = new RestoreFileController(restoreFileUseCase);
+export const streamVideoController = new StreamVideoController(streamVideoUseCase, cryptoService);
 
 // trash
 const deleteFileInTrashUseCase = new DeleteFileInTrashUseCase(storageItemRepository);
@@ -171,10 +169,7 @@ const deleteFolderInTrashUseCase = new DeleteFolderInTrashUseCase(storageItemRep
 const listItemsInTrashUseCase = new ListItemsInTrashUseCase(storageItemRepository);
 const deleteAllInTrashUseCase = new DeleteAllInTrashUseCase(storageItemRepository);
 
-export const deleteFileInTrashController = new DeleteFileInTrashController(deleteFileInTrashUseCase, loggerFactory);
-export const deleteFolderInTrashController = new DeleteFolderInTrashController(
-  deleteFolderInTrashUseCase,
-  loggerFactory,
-);
-export const listItemsInTrashController = new ListItemsInTrashController(listItemsInTrashUseCase, loggerFactory);
-export const deleteAllInTrashController = new DeleteAllInTrashController(deleteAllInTrashUseCase, loggerFactory);
+export const deleteFileInTrashController = new DeleteFileInTrashController(deleteFileInTrashUseCase);
+export const deleteFolderInTrashController = new DeleteFolderInTrashController(deleteFolderInTrashUseCase);
+export const listItemsInTrashController = new ListItemsInTrashController(listItemsInTrashUseCase);
+export const deleteAllInTrashController = new DeleteAllInTrashController(deleteAllInTrashUseCase);

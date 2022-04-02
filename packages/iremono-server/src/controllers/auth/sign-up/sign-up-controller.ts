@@ -1,25 +1,19 @@
-import { SignUpUseCase } from '@iremono/backend-core/dist/use-cases/auth';
-import { LoggerFactory, Logger } from '@iremono/util/dist/logger';
+import { SignUpRequestDTO, SignUpUseCase } from '@iremono/backend-core/dist/use-cases/auth';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { cookieHelper } from '../../../shared/utils/cookie-helper';
-import { makeSignUpRequestDTO } from './make-sign-up-request-DTO';
 
 export class SignUpController extends Controller<SignUpUseCase> {
-  private readonly _logger: Logger;
-
-  constructor(useCase: SignUpUseCase, loggerFactory: LoggerFactory) {
+  constructor(useCase: SignUpUseCase) {
     super(useCase);
-    this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeSignUpRequestDTO(request);
-    const result = await this._useCase.handle(dto);
+  async handle({ body: { email, password } }: HttpRequest): Promise<HttpResponse> {
+    const dto: SignUpRequestDTO = {
+      email,
+      password,
+    };
 
-    this._logger.info(
-      'new user has signed up',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="new user has signed up"]`,
-    );
+    const result = await this._useCase.handle(dto);
 
     return this._created(result, {}, [
       cookieHelper.makeRefreshTokenCookie(result.refreshToken.value, result.refreshToken.expiresIn),

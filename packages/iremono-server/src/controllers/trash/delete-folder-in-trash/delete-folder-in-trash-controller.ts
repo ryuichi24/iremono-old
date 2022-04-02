@@ -1,21 +1,20 @@
 import path from 'path';
-import { DeleteFolderInTrashUseCase } from '@iremono/backend-core/dist/use-cases';
-import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
+import { DeleteFolderInTrashRequestDTO, DeleteFolderInTrashUseCase } from '@iremono/backend-core/dist/use-cases';
 import { deleteFromFileSystem } from '@iremono/util/dist/file-system';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeDeleteFolderInTrashRequestDTO } from './make-delete-folder-in-trash-request-DTO';
 import { config } from '../../../config';
 
 export class DeleteFolderInTrashController extends Controller<DeleteFolderInTrashUseCase> {
-  private readonly _logger: Logger;
-
-  constructor(useCase: DeleteFolderInTrashUseCase, loggerFactory: LoggerFactory) {
+  constructor(useCase: DeleteFolderInTrashUseCase) {
     super(useCase);
-    this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeDeleteFolderInTrashRequestDTO(request);
+  async handle({ params, user }: HttpRequest): Promise<HttpResponse> {
+    const dto: DeleteFolderInTrashRequestDTO = {
+      id: params?.id,
+      ownerId: user.id,
+    };
+
     const result = await this._useCase.handle(dto);
 
     await Promise.all(
@@ -24,11 +23,6 @@ export class DeleteFolderInTrashController extends Controller<DeleteFolderInTras
         if (file.hasThumbnail)
           deleteFromFileSystem(path.join(config.mediaConfig.PATH_TO_MEDIA_DIR, file.thumbnailPath!));
       }),
-    );
-
-    this._logger.info(
-      'user has deleted a folder in trash',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has deleted a folder in trash"]`,
     );
 
     return this._noContent();

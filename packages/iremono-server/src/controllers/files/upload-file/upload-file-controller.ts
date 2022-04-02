@@ -1,25 +1,41 @@
-import { UploadFileUseCase } from '@iremono/backend-core/dist/use-cases';
-import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
+import { UploadFileRequestDTO, UploadFileUseCase } from '@iremono/backend-core/dist/use-cases';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
-import { makeUploadFileRequestDTO } from './make-upload-file-request-DTO';
 
 export class UploadFileController extends Controller<UploadFileUseCase> {
-  private readonly _logger: Logger;
-  
-  constructor(useCase: UploadFileUseCase, loggerFactory: LoggerFactory) {
+  constructor(useCase: UploadFileUseCase) {
     super(useCase);
-    this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const dto = makeUploadFileRequestDTO(request);
-    const result = await this._useCase.handle(dto);
+  async handle({
+    uploadedFile: {
+      fileName,
+      filePath,
+      fileSize,
+      mimeType,
+      fileInitializationVector,
+      formData: { parentId },
+      thumbnail: { thumbnailPath, thumbnailSize, thumbnailInitializationVector },
+      isCryptoFolderItem,
+    },
+    user,
+  }: HttpRequest): Promise<HttpResponse> {
+    const dto: UploadFileRequestDTO = {
+      name: fileName,
+      parentId,
+      filePath,
+      fileSize,
+      mimeType,
+      fileInitializationVector,
+      ownerId: user.id,
+      thumbnailPath,
+      thumbnailSize,
+      thumbnailInitializationVector,
+      isCryptoFolderItem,
+    };
 
-    this._logger.info(
-      'user has uploaded a file',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has uploaded a file"]`,
-    );
+    const result = await this._useCase.handle(dto);
 
     return this._created(result);
   }
 }
+``;
