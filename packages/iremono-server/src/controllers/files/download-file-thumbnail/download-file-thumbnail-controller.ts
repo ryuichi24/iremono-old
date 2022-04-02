@@ -2,21 +2,18 @@ import fs from 'fs';
 import path from 'path';
 import { CryptoService } from '@iremono/backend-core/dist/services/crypto-service';
 import { DownloadFileThumbnailRequestDTO, DownloadFileThumbnailUseCase } from '@iremono/backend-core/dist/use-cases';
-import { Logger, LoggerFactory } from '@iremono/util/dist/logger';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { config } from '../../../config';
 
 export class DownloadFileThumbnailController extends Controller<DownloadFileThumbnailUseCase> {
-  private readonly _logger: Logger;
   private readonly _cryptoService: CryptoService;
 
-  constructor(useCase: DownloadFileThumbnailUseCase, cryptoService: CryptoService, loggerFactory: LoggerFactory) {
+  constructor(useCase: DownloadFileThumbnailUseCase, cryptoService: CryptoService) {
     super(useCase);
     this._cryptoService = cryptoService;
-    this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle({ params, user, headers, fullPath, method, host, ip }: HttpRequest): Promise<HttpResponse> {
+  async handle({ params, user, headers }: HttpRequest): Promise<HttpResponse> {
     const dto: DownloadFileThumbnailRequestDTO = {
       ownerId: user?.id,
       id: params?.id,
@@ -43,11 +40,6 @@ export class DownloadFileThumbnailController extends Controller<DownloadFileThum
     } else {
       decryptedFileReadStream = readStream.pipe(decipherStream);
     }
-
-    this._logger.info(
-      'user has downloaded the file',
-      `[path="${fullPath}", method="${method}", host="${host}", ip="${ip}", message="user has downloaded the file"]`,
-    );
 
     return this._download(decryptedFileReadStream, {
       'Content-type': 'image/png',
