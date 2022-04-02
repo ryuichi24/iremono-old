@@ -10,17 +10,17 @@ export class RestoreFileController extends Controller<RestoreFileUseCase> {
     this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
+  async handle({ params, user, fullPath, method, host, ip }: HttpRequest): Promise<HttpResponse> {
     const dto: RestoreFileRequestDTO = {
-      id: request.params?.id,
-      ownerId: request.user?.id,
+      id: params?.id,
+      ownerId: user?.id,
     };
 
     await this._useCase.handle(dto);
 
     this._logger.info(
       'user has restored a file',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has restored a file"]`,
+      `[path="${fullPath}", method="${method}", host="${host}", ip="${ip}", message="user has restored a file"]`,
     );
 
     return this._noContent();

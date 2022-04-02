@@ -10,8 +10,8 @@ export class UploadFileController extends Controller<UploadFileUseCase> {
     this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const {
+  async handle({
+    uploadedFile: {
       fileName,
       filePath,
       fileSize,
@@ -20,8 +20,13 @@ export class UploadFileController extends Controller<UploadFileUseCase> {
       formData: { parentId },
       thumbnail: { thumbnailPath, thumbnailSize, thumbnailInitializationVector },
       isCryptoFolderItem,
-    } = request.uploadedFile;
-
+    },
+    user,
+    fullPath,
+    method,
+    host,
+    ip,
+  }: HttpRequest): Promise<HttpResponse> {
     const dto: UploadFileRequestDTO = {
       name: fileName,
       parentId,
@@ -29,7 +34,7 @@ export class UploadFileController extends Controller<UploadFileUseCase> {
       fileSize,
       mimeType,
       fileInitializationVector,
-      ownerId: request.user.id,
+      ownerId: user.id,
       thumbnailPath,
       thumbnailSize,
       thumbnailInitializationVector,
@@ -40,10 +45,10 @@ export class UploadFileController extends Controller<UploadFileUseCase> {
 
     this._logger.info(
       'user has uploaded a file',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has uploaded a file"]`,
+      `[path="${fullPath}", method="${method}", host="${host}", ip="${ip}", message="user has uploaded a file"]`,
     );
 
     return this._created(result);
   }
 }
-``
+``;

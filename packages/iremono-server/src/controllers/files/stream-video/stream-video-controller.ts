@@ -17,15 +17,15 @@ export class StreamVideoController extends Controller<StreamVideoUseCase> {
     this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
+  async handle({ params, query, headers, fullPath, method, host, ip }: HttpRequest): Promise<HttpResponse> {
     const dto: StreamVideoRequestDTO = {
-      streamFileToken: request.query?.token,
-      id: request.params?.id,
+      streamFileToken: query?.token,
+      id: params?.id,
     };
 
     const result = await this._useCase.handle(dto);
 
-    const streamRange = request.headers.range || 'bytes=0-';
+    const streamRange = headers.range || 'bytes=0-';
     const parsedFileSize = parseInt(result.fileSize.toString(), 10);
     const startEnd = streamRange.replace(/bytes=/, '').split('-');
     const [start, end] = startEnd.map((part) => (part ? parseInt(part, 10) : parsedFileSize - 1));
@@ -86,7 +86,7 @@ export class StreamVideoController extends Controller<StreamVideoUseCase> {
 
     this._logger.info(
       'user has requested for streaming video',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has requested for streaming video"]`,
+      `[path="${fullPath}", method="${method}", host="${host}", ip="${ip}", message="user has requested for streaming video"]`,
     );
 
     return this._streamVideo(videoReadStream, {

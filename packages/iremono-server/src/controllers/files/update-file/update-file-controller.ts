@@ -10,21 +10,19 @@ export class UpdateFileController extends Controller<UpdateFileUseCase> {
     this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const { name, parentId } = request.body;
-
+  async handle({ body: { name, parentId }, params, user, fullPath, method, host, ip }: HttpRequest): Promise<HttpResponse> {
     const dto: UpdateFileRequestDTO = {
       name,
       parentId,
-      ownerId: request.user?.id,
-      id: request.params?.id,
+      ownerId: user?.id,
+      id: params?.id,
     };
 
     const result = await this._useCase.handle(dto);
 
     this._logger.info(
       'user has updated the file',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has updated the file"]`,
+      `[path="${fullPath}", method="${method}", host="${host}", ip="${ip}", message="user has updated the file"]`,
     );
 
     return this._ok(result);

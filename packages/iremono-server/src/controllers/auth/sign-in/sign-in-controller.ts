@@ -11,15 +11,14 @@ export class SignInController extends Controller<SignInUseCase> {
     this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const { email, password } = request.body;
+  async handle({ body: { email, password }, fullPath, method, host, ip }: HttpRequest): Promise<HttpResponse> {
     const dto: SignInRequestDTO = { email, password };
 
     const result = await this._useCase.handle(dto);
 
     this._logger.info(
       'user has signed in',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has signed in"]`,
+      `[path="${fullPath}", method="${method}", host="${host}", ip="${ip}", message="user has signed in"]`,
     );
 
     return this._ok(result, {}, [

@@ -10,18 +10,16 @@ export class CheckAuthController extends Controller<CheckAuthUseCase> {
     this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const { id } = request.user;
-
+  async handle({ user, fullPath, method, host, ip }: HttpRequest): Promise<HttpResponse> {
     const dto: CheckAuthRequestDTO = {
-      id,
+      id: user?.id,
     };
 
     const result = await this._useCase.handle(dto);
 
     this._logger.info(
       'user has checked his/her auth',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has checked his/her auth"]`,
+      `[path="${fullPath}", method="${method}", host="${host}", ip="${ip}", message="user has checked his/her auth"]`,
     );
 
     return this._ok(result);

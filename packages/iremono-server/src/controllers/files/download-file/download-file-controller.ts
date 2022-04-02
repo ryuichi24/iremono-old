@@ -16,13 +16,10 @@ export class DownloadFileController extends Controller<DownloadFileUseCase> {
     this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const { id } = request.params;
-    const { token } = request.query;
-
+  async handle({ params, query, fullPath, method, host, ip }: HttpRequest): Promise<HttpResponse> {
     const dto: DownloadFileRequestDTO = {
-      downloadFileToken: token,
-      id,
+      downloadFileToken: query?.token,
+      id: params?.id,
     };
 
     const result = await this._useCase.handle(dto);
@@ -50,7 +47,7 @@ export class DownloadFileController extends Controller<DownloadFileUseCase> {
 
     this._logger.info(
       'user has downloaded the file',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has downloaded the file"]`,
+      `[path="${fullPath}", method="${method}", host="${host}", ip="${ip}", message="user has downloaded the file"]`,
     );
 
     return this._download(decryptedFileReadStream, {

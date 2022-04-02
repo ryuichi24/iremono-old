@@ -11,16 +11,14 @@ export class SignOutController extends Controller<SignOutUseCase> {
     this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const { refreshToken } = request.cookies;
-
-    const dto: SignOutRequestDTO = { refreshToken };
+  async handle({ cookies, fullPath, method, host, ip }: HttpRequest): Promise<HttpResponse> {
+    const dto: SignOutRequestDTO = { refreshToken: cookies?.refreshToken };
 
     const result = await this._useCase.handle(dto);
 
     this._logger.info(
       'user has signed out',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has signed out"]`,
+      `[path="${fullPath}", method="${method}", host="${host}", ip="${ip}", message="user has signed out"]`,
     );
 
     return this._ok(result, {}, [

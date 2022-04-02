@@ -11,9 +11,7 @@ export class SignUpController extends Controller<SignUpUseCase> {
     this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
-    const { email, password } = request.body;
-
+  async handle({ body: { email, password }, fullPath, method, host, ip }: HttpRequest): Promise<HttpResponse> {
     const dto: SignUpRequestDTO = {
       email,
       password,
@@ -23,7 +21,7 @@ export class SignUpController extends Controller<SignUpUseCase> {
 
     this._logger.info(
       'new user has signed up',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="new user has signed up"]`,
+      `[path="${fullPath}", method="${method}", host="${host}", ip="${ip}", message="new user has signed up"]`,
     );
 
     return this._created(result, {}, [

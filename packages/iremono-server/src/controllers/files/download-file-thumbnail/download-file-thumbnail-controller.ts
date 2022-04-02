@@ -16,11 +16,11 @@ export class DownloadFileThumbnailController extends Controller<DownloadFileThum
     this._logger = loggerFactory.createLogger(this.constructor.name);
   }
 
-  async handle(request: HttpRequest): Promise<HttpResponse> {
+  async handle({ params, user, headers, fullPath, method, host, ip }: HttpRequest): Promise<HttpResponse> {
     const dto: DownloadFileThumbnailRequestDTO = {
-      ownerId: request.user?.id,
-      id: request.params?.id,
-      clientEncryptionKey: request.headers['encryption-key'],
+      ownerId: user?.id,
+      id: params?.id,
+      clientEncryptionKey: headers['encryption-key'],
     };
 
     const result = await this._useCase.handle(dto);
@@ -46,7 +46,7 @@ export class DownloadFileThumbnailController extends Controller<DownloadFileThum
 
     this._logger.info(
       'user has downloaded the file',
-      `[path="${request.fullPath}", method="${request.method}", host="${request.host}", ip="${request.ip}", message="user has downloaded the file"]`,
+      `[path="${fullPath}", method="${method}", host="${host}", ip="${ip}", message="user has downloaded the file"]`,
     );
 
     return this._download(decryptedFileReadStream, {
