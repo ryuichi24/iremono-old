@@ -1,25 +1,23 @@
 import fs from 'fs';
 import path from 'path';
 import { CryptoService } from '@iremono/backend-core/dist/services/crypto-service';
-import { DownloadFileRequestDTO, DownloadFileUseCase } from '@iremono/backend-core/dist/use-cases';
+import { IDownloadFileUseCase } from '@iremono/backend-core/dist/use-cases/files/download-file/contracts';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { config } from '../../../config';
 
-export class DownloadFileController extends Controller<DownloadFileUseCase> {
+export class DownloadFileController extends Controller<IDownloadFileUseCase> {
   private readonly _cryptoService: CryptoService;
 
-  constructor(useCase: DownloadFileUseCase, cryptoService: CryptoService) {
+  constructor(useCase: IDownloadFileUseCase, cryptoService: CryptoService) {
     super(useCase);
     this._cryptoService = cryptoService;
   }
 
   async handle({ params, query }: HttpRequest): Promise<HttpResponse> {
-    const dto: DownloadFileRequestDTO = {
+    const result = await this._useCase.handle({
       downloadFileToken: query?.token,
       id: params?.id,
-    };
-
-    const result = await this._useCase.handle(dto);
+    });
 
     const readStream = fs.createReadStream(path.join(config.mediaConfig.PATH_TO_MEDIA_DIR, result.filePath));
     const decipherStream = this._cryptoService.generateDecipherStreamInCBC(

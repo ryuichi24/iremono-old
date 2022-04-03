@@ -1,12 +1,12 @@
-import { StorageItemRepository, UserRepository } from '../../../repositories';
-import { UseCase } from '../../../shared/use-case-lib';
+import { StorageItemRepository } from '../../../repositories';
 import { NotExistError } from '../../../shared/utils/errors';
-import { DownloadFileThumbnailRequestDTO } from './download-file-thumbnail-request-DTO';
-import { DownloadFileThumbnailResponseDTO } from './download-file-thumbnail-response-DTO';
+import {
+  DownloadFileThumbnailRequestDTO,
+  DownloadFileThumbnailResponseDTO,
+  IDownloadFileThumbnailUseCase,
+} from './contracts';
 
-export class DownloadFileThumbnailUseCase
-  implements UseCase<DownloadFileThumbnailRequestDTO, DownloadFileThumbnailResponseDTO>
-{
+export class DownloadFileThumbnailUseCase implements IDownloadFileThumbnailUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
 
   constructor(storageItemRepository: StorageItemRepository) {

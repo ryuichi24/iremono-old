@@ -1,13 +1,13 @@
 import { StorageItemRepository } from '../../../repositories';
 import { HashService } from '../../../services';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
-import { VerifyClientEncryptionKeyRequestDTO } from './verify-client-encryption-key-request-DTO';
-import { VerifyClientEncryptionKeyResponseDTO } from './verify-client-encryption-key-response-DTO';
+import {
+  IVerifyClientEncryptionKeyUseCase,
+  VerifyClientEncryptionKeyRequestDTO,
+  VerifyClientEncryptionKeyResponseDTO,
+} from './contracts';
 
-export class VerifyClientEncryptionKeyUseCase
-  implements UseCase<VerifyClientEncryptionKeyRequestDTO, VerifyClientEncryptionKeyResponseDTO>
-{
+export class VerifyClientEncryptionKeyUseCase implements IVerifyClientEncryptionKeyUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
   private readonly _hashService: HashService;
 
@@ -20,7 +20,10 @@ export class VerifyClientEncryptionKeyUseCase
     const cryptoRootFolder = await this._storageItemRepository.findCryptoRootFolderByOwnerId(dto.ownerId);
     if (!cryptoRootFolder) throw new NotExistError('Crypto root folder for the user does not exist.');
 
-    const isKeyValid = await this._hashService.compare(dto.clientEncryptionKey, cryptoRootFolder.clientEncryptionKeyHash!);
+    const isKeyValid = await this._hashService.compare(
+      dto.clientEncryptionKey,
+      cryptoRootFolder.clientEncryptionKeyHash!,
+    );
     if (!isKeyValid) throw new InvalidRequestError('Invalid client encryption key is provided.');
 
     return {};

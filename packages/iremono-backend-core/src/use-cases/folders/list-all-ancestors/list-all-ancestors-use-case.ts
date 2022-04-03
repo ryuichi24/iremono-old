@@ -1,11 +1,9 @@
 import { makeStorageItemDTO } from '../../../models';
 import { StorageItemRepository } from '../../../repositories';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
-import { ListAllAncestorsRequestDTO } from './list-all-ancestors-request-DTO';
-import { ListAllAncestorsResponseDTO } from './list-all-ancestors-response-DTO';
+import { IListAllAncestorsUseCase, ListAllAncestorsRequestDTO, ListAllAncestorsResponseDTO } from './contracts';
 
-export class ListAllAncestorsUseCase implements UseCase<ListAllAncestorsRequestDTO, ListAllAncestorsResponseDTO> {
+export class ListAllAncestorsUseCase implements IListAllAncestorsUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
 
   constructor(storageItemRepository: StorageItemRepository) {

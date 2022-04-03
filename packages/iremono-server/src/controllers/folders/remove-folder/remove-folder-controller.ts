@@ -1,18 +1,16 @@
-import { RemoveFolderRequestDTO, RemoveFolderUseCase } from '@iremono/backend-core/dist/use-cases';
+import { IRemoveFolderUseCase } from '@iremono/backend-core/dist/use-cases/folders/remove-folder/contracts';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 
-export class RemoveFolderController extends Controller<RemoveFolderUseCase> {
-  constructor(useCase: RemoveFolderUseCase) {
+export class RemoveFolderController extends Controller<IRemoveFolderUseCase> {
+  constructor(useCase: IRemoveFolderUseCase) {
     super(useCase);
   }
 
   async handle({ params, user }: HttpRequest): Promise<HttpResponse> {
-    const dto: RemoveFolderRequestDTO = {
+    await this._useCase.handle({
       id: params?.id,
       ownerId: user?.id,
-    };
-
-    await this._useCase.handle(dto);
+    });
 
     return this._noContent();
   }

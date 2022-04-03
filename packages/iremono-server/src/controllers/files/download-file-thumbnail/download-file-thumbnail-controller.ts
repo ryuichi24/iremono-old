@@ -1,26 +1,24 @@
 import fs from 'fs';
 import path from 'path';
 import { CryptoService } from '@iremono/backend-core/dist/services/crypto-service';
-import { DownloadFileThumbnailRequestDTO, DownloadFileThumbnailUseCase } from '@iremono/backend-core/dist/use-cases';
+import { IDownloadFileThumbnailUseCase } from '@iremono/backend-core/dist/use-cases/files/download-file-thumbnail/contracts';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { config } from '../../../config';
 
-export class DownloadFileThumbnailController extends Controller<DownloadFileThumbnailUseCase> {
+export class DownloadFileThumbnailController extends Controller<IDownloadFileThumbnailUseCase> {
   private readonly _cryptoService: CryptoService;
 
-  constructor(useCase: DownloadFileThumbnailUseCase, cryptoService: CryptoService) {
+  constructor(useCase: IDownloadFileThumbnailUseCase, cryptoService: CryptoService) {
     super(useCase);
     this._cryptoService = cryptoService;
   }
 
   async handle({ params, user, headers }: HttpRequest): Promise<HttpResponse> {
-    const dto: DownloadFileThumbnailRequestDTO = {
+    const result = await this._useCase.handle({
       ownerId: user?.id,
       id: params?.id,
       clientEncryptionKey: headers['encryption-key'],
-    };
-
-    const result = await this._useCase.handle(dto);
+    });
 
     const readStream = fs.createReadStream(path.join(config.mediaConfig.PATH_TO_MEDIA_DIR, result.thumbnailPath));
     const decipherStream = this._cryptoService.generateDecipherStreamInCBC(

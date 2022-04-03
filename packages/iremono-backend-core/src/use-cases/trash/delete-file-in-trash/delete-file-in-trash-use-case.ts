@@ -1,11 +1,9 @@
 import { makeStorageItemDTO } from '../../../models';
 import { StorageItemRepository } from '../../../repositories';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError } from '../../../shared/utils/errors';
-import { DeleteFileInTrashRequestDTO } from './delete-file-in-trash-request-DTO';
-import { DeleteFileInTrashResponseDTO } from './delete-file-in-trash-response-DTO';
+import { DeleteFileInTrashRequestDTO, DeleteFileInTrashResponseDTO, IDeleteFileInTrashUseCase } from './contracts';
 
-export class DeleteFileInTrashUseCase implements UseCase<DeleteFileInTrashRequestDTO, DeleteFileInTrashResponseDTO> {
+export class DeleteFileInTrashUseCase implements IDeleteFileInTrashUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
 
   constructor(storageItemRepository: StorageItemRepository) {

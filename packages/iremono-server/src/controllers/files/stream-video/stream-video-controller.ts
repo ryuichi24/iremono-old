@@ -1,26 +1,24 @@
 import fs from 'fs';
 import path from 'path';
 import { CryptoService } from '@iremono/backend-core/dist/services/crypto-service';
-import { StreamVideoRequestDTO, StreamVideoUseCase } from '@iremono/backend-core/dist/use-cases';
+import { IStreamVideoUseCase } from '@iremono/backend-core/dist/use-cases/files/stream-video/contracts';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { config } from '../../../config';
 import { SkipStream } from '../../../shared/utils/skip-stream';
 
-export class StreamVideoController extends Controller<StreamVideoUseCase> {
+export class StreamVideoController extends Controller<IStreamVideoUseCase> {
   private readonly _cryptoService: CryptoService;
 
-  constructor(useCase: StreamVideoUseCase, cryptoService: CryptoService) {
+  constructor(useCase: IStreamVideoUseCase, cryptoService: CryptoService) {
     super(useCase);
     this._cryptoService = cryptoService;
   }
 
   async handle({ params, query, headers, fullPath, method, host, ip }: HttpRequest): Promise<HttpResponse> {
-    const dto: StreamVideoRequestDTO = {
+    const result = await this._useCase.handle({
       streamFileToken: query?.token,
       id: params?.id,
-    };
-
-    const result = await this._useCase.handle(dto);
+    });
 
     const streamRange = headers.range || 'bytes=0-';
     const parsedFileSize = parseInt(result.fileSize.toString(), 10);

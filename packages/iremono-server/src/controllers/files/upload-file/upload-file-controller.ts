@@ -1,8 +1,8 @@
-import { UploadFileRequestDTO, UploadFileUseCase } from '@iremono/backend-core/dist/use-cases';
+import { IUploadFileUseCase } from '@iremono/backend-core/dist/use-cases/files/upload-file/contracts';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 
-export class UploadFileController extends Controller<UploadFileUseCase> {
-  constructor(useCase: UploadFileUseCase) {
+export class UploadFileController extends Controller<IUploadFileUseCase> {
+  constructor(useCase: IUploadFileUseCase) {
     super(useCase);
   }
 
@@ -19,7 +19,7 @@ export class UploadFileController extends Controller<UploadFileUseCase> {
     },
     user,
   }: HttpRequest): Promise<HttpResponse> {
-    const dto: UploadFileRequestDTO = {
+    const result = await this._useCase.handle({
       name: fileName,
       parentId,
       filePath,
@@ -31,9 +31,7 @@ export class UploadFileController extends Controller<UploadFileUseCase> {
       thumbnailSize,
       thumbnailInitializationVector,
       isCryptoFolderItem,
-    };
-
-    const result = await this._useCase.handle(dto);
+    });
 
     return this._created(result);
   }

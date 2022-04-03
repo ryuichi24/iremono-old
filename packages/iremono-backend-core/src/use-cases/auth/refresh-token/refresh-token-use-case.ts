@@ -1,10 +1,8 @@
 import { TokenService } from '../../../services';
-import { UseCase } from '../../../shared/use-case-lib';
 import { AuthError } from '../../../shared/utils/errors';
-import { RefreshTokenResponseDTO } from './refresh-token-response-DTO';
-import { RefreshTokenRequestDTO } from './refresh-token-request-DTO';
+import { IRefreshTokenUseCase, RefreshTokenRequestDTO, RefreshTokenResponseDTO } from './contracts';
 
-export class RefreshTokenUseCase implements UseCase<RefreshTokenRequestDTO, RefreshTokenResponseDTO> {
+export class RefreshTokenUseCase implements IRefreshTokenUseCase {
   private readonly _tokenService: TokenService;
 
   constructor(tokenService: TokenService) {

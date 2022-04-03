@@ -1,20 +1,18 @@
 import path from 'path';
-import { DeleteAllInTrashRequestDTO, DeleteAllInTrashUseCase } from '@iremono/backend-core/dist/use-cases';
+import { IDeleteAllInTrashUseCase } from '@iremono/backend-core/dist/use-cases/trash/delete-all-in-trash/contracts';
 import { deleteFromFileSystem } from '@iremono/util/dist/file-system';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { config } from '../../../config';
 
-export class DeleteAllInTrashController extends Controller<DeleteAllInTrashUseCase> {
-  constructor(useCase: DeleteAllInTrashUseCase) {
+export class DeleteAllInTrashController extends Controller<IDeleteAllInTrashUseCase> {
+  constructor(useCase: IDeleteAllInTrashUseCase) {
     super(useCase);
   }
 
   async handle({ user }: HttpRequest): Promise<HttpResponse> {
-    const dto: DeleteAllInTrashRequestDTO = {
+    const result = await this._useCase.handle({
       ownerId: user.id,
-    };
-
-    const result = await this._useCase.handle(dto);
+    });
 
     await Promise.all(
       result.deletedFiles.map((file) => {
