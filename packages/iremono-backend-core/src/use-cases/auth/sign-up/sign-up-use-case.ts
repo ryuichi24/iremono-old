@@ -1,12 +1,10 @@
 import { User } from '../../../entities';
 import { makeUserDTO } from '../../../models';
-import { UserRepository, StorageItemRepository } from '../../../repositories';
+import { UserRepository } from '../../../repositories';
 import { HashService, TokenService } from '../../../services';
 import { InvalidRequestError } from '../../../shared/utils/errors';
 import { CreateRootFolderUseCase } from '../../folders';
-import { ISignUpUseCase } from './i-sign-up-use-case';
-import { SignUpRequestDTO } from './sign-up-request-DTO';
-import { SignUpResponseDTO } from './sign-up-response-DTO';
+import { ISignUpUseCase, SignUpRequestDTO, SignUpResponseDTO } from './contracts';
 
 export class SignUpUseCase implements ISignUpUseCase {
   private readonly _userRepository: UserRepository;

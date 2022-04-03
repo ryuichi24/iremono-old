@@ -1,9 +1,7 @@
 import { makeUserDTO } from '../../../models';
 import { UserRepository } from '../../../repositories';
 import { AuthError } from '../../../shared/utils/errors';
-import { CheckAuthRequestDTO } from './check-auth-request-DTO';
-import { CheckAuthResponseDTO } from './check-auth-response-DTO';
-import { ICheckAuthUseCase } from './i-check-auth-use-case';
+import { CheckAuthRequestDTO, CheckAuthResponseDTO, ICheckAuthUseCase } from './contracts';
 
 export class CheckAuthUseCase implements ICheckAuthUseCase {
   private readonly _userRepository: UserRepository;

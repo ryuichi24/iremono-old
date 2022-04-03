@@ -1,4 +1,4 @@
-import { ICheckAuthUseCase } from '@iremono/backend-core/src/use-cases';
+import { ICheckAuthUseCase } from '@iremono/backend-core/dist/use-cases/auth/check-auth';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 
 export class CheckAuthController extends Controller<ICheckAuthUseCase> {

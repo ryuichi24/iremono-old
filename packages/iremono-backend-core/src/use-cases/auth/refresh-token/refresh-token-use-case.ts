@@ -1,8 +1,6 @@
 import { TokenService } from '../../../services';
 import { AuthError } from '../../../shared/utils/errors';
-import { RefreshTokenResponseDTO } from './refresh-token-response-DTO';
-import { RefreshTokenRequestDTO } from './refresh-token-request-DTO';
-import { IRefreshTokenUseCase } from './i-refresh-token-use-case';
+import { IRefreshTokenUseCase, RefreshTokenRequestDTO, RefreshTokenResponseDTO } from './contracts';
 
 export class RefreshTokenUseCase implements IRefreshTokenUseCase {
   private readonly _tokenService: TokenService;

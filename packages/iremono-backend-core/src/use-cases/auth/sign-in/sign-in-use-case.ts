@@ -2,9 +2,7 @@ import { makeUserDTO } from '../../../models';
 import { UserRepository } from '../../../repositories';
 import { HashService, TokenService } from '../../../services';
 import { AuthError } from '../../../shared/utils/errors';
-import { ISignInUseCase } from './i-sign-in-use-case';
-import { SignInResponseDTO } from './sigin-in-response-DTO';
-import { SignInRequestDTO } from './sign-in-request-DTO';
+import { ISignInUseCase, SignInRequestDTO, SignInResponseDTO } from './contracts';
 
 export class SignInUseCase implements ISignInUseCase {
   private readonly _userRepository: UserRepository;

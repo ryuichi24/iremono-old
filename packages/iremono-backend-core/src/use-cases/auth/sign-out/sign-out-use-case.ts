@@ -1,7 +1,5 @@
 import { TokenService } from '../../../services';
-import { SignOutResponseDTO } from './sign-out-response-DTO';
-import { SignOutRequestDTO } from './sign-out-request-DTO';
-import { ISignOutUseCase } from './i-sign-out-use-case';
+import { ISignOutUseCase, SignOutRequestDTO, SignOutResponseDTO } from './contracts';
 
 export class SignOutUseCase implements ISignOutUseCase {
   private readonly _tokenService: TokenService;
