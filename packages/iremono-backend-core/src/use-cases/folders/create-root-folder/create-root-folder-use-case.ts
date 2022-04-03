@@ -2,12 +2,10 @@ import { StorageItem } from '../../../entities';
 import { makeStorageItemDTO } from '../../../models';
 import { StorageItemRepository } from '../../../repositories';
 import { HashService } from '../../../services';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError } from '../../../shared/utils/errors';
-import { CreateRootFolderRequestDTO } from './create-root-folder-request-DTO';
-import { CreateRootFolderResponseDTO } from './create-root-folder-response-DTO';
+import { CreateRootFolderRequestDTO, CreateRootFolderResponseDTO, ICreateRootFolderUseCase } from './contracts';
 
-export class CreateRootFolderUseCase implements UseCase<CreateRootFolderRequestDTO, CreateRootFolderResponseDTO> {
+export class CreateRootFolderUseCase implements ICreateRootFolderUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
   private readonly _hashService: HashService;
 

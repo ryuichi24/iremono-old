@@ -1,17 +1,16 @@
-import { ListAllAncestorsRequestDTO, ListAllAncestorsUseCase } from '@iremono/backend-core/dist/use-cases/folders/';
+import { IListAllAncestorsUseCase } from '@iremono/backend-core/dist/use-cases/folders/list-all-ancestors/contracts';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 
-export class ListAllAncestorsController extends Controller<ListAllAncestorsUseCase> {
-  constructor(useCase: ListAllAncestorsUseCase) {
+export class ListAllAncestorsController extends Controller<IListAllAncestorsUseCase> {
+  constructor(useCase: IListAllAncestorsUseCase) {
     super(useCase);
   }
 
   async handle({ params, user }: HttpRequest): Promise<HttpResponse> {
-    const dto: ListAllAncestorsRequestDTO = {
+    const result = await this._useCase.handle({
       id: params?.id,
       ownerId: user?.id,
-    };
-    const result = await this._useCase.handle(dto);
+    });
 
     return this._ok(result);
   }

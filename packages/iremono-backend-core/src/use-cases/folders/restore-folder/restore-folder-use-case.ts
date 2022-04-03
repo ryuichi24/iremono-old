@@ -1,11 +1,8 @@
 import { StorageItemRepository } from '../../../repositories';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError } from '../../../shared/utils/errors';
-import { isRootFolder } from '../../../shared/utils/is-rootr-folder';
-import { RestoreFolderRequestDTO } from './restore-folder-request-DTO';
-import { RestoreFolderResponseDTO } from './restore-folder-response-DTO';
+import { IRestoreFolderUseCase, RestoreFolderRequestDTO, RestoreFolderResponseDTO } from './contracts';
 
-export class RestoreFolderUseCase implements UseCase<RestoreFolderRequestDTO, RestoreFolderResponseDTO> {
+export class RestoreFolderUseCase implements IRestoreFolderUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
 
   constructor(storageItemRepository: StorageItemRepository) {

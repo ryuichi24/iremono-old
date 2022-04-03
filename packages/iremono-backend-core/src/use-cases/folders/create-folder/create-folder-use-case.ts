@@ -1,13 +1,11 @@
 import { StorageItem } from '../../../entities';
 import { makeStorageItemDTO } from '../../../models';
 import { StorageItemRepository } from '../../../repositories';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError } from '../../../shared/utils/errors';
 import { isRootFolder } from '../../../shared/utils/is-rootr-folder';
-import { CreateFolderRequestDTO } from './create-folder-request-DTO';
-import { CreateFolderResponseDTO } from './create-folder-response-DTO';
+import { CreateFolderRequestDTO, CreateFolderResponseDTO, ICreateFolderUseCase } from './contracts';
 
-export class CreateFolderUseCase implements UseCase<CreateFolderRequestDTO, CreateFolderResponseDTO> {
+export class CreateFolderUseCase implements ICreateFolderUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
 
   constructor(storageItemRepository: StorageItemRepository) {

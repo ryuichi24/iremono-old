@@ -1,10 +1,8 @@
 import { StorageItemRepository } from '../../../repositories';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError } from '../../../shared/utils/errors';
-import { RemoveFolderRequestDTO } from './remove-folder-request-DTO';
-import { RemoveFolderResponseDTO } from './remove-folder-response-DTO';
+import { IRemoveFolderUseCase, RemoveFolderRequestDTO, RemoveFolderResponseDTO } from './contracts';
 
-export class RemoveFolderUseCase implements UseCase<RemoveFolderRequestDTO, RemoveFolderResponseDTO> {
+export class RemoveFolderUseCase implements IRemoveFolderUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
 
   constructor(storageItemRepository: StorageItemRepository) {
