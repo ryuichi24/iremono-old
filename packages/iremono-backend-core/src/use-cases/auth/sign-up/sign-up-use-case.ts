@@ -2,13 +2,13 @@ import { User } from '../../../entities';
 import { makeUserDTO } from '../../../models';
 import { UserRepository, StorageItemRepository } from '../../../repositories';
 import { HashService, TokenService } from '../../../services';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError } from '../../../shared/utils/errors';
 import { CreateRootFolderUseCase } from '../../folders';
+import { ISignUpUseCase } from './i-sign-up-use-case';
 import { SignUpRequestDTO } from './sign-up-request-DTO';
 import { SignUpResponseDTO } from './sign-up-response-DTO';
 
-export class SignUpUseCase implements UseCase<SignUpRequestDTO, SignUpResponseDTO> {
+export class SignUpUseCase implements ISignUpUseCase {
   private readonly _userRepository: UserRepository;
   private readonly _tokenService: TokenService;
   private readonly _hashService: HashService;

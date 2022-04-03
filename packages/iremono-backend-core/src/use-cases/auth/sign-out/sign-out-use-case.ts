@@ -1,9 +1,9 @@
 import { TokenService } from '../../../services';
-import { UseCase } from '../../../shared/use-case-lib';
 import { SignOutResponseDTO } from './sign-out-response-DTO';
 import { SignOutRequestDTO } from './sign-out-request-DTO';
+import { ISignOutUseCase } from './i-sign-out-use-case';
 
-export class SignOutUseCase implements UseCase<SignOutRequestDTO, SignOutResponseDTO> {
+export class SignOutUseCase implements ISignOutUseCase {
   private readonly _tokenService: TokenService;
 
   constructor(tokenService: TokenService) {
