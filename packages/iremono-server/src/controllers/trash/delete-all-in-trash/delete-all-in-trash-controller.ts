@@ -1,5 +1,5 @@
 import path from 'path';
-import { IDeleteAllInTrashUseCase } from '@iremono/backend-core/dist/use-cases/trash/delete-all-in-trash';
+import { IDeleteAllInTrashUseCase } from '@iremono/backend-core/dist/use-cases/trash/delete-all-in-trash/contracts';
 import { deleteFromFileSystem } from '@iremono/util/dist/file-system';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { config } from '../../../config';

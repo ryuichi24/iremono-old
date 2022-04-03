@@ -1,4 +1,4 @@
-import { IListItemsInTrashUseCase } from '@iremono/backend-core/dist/use-cases/trash/list-items-in-trash';
+import { IListItemsInTrashUseCase } from '@iremono/backend-core/dist/use-cases/trash/list-items-in-trash/contracts';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 
 export class ListItemsInTrashController extends Controller<IListItemsInTrashUseCase> {

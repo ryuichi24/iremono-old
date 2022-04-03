@@ -1,4 +1,4 @@
-import { ISignInUseCase } from '@iremono/backend-core/dist/use-cases/auth/sign-in';
+import { ISignInUseCase } from '@iremono/backend-core/dist/use-cases/auth/sign-in/contracts';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { cookieHelper } from '../../../shared/utils/cookie-helper';
 

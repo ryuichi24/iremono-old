@@ -1,4 +1,4 @@
-import { IRefreshTokenUseCase } from '@iremono/backend-core/dist/use-cases/auth/refresh-token';
+import { IRefreshTokenUseCase } from '@iremono/backend-core/dist/use-cases/auth/refresh-token/contracts';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 import { cookieHelper } from '../../../shared/utils/cookie-helper';
 
