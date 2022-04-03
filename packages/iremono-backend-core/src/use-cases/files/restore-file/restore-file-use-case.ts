@@ -1,10 +1,8 @@
 import { StorageItemRepository } from '../../../repositories';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
-import { RestoreFileRequestDTO } from './restore-file-request-DTO';
-import { RestoreFileResponseDTO } from './restore-file-response-DTO';
+import { IRestoreFileUseCase, RestoreFileRequestDTO, RestoreFileResponseDTO } from './contracts';
 
-export class RestoreFileUseCase implements UseCase<RestoreFileRequestDTO, RestoreFileResponseDTO> {
+export class RestoreFileUseCase implements IRestoreFileUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
 
   constructor(storageItemRepository: StorageItemRepository) {

@@ -1,2 +1,2 @@
 export * from './stream-video-use-case';
-export * from './stream-video-request-DTO';
+export * from './contracts';

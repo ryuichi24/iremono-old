@@ -1,13 +1,11 @@
 import { StorageItem } from '../../../entities';
 import { makeStorageItemDTO } from '../../../models';
 import { StorageItemRepository } from '../../../repositories';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError } from '../../../shared/utils/errors';
 import { isRootFolder } from '../../../shared/utils/is-rootr-folder';
-import { UploadFileRequestDTO } from './upload-file-request-DTO';
-import { UploadFileResponseDTO } from './upload-file-response-DTO';
+import { IUploadFileUseCase, UploadFileRequestDTO, UploadFileResponseDTO } from './contracts';
 
-export class UploadFileUseCase implements UseCase<UploadFileRequestDTO, UploadFileResponseDTO> {
+export class UploadFileUseCase implements IUploadFileUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
 
   constructor(storageItemRepository: StorageItemRepository) {

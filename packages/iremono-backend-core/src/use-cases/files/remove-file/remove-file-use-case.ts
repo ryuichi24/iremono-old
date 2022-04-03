@@ -1,10 +1,8 @@
 import { StorageItemRepository } from '../../../repositories';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
-import { RemoveFileRequestDTO } from './remove-file-request-DTO';
-import { RemoveFileResponseDTO } from './remove-file-response-DTO';
+import { IRemoveFileUseCase, RemoveFileRequestDTO, RemoveFileResponseDTO } from './contracts';
 
-export class RemoveFileUseCase implements UseCase<RemoveFileRequestDTO, RemoveFileResponseDTO> {
+export class RemoveFileUseCase implements IRemoveFileUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
 
   constructor(storageItemRepository: StorageItemRepository) {

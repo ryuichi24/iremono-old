@@ -1,18 +1,16 @@
-import { RestoreFileRequestDTO, RestoreFileUseCase } from '@iremono/backend-core/dist/use-cases';
+import { IRestoreFileUseCase } from '@iremono/backend-core/dist/use-cases/files/restore-file/contracts';
 import { Controller, HttpRequest, HttpResponse } from '../../../shared/controller-lib';
 
-export class RestoreFileController extends Controller<RestoreFileUseCase> {
-  constructor(useCase: RestoreFileUseCase) {
+export class RestoreFileController extends Controller<IRestoreFileUseCase> {
+  constructor(useCase: IRestoreFileUseCase) {
     super(useCase);
   }
 
   async handle({ params, user }: HttpRequest): Promise<HttpResponse> {
-    const dto: RestoreFileRequestDTO = {
+    await this._useCase.handle({
       id: params?.id,
       ownerId: user?.id,
-    };
-
-    await this._useCase.handle(dto);
+    });
 
     return this._noContent();
   }

@@ -1,11 +1,9 @@
 import { makeStorageItemDTO } from '../../../models';
 import { StorageItemRepository } from '../../../repositories';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
-import { UpdateFileRequestDTO } from './update-file-request-DTO';
-import { UpdateFileResponseDTO } from './update-file-response-DTO';
+import { IUpdateFileUseCase, UpdateFileRequestDTO, UpdateFileResponseDTO } from './contracts';
 
-export class UpdateFileUseCase implements UseCase<UpdateFileRequestDTO, UpdateFileResponseDTO> {
+export class UpdateFileUseCase implements IUpdateFileUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
 
   constructor(storageItemRepository: StorageItemRepository) {

@@ -1,11 +1,9 @@
 import { StorageItemRepository } from '../../../repositories';
 import { TokenService } from '../../../services';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
-import { GetFileTokenRequestDTO } from './get-file-token-request-DTO';
-import { GetFileTokenResponseDTO } from './get-file-token-response-DTO';
+import { GetFileTokenRequestDTO, GetFileTokenResponseDTO, IGetFileTokenUseCase } from './contracts';
 
-export class GetFileTokenUseCase implements UseCase<GetFileTokenRequestDTO, GetFileTokenResponseDTO> {
+export class GetFileTokenUseCase implements IGetFileTokenUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
   private readonly _tokenService: TokenService;
 

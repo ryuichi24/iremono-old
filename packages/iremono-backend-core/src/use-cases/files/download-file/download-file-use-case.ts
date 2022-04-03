@@ -1,11 +1,9 @@
 import { StorageItemRepository } from '../../../repositories';
 import { TokenService } from '../../../services';
-import { UseCase } from '../../../shared/use-case-lib';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
-import { DownloadFileRequestDTO } from './download-file-request-DTO';
-import { DownloadFileResponseDTO } from './download-file-response-DTO';
+import { DownloadFileRequestDTO, DownloadFileResponseDTO, IDownloadFileUseCase } from './contracts';
 
-export class DownloadFileUseCase implements UseCase<DownloadFileRequestDTO, DownloadFileResponseDTO> {
+export class DownloadFileUseCase implements IDownloadFileUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
   private readonly _tokenService: TokenService;
 
