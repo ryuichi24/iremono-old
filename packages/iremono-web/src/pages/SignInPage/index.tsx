@@ -69,14 +69,14 @@ export const SignInPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label={
               <Typography fontSize={16} color="text.primary">
                 Remember me?
               </Typography>
             }
-          />
+          /> */}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign In
           </Button>
@@ -84,7 +84,7 @@ export const SignInPage = () => {
             <Grid item xs>
               <Link href="#" variant="body2">
                 <Typography fontSize={14} color="text.primary">
-                  Forgot password?
+                  {/* Forgot password? */}
                 </Typography>
               </Link>
             </Grid>

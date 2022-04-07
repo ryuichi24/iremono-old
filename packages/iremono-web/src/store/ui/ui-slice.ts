@@ -3,10 +3,12 @@ import { RootState } from '../index';
 
 interface UIState {
   storageItemViewMode: 'grid' | 'list';
+  isSidePanelLeft: boolean;
 }
 
 const initialState: UIState = {
   storageItemViewMode: 'grid',
+  isSidePanelLeft: false,
 };
 
 export const uiSlice = createSlice({

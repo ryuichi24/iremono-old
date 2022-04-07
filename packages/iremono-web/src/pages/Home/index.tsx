@@ -17,9 +17,10 @@ import { usePopupMenu } from '@/hooks/use-popup-menu';
 import { authService } from '@/services/auth-service';
 import { useAppSelector } from '@/store/redux-hooks';
 import { userSelector } from '@/store/auth/auth-slice';
+import { useUIContext } from '@/contexts/ui-context';
 
 export const Home = () => {
-  const [isSidebarPositionLeft, setsSidebarPositionLeft] = useState(true);
+  const { isSidebarPositionLeft } = useUIContext();
   const [openMenu, anchorEl, handleOpenMenu, handleCloseMenu] = usePopupMenu();
   const muiTheme = useTheme();
   const { clearAuth } = useAuthActions();

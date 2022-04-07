@@ -47,10 +47,10 @@ export const StorageItemContextMenu = ({ children, storageItem, currentFolderId 
             <DownloadOutlinedIcon />
             <Typography>Download</Typography>
           </ContextMenuItem>
-          <ContextMenuItem>
+          {/* <ContextMenuItem>
             <ShareOutlinedIcon />
             <Typography>Share</Typography>
-          </ContextMenuItem>
+          </ContextMenuItem> */}
           <ContextMenuItem onClick={() => handleOpenRenameStorageItemForm()}>
             <DriveFileRenameOutlineOutlinedIcon />
             <Typography>Rename</Typography>
