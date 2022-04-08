@@ -28,8 +28,8 @@ interface StorageItemRow {
 
 const storageItemTable: StorageItemRow[] = [];
 
-export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory): StorageItemRepository => {
-  const logger = loggerFactory.createLogger('MockStorageItemRepository');
+export const constructMockStorageItemRepository = (loggerFactory?: LoggerFactory): StorageItemRepository => {
+  const logger = loggerFactory?.createLogger('MockStorageItemRepository');
 
   const _insert = async (entity: StorageItem) => {
     const parentFolder = storageItemTable.find((item) => item.id === entity.parentId);
@@ -73,7 +73,7 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     if (!entityExists) await _insert(entity);
     if (entityExists) await _update(entity);
 
-    logger.debug(
+    logger?.debug(
       `a storage item has been saved.`,
       `[storage-item-memory-table="${JSON.stringify(storageItemTable, null, '\t')}"]`,
     );
@@ -85,7 +85,7 @@ export const constructMockStorageItemRepository = (loggerFactory: LoggerFactory)
     const indexOfEntity = storageItemTable.findIndex((item) => item.id === entity.id);
     storageItemTable.splice(indexOfEntity, 1)[0];
 
-    logger.debug(
+    logger?.debug(
       `a storage item has been removed.`,
       `[storage-item-memory-table="${JSON.stringify(storageItemTable, null, '\t')}"]`,
     );
