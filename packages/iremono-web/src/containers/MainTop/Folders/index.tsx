@@ -77,11 +77,11 @@ export const Folders = () => {
         fileUploaderRef.current?.click();
       },
     },
-    {
-      text: 'Upload Folder',
-      icon: <DriveFolderUploadIcon fontSize="small" />,
-      action: () => console.log('upload folder'),
-    },
+    // {
+    //   text: 'Upload Folder',
+    //   icon: <DriveFolderUploadIcon fontSize="small" />,
+    //   action: () => console.log('upload folder'),
+    // },
   ];
 
   useEffect(() => {
