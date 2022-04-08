@@ -17,6 +17,7 @@ export class RestoreFileUseCase implements IRestoreFileUseCase {
       throw new InvalidRequestError(`the owner does not match the folder's owner`);
 
     const parentFolder = await this._storageItemRepository.findOneById(fileToRestore.parentId!);
+
     if (parentFolder?.isInTrash) throw new InvalidRequestError('the parent folder is in a trash.');
 
     fileToRestore.restore();

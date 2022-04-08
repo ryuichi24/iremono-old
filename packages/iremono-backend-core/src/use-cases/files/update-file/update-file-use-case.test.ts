@@ -1,7 +1,7 @@
 import { StorageItem } from '../../../entities';
 import { constructMockStorageItemRepository } from '../../../infra/data-access/mock/repositories/mock-storage-item-repository';
-import { UploadFileRequestDTO } from './contracts';
-import { UploadFileUseCase } from './upload-file-use-case';
+import { UpdateFileRequestDTO } from './contracts';
+import { UpdateFileUseCase } from './update-file-use-case';
 
 const TEST_USER_1_ID = '953a7c7d-efbf-467a-a57c-6be18b2456d7';
 const TEST_ROOT_FOLDER_1_ID = 'f6bbf56a-c4d1-404c-bf5d-66f54be46cca';
@@ -37,27 +37,20 @@ afterEach(async () => {
   }
 });
 
-describe('test UploadFileUseCase handle method', () => {
-  it('should create new file item', async () => {
-    const uploadFileUseCase = new UploadFileUseCase(mockStorageItemRepository);
+describe('test UpdateFileUseCase handle method', () => {
+  it('should update file name', async () => {
+    const NEW_FILE_NAME = 'test file 1 updated';
 
-    const mockUploadFileDTO: UploadFileRequestDTO = {
-      name: 'test file name',
-      parentId: TEST_FOLDER_1_ID,
-      filePath: 'test file path',
-      fileSize: 1000,
-      mimeType: 'test mime type',
-      fileInitializationVector: 'test file initialization vector',
+    const updateFileUseCase = new UpdateFileUseCase(mockStorageItemRepository);
+
+    const mockUpdateFileDTO: UpdateFileRequestDTO = {
+      id: TEST_FILE_1_ID,
+      name: NEW_FILE_NAME,
       ownerId: TEST_USER_1_ID,
-      thumbnailPath: 'test thumbnail path',
-      thumbnailSize: 1000,
-      thumbnailInitializationVector: 'test thumbnail initialization vector',
-      isCryptoFolderItem: false,
     };
 
-    const responseDTO = await uploadFileUseCase.handle(mockUploadFileDTO);
+    const responseDTO = await updateFileUseCase.handle(mockUpdateFileDTO);
 
-    expect(responseDTO.id).toBeTruthy();
-    expect(responseDTO.isFolder).toBe(false);
+    expect(responseDTO.name).toBe(NEW_FILE_NAME);
   });
 });
