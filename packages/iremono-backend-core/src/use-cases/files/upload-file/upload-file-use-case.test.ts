@@ -56,8 +56,11 @@ describe('test UploadFileUseCase handle method', () => {
     };
 
     const responseDTO = await uploadFileUseCase.handle(mockUploadFileDTO);
+    const createdItem = await mockStorageItemRepository.findOneById(responseDTO.id!);
 
-    expect(responseDTO.id).toBeTruthy();
-    expect(responseDTO.isFolder).toBe(false);
+    expect(createdItem).toBeTruthy();
+    expect(createdItem?.isFolder).toBe(false);
+    expect(responseDTO).toBeTruthy();
+    expect(responseDTO?.isFolder).toBe(false);
   });
 });

@@ -44,6 +44,9 @@ afterEach(async () => {
 
 describe('test RestoreFileUseCase handle method', () => {
   it('should restore a file', async () => {
+    const oldFileItem = await mockStorageItemRepository.findOneById(TEST_FILE_1_ID);
+    expect(oldFileItem?.isInTrash).toBe(true);
+
     const restoreFileUseCaseUseCase = new RestoreFileUseCase(mockStorageItemRepository);
 
     const mockRestoreFileUseCaseDTO: RestoreFileRequestDTO = {
@@ -53,8 +56,8 @@ describe('test RestoreFileUseCase handle method', () => {
 
     await restoreFileUseCaseUseCase.handle(mockRestoreFileUseCaseDTO);
 
-    const restored = await mockStorageItemRepository.findOneById(TEST_FILE_1_ID);
+    const restoredFileItem = await mockStorageItemRepository.findOneById(TEST_FILE_1_ID);
 
-    expect(restored?.isInTrash).toBe(false);
+    expect(restoredFileItem?.isInTrash).toBe(false);
   });
 });

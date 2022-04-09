@@ -3,7 +3,6 @@ import { constructMockStorageItemRepository } from '../../../infra/data-access/m
 import { RemoveFileRequestDTO } from './contracts';
 import { RemoveFileUseCase } from './remove-file-use-case';
 
-
 const TEST_USER_1_ID = '953a7c7d-efbf-467a-a57c-6be18b2456d7';
 const TEST_ROOT_FOLDER_1_ID = 'f6bbf56a-c4d1-404c-bf5d-66f54be46cca';
 const TEST_FOLDER_1_ID = '1a1cec9e-9bf0-4b93-bcc1-0f2032d73826';
@@ -45,6 +44,8 @@ afterEach(async () => {
 
 describe('test RemoveFileUseCase handle method', () => {
   it('should remove a file', async () => {
+    const oldFileItem = await mockStorageItemRepository.findOneById(TEST_FILE_1_ID);
+    expect(oldFileItem?.isInTrash).toBe(false);
     const removeFileUseCase = new RemoveFileUseCase(mockStorageItemRepository);
 
     const mockRemoveFileUseCaseDTO: RemoveFileRequestDTO = {
@@ -54,8 +55,8 @@ describe('test RemoveFileUseCase handle method', () => {
 
     await removeFileUseCase.handle(mockRemoveFileUseCaseDTO);
 
-    const restored = await mockStorageItemRepository.findOneById(TEST_FILE_1_ID);
+    const removedFileItem = await mockStorageItemRepository.findOneById(TEST_FILE_1_ID);
 
-    expect(restored?.isInTrash).toBe(true);
+    expect(removedFileItem?.isInTrash).toBe(true);
   });
 });
