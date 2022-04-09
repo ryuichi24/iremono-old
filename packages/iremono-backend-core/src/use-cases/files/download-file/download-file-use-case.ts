@@ -12,8 +12,6 @@ export class DownloadFileUseCase implements IDownloadFileUseCase {
   public async handle(dto: DownloadFileRequestDTO): Promise<DownloadFileResponseDTO> {
     const payloadFromToken = this._downloadFileTokenService.verify(dto.downloadFileToken);
 
-    console.log(payloadFromToken);
-
     if (payloadFromToken?.fileId !== dto.id) throw new InvalidRequestError('the download file token is invalid.');
 
     const fileToDownload = await this._storageItemRepository.findOneById(payloadFromToken.fileId);
