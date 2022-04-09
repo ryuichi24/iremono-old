@@ -3,14 +3,14 @@ import {
   deleteAllInTrashController,
   deleteFileInTrashController,
   deleteFolderInTrashController,
-  tokenService,
+  accessTokenService,
   listItemsInTrashController,
 } from '../dependency-container';
 import { authHandler, makeExpressHandler } from '../shared/express-lib';
 
 export const trashRouter = express
   .Router()
-  .get('/items', authHandler(tokenService), makeExpressHandler(listItemsInTrashController))
-  .delete('/folders/:id', authHandler(tokenService), makeExpressHandler(deleteFolderInTrashController))
-  .delete('/files/:id', authHandler(tokenService), makeExpressHandler(deleteFileInTrashController))
-  .delete('/items', authHandler(tokenService), makeExpressHandler(deleteAllInTrashController));
+  .get('/items', authHandler(accessTokenService), makeExpressHandler(listItemsInTrashController))
+  .delete('/folders/:id', authHandler(accessTokenService), makeExpressHandler(deleteFolderInTrashController))
+  .delete('/files/:id', authHandler(accessTokenService), makeExpressHandler(deleteFileInTrashController))
+  .delete('/items', authHandler(accessTokenService), makeExpressHandler(deleteAllInTrashController));

@@ -9,9 +9,12 @@ import {
   DatabaseType,
 } from '@iremono/backend-core/dist/infra/data-access';
 import {
+  AccessTokenService,
   constructBcryptService,
   constructCryptoService,
-  constructTokenService,
+  DownloadFileTokenService,
+  RefreshTokenTokenService,
+  StreamFileTokenService,
 } from '@iremono/backend-core/dist/infra/services';
 import {
   CheckAuthUseCase,
@@ -70,6 +73,7 @@ import {
   VerifyClientEncryptionKeyController,
 } from '../controllers';
 import { loggerFactory } from '../shared/utils/logger';
+import { Cache } from '@iremono/util';
 
 const repositories = {
   userRepository: [
@@ -91,26 +95,41 @@ const storageItemRepository =
   constructMockStorageItemRepository(loggerFactory);
 
 const bcryptService = constructBcryptService();
-export const tokenService = constructTokenService({
-  jwtSecretForAccessToken: config.tokenConfig.JWT_SECRET_FOR_ACCESS_TOKEN,
-  jwtExpiresInForAccessToken: config.tokenConfig.JWT_EXPIRE_IN_FOR_ACCESS_TOKEN,
-  expiresInForRefreshToken: config.tokenConfig.EXPIRE_IN_FOR_REFRESH_TOKEN,
-  expiresInForDownloadFileToken: config.tokenConfig.EXPIRE_IN_FOR_DOWNLOAD_FILE_TOKEN,
-  expiresInForStreamFileToken: config.tokenConfig.EXPIRE_IN_FOR_STREAM_FILE_TOKEN,
-});
+
 export const cryptoService = constructCryptoService();
+
+export const accessTokenService = new AccessTokenService({
+  secretKey: config.tokenConfig.JWT_SECRET_FOR_ACCESS_TOKEN,
+  expiresIn: config.tokenConfig.JWT_EXPIRE_IN_FOR_ACCESS_TOKEN,
+});
+
+export const refreshTokenService = new RefreshTokenTokenService(new Cache(), {
+  expiresIn: config.tokenConfig.EXPIRE_IN_FOR_REFRESH_TOKEN,
+  tokenSize: 40,
+});
+
+export const downloadFileTokenService = new DownloadFileTokenService(new Cache(), {
+  expiresIn: config.tokenConfig.EXPIRE_IN_FOR_DOWNLOAD_FILE_TOKEN,
+  tokenSize: 40,
+});
+
+export const streamFileTokenService = new StreamFileTokenService(new Cache(), {
+  expiresIn: config.tokenConfig.EXPIRE_IN_FOR_STREAM_FILE_TOKEN,
+  tokenSize: 40,
+});
 
 // User
 const signUpUseCase = new SignUpUseCase(
   userRepository,
-  tokenService,
+  accessTokenService,
+  refreshTokenService,
   bcryptService,
   new CreateRootFolderUseCase(storageItemRepository, bcryptService),
 );
-const signInUseCase = new SignInUseCase(userRepository, tokenService, bcryptService);
-const signOutUseCase = new SignOutUseCase(tokenService);
+const signInUseCase = new SignInUseCase(userRepository, accessTokenService, refreshTokenService, bcryptService);
+const signOutUseCase = new SignOutUseCase(refreshTokenService);
 const checkAuthUseCase = new CheckAuthUseCase(userRepository);
-const refreshTokenUseCase = new RefreshTokenUseCase(tokenService);
+const refreshTokenUseCase = new RefreshTokenUseCase(accessTokenService, refreshTokenService);
 
 export const signUpController = new SignUpController(signUpUseCase);
 export const signInController = new SignInController(signInUseCase);
@@ -143,13 +162,17 @@ export const listAllAncestorsController = new ListAllAncestorsController(listAll
 
 // files
 const uploadFileUseCase = new UploadFileUseCase(storageItemRepository);
-const downloadFileUseCase = new DownloadFileUseCase(storageItemRepository, tokenService);
-const getFileTokenUseCase = new GetFileTokenUseCase(storageItemRepository, tokenService);
+const downloadFileUseCase = new DownloadFileUseCase(storageItemRepository, downloadFileTokenService);
+const getFileTokenUseCase = new GetFileTokenUseCase(
+  storageItemRepository,
+  downloadFileTokenService,
+  streamFileTokenService,
+);
 const downloadFileThumbnailUseCase = new DownloadFileThumbnailUseCase(storageItemRepository);
 const updateFileUseCase = new UpdateFileUseCase(storageItemRepository);
 const removeFileUseCase = new RemoveFileUseCase(storageItemRepository);
 const restoreFileUseCase = new RestoreFileUseCase(storageItemRepository);
-const streamVideoUseCase = new StreamVideoUseCase(storageItemRepository, tokenService);
+const streamVideoUseCase = new StreamVideoUseCase(storageItemRepository, streamFileTokenService);
 
 export const uploadFileController = new UploadFileController(uploadFileUseCase);
 export const downloadFileController = new DownloadFileController(downloadFileUseCase, cryptoService);

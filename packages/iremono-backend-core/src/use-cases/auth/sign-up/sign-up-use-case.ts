@@ -1,25 +1,24 @@
 import { User } from '../../../entities';
 import { makeUserDTO } from '../../../models';
 import { UserRepository } from '../../../repositories';
-import { HashService, TokenService } from '../../../services';
+import { HashService, IAccessTokenService, IRefreshTokenService } from '../../../services';
 import { InvalidRequestError } from '../../../shared/utils/errors';
 import { CreateRootFolderUseCase } from '../../folders';
 import { ISignUpUseCase, SignUpRequestDTO, SignUpResponseDTO } from './contracts';
 
 export class SignUpUseCase implements ISignUpUseCase {
   private readonly _userRepository: UserRepository;
-  private readonly _tokenService: TokenService;
   private readonly _hashService: HashService;
   private readonly _createRootFolderUseCase: CreateRootFolderUseCase;
 
   constructor(
     userRepository: UserRepository,
-    tokenService: TokenService,
+    private readonly _accessTokenService: IAccessTokenService,
+    private readonly _refreshTokenService: IRefreshTokenService,
     hashService: HashService,
     createRootFolderUseCase: CreateRootFolderUseCase,
   ) {
     this._userRepository = userRepository;
-    this._tokenService = tokenService;
     this._hashService = hashService;
     this._createRootFolderUseCase = createRootFolderUseCase;
   }
@@ -35,8 +34,8 @@ export class SignUpUseCase implements ISignUpUseCase {
     // TODO: decouple root folder initialization with event emitter
     await this._createRootFolderUseCase.handle({ name: 'all files', ownerId: savedUser.id, folderType: 'normal' });
 
-    const accessToken = this._tokenService.generateAccessToken({ id: savedUser.id });
-    const refreshToken = this._tokenService.generateRefreshToken(savedUser.id);
+    const accessToken = this._accessTokenService.generate({ id: savedUser.id });
+    const refreshToken = this._refreshTokenService.generate(savedUser.id);
 
     return {
       accessToken,

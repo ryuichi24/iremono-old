@@ -1,19 +1,22 @@
 import { StorageItemRepository } from '../../../repositories';
-import { TokenService } from '../../../services';
+import { IDownloadFileTokenService } from '../../../services';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
 import { DownloadFileRequestDTO, DownloadFileResponseDTO, IDownloadFileUseCase } from './contracts';
 
 export class DownloadFileUseCase implements IDownloadFileUseCase {
   private readonly _storageItemRepository: StorageItemRepository;
-  private readonly _tokenService: TokenService;
 
-  constructor(storageItemRepository: StorageItemRepository, tokenService: TokenService) {
+  constructor(
+    storageItemRepository: StorageItemRepository,
+    private readonly _downloadFileTokenService: IDownloadFileTokenService,
+  ) {
     this._storageItemRepository = storageItemRepository;
-    this._tokenService = tokenService;
   }
 
   public async handle(dto: DownloadFileRequestDTO): Promise<DownloadFileResponseDTO> {
-    const payloadFromToken = this._tokenService.verifyDownloadFileToken(dto.downloadFileToken);
+    const payloadFromToken = this._downloadFileTokenService.verify(dto.downloadFileToken);
+
+    console.log(payloadFromToken);
 
     if (payloadFromToken?.fileId !== dto.id) throw new InvalidRequestError('the download file token is invalid.');
 
@@ -27,7 +30,7 @@ export class DownloadFileUseCase implements IDownloadFileUseCase {
       throw new InvalidRequestError('the file is in a trash.');
     }
 
-    this._tokenService.revokeDownloadFileToken(dto.downloadFileToken);
+    this._downloadFileTokenService.revoke(dto.downloadFileToken);
 
     const responseDto: DownloadFileResponseDTO = {
       name: fileToDownload.name,

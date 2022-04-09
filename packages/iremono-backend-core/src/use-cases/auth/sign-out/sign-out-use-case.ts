@@ -1,15 +1,11 @@
-import { TokenService } from '../../../services';
+import { IRefreshTokenService } from '../../../services';
 import { ISignOutUseCase, SignOutRequestDTO, SignOutResponseDTO } from './contracts';
 
 export class SignOutUseCase implements ISignOutUseCase {
-  private readonly _tokenService: TokenService;
-
-  constructor(tokenService: TokenService) {
-    this._tokenService = tokenService;
-  }
+  constructor(private readonly _refreshTokenService: IRefreshTokenService) {}
 
   public async handle(dto: SignOutRequestDTO): Promise<SignOutResponseDTO> {
-    this._tokenService.revokeRefreshToken(dto.refreshToken);
+    this._refreshTokenService.revoke(dto.refreshToken);
     return {};
   }
 }

@@ -1,12 +1,13 @@
 import express from 'express';
-import { TokenService } from '@iremono/backend-core/dist/services';
+import { IAccessTokenService } from '@iremono/backend-core/dist/services';
 import { UnauthorizedError } from '../../utils/errors';
 import { loggerFactory } from '../../utils/logger';
 
 const logger = loggerFactory.createLogger('authHandler');
 
 export const authHandler =
-  (tokenService: TokenService) => async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  (accessTokenService: IAccessTokenService) =>
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       let token;
 
@@ -17,7 +18,7 @@ export const authHandler =
       }
 
       if (!token) throw new UnauthorizedError('no bearer token provided');
-      req.user = tokenService.verifyAccessTokenToken(token);
+      req.user = accessTokenService.verify(token);
       next();
     } catch (error) {
       if (error instanceof Error) {

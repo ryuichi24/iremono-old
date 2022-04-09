@@ -2,7 +2,7 @@ import express from 'express';
 import {
   createFolderController,
   getFolderController,
-  tokenService,
+  accessTokenService,
   listAllAncestorsController,
   listItemsInFolderController,
   removeFolderController,
@@ -15,12 +15,12 @@ import { authHandler, makeExpressHandler } from '../shared/express-lib';
 
 export const foldersRouter = express
   .Router()
-  .post('/', authHandler(tokenService), makeExpressHandler(createFolderController))
-  .post('/root', authHandler(tokenService), makeExpressHandler(createRootFolderController))
-  .post('/root/verify-key', authHandler(tokenService), makeExpressHandler(verifyClientEncryptionKeyController))
-  .patch('/:id', authHandler(tokenService), makeExpressHandler(updateFolderController))
-  .post('/:id/remove', authHandler(tokenService), makeExpressHandler(removeFolderController))
-  .post('/:id/restore', authHandler(tokenService), makeExpressHandler(restoreFolderController))
-  .get('/:id/items', authHandler(tokenService), makeExpressHandler(listItemsInFolderController))
-  .get('/:id', authHandler(tokenService), makeExpressHandler(getFolderController))
-  .get('/:id/ancestors', authHandler(tokenService), makeExpressHandler(listAllAncestorsController));
+  .post('/', authHandler(accessTokenService), makeExpressHandler(createFolderController))
+  .post('/root', authHandler(accessTokenService), makeExpressHandler(createRootFolderController))
+  .post('/root/verify-key', authHandler(accessTokenService), makeExpressHandler(verifyClientEncryptionKeyController))
+  .patch('/:id', authHandler(accessTokenService), makeExpressHandler(updateFolderController))
+  .post('/:id/remove', authHandler(accessTokenService), makeExpressHandler(removeFolderController))
+  .post('/:id/restore', authHandler(accessTokenService), makeExpressHandler(restoreFolderController))
+  .get('/:id/items', authHandler(accessTokenService), makeExpressHandler(listItemsInFolderController))
+  .get('/:id', authHandler(accessTokenService), makeExpressHandler(getFolderController))
+  .get('/:id/ancestors', authHandler(accessTokenService), makeExpressHandler(listAllAncestorsController));
