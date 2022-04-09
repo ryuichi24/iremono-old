@@ -4,14 +4,10 @@ import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors
 import { DownloadFileRequestDTO, DownloadFileResponseDTO, IDownloadFileUseCase } from './contracts';
 
 export class DownloadFileUseCase implements IDownloadFileUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
   constructor(
-    storageItemRepository: StorageItemRepository,
+    private readonly _storageItemRepository: StorageItemRepository,
     private readonly _downloadFileTokenService: IDownloadFileTokenService,
-  ) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  ) {}
 
   public async handle(dto: DownloadFileRequestDTO): Promise<DownloadFileResponseDTO> {
     const payloadFromToken = this._downloadFileTokenService.verify(dto.downloadFileToken);

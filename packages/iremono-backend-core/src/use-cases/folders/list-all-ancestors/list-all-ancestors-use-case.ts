@@ -4,11 +4,7 @@ import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors
 import { IListAllAncestorsUseCase, ListAllAncestorsRequestDTO, ListAllAncestorsResponseDTO } from './contracts';
 
 export class ListAllAncestorsUseCase implements IListAllAncestorsUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: ListAllAncestorsRequestDTO): Promise<ListAllAncestorsResponseDTO> {
     const folder = await this._storageItemRepository.findOneById(dto.id);

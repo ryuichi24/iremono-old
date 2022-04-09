@@ -4,11 +4,7 @@ import { InvalidRequestError } from '../../../shared/utils/errors';
 import { DeleteFileInTrashRequestDTO, DeleteFileInTrashResponseDTO, IDeleteFileInTrashUseCase } from './contracts';
 
 export class DeleteFileInTrashUseCase implements IDeleteFileInTrashUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: DeleteFileInTrashRequestDTO): Promise<DeleteFileInTrashResponseDTO> {
     const fileToRemove = await this._storageItemRepository.findOneById(dto.id);

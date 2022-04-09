@@ -4,11 +4,7 @@ import { InvalidRequestError } from '../../../shared/utils/errors';
 import { IUpdateFolderUseCase, UpdateFolderRequestDTO, UpdateFolderResponseDTO } from './contracts';
 
 export class UpdateFolderUseCase implements IUpdateFolderUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: UpdateFolderRequestDTO): Promise<UpdateFolderResponseDTO> {
     const folderToUpdate = await this._storageItemRepository.findOneById(dto.id);

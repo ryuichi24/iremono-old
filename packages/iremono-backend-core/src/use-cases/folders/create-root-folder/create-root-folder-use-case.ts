@@ -6,13 +6,10 @@ import { InvalidRequestError } from '../../../shared/utils/errors';
 import { CreateRootFolderRequestDTO, CreateRootFolderResponseDTO, ICreateRootFolderUseCase } from './contracts';
 
 export class CreateRootFolderUseCase implements ICreateRootFolderUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-  private readonly _hashService: HashService;
-
-  constructor(storageItemRepository: StorageItemRepository, hashService: HashService) {
-    this._storageItemRepository = storageItemRepository;
-    this._hashService = hashService;
-  }
+  constructor(
+    private readonly _storageItemRepository: StorageItemRepository,
+    private readonly _hashService: HashService,
+  ) {}
 
   public async handle(dto: CreateRootFolderRequestDTO): Promise<CreateRootFolderResponseDTO> {
     const alreadyExists =

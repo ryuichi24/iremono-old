@@ -4,14 +4,10 @@ import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors
 import { IStreamVideoUseCase, StreamVideoRequestDTO, StreamVideoResponseDTO } from './contracts';
 
 export class StreamVideoUseCase implements IStreamVideoUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
   constructor(
-    storageItemRepository: StorageItemRepository,
+    private readonly _storageItemRepository: StorageItemRepository,
     private readonly _streamFileTokenService: IStreamFileTokenService,
-  ) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  ) {}
 
   public async handle(dto: StreamVideoRequestDTO): Promise<StreamVideoResponseDTO> {
     const payloadFromToken = this._streamFileTokenService.verify(dto.streamFileToken);

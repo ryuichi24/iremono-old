@@ -4,15 +4,11 @@ import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors
 import { GetFileTokenRequestDTO, GetFileTokenResponseDTO, IGetFileTokenUseCase } from './contracts';
 
 export class GetFileTokenUseCase implements IGetFileTokenUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
   constructor(
-    storageItemRepository: StorageItemRepository,
+    private readonly _storageItemRepository: StorageItemRepository,
     private readonly _downloadFileTokenService: IDownloadFileTokenService,
     private readonly _streamFileTokenService: IStreamFileTokenService,
-  ) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  ) {}
 
   public async handle(dto: GetFileTokenRequestDTO): Promise<GetFileTokenResponseDTO> {
     const fileToDownload = await this._storageItemRepository.findOneById(dto.id);

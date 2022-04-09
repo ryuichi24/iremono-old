@@ -6,11 +6,7 @@ import { isRootFolder } from '../../../shared/utils/is-rootr-folder';
 import { CreateFolderRequestDTO, CreateFolderResponseDTO, ICreateFolderUseCase } from './contracts';
 
 export class CreateFolderUseCase implements ICreateFolderUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: CreateFolderRequestDTO): Promise<CreateFolderResponseDTO> {
     let parentFolder;

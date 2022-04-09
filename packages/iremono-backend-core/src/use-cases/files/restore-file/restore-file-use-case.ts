@@ -3,11 +3,7 @@ import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors
 import { IRestoreFileUseCase, RestoreFileRequestDTO, RestoreFileResponseDTO } from './contracts';
 
 export class RestoreFileUseCase implements IRestoreFileUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: RestoreFileRequestDTO): Promise<RestoreFileResponseDTO> {
     const fileToRestore = await this._storageItemRepository.findOneById(dto.id);

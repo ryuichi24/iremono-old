@@ -3,11 +3,7 @@ import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors
 import { IRemoveFileUseCase, RemoveFileRequestDTO, RemoveFileResponseDTO } from './contracts';
 
 export class RemoveFileUseCase implements IRemoveFileUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: RemoveFileRequestDTO): Promise<RemoveFileResponseDTO> {
     const fileToRemove = await this._storageItemRepository.findOneById(dto.id);

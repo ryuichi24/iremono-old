@@ -7,11 +7,7 @@ import {
 } from './contracts';
 
 export class DownloadFileThumbnailUseCase implements IDownloadFileThumbnailUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: DownloadFileThumbnailRequestDTO): Promise<DownloadFileThumbnailResponseDTO> {
     const fileOfThumbnailToDownload = await this._storageItemRepository.findOneById(dto.id);

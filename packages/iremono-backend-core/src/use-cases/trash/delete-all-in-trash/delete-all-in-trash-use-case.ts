@@ -4,11 +4,7 @@ import { NotExistError } from '../../../shared/utils/errors';
 import { DeleteAllInTrashRequestDTO, DeleteAllInTrashResponseDTO, IDeleteAllInTrashUseCase } from './contracts';
 
 export class DeleteAllInTrashUseCase implements IDeleteAllInTrashUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: DeleteAllInTrashRequestDTO): Promise<DeleteAllInTrashResponseDTO> {
     const rootFolder = await this._storageItemRepository.findRootFolderByOwnerId(dto.ownerId);

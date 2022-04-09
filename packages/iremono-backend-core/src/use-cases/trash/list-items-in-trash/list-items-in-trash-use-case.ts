@@ -4,11 +4,7 @@ import { NotExistError } from '../../../shared/utils/errors';
 import { IListItemsInTrashUseCase, ListItemsInTrashRequestDTO, ListItemsInTrashResponseDTO } from './contracts';
 
 export class ListItemsInTrashUseCase implements IListItemsInTrashUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: ListItemsInTrashRequestDTO): Promise<ListItemsInTrashResponseDTO> {
     let rootFolder;

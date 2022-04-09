@@ -7,21 +7,13 @@ import { CreateRootFolderUseCase } from '../../folders';
 import { ISignUpUseCase, SignUpRequestDTO, SignUpResponseDTO } from './contracts';
 
 export class SignUpUseCase implements ISignUpUseCase {
-  private readonly _userRepository: UserRepository;
-  private readonly _hashService: HashService;
-  private readonly _createRootFolderUseCase: CreateRootFolderUseCase;
-
   constructor(
-    userRepository: UserRepository,
+    private readonly _userRepository: UserRepository,
     private readonly _accessTokenService: IAccessTokenService,
     private readonly _refreshTokenService: IRefreshTokenService,
-    hashService: HashService,
-    createRootFolderUseCase: CreateRootFolderUseCase,
-  ) {
-    this._userRepository = userRepository;
-    this._hashService = hashService;
-    this._createRootFolderUseCase = createRootFolderUseCase;
-  }
+    private readonly _hashService: HashService,
+    private readonly _createRootFolderUseCase: CreateRootFolderUseCase,
+  ) {}
 
   public async handle(dto: SignUpRequestDTO): Promise<SignUpResponseDTO> {
     const isDuplicate = !!(await this._userRepository.findOneByEmail(dto.email));

@@ -5,18 +5,12 @@ import { AuthError } from '../../../shared/utils/errors';
 import { ISignInUseCase, SignInRequestDTO, SignInResponseDTO } from './contracts';
 
 export class SignInUseCase implements ISignInUseCase {
-  private readonly _userRepository: UserRepository;
-  private readonly _hashService: HashService;
-
   constructor(
-    userRepository: UserRepository,
+    private readonly _userRepository: UserRepository,
     private readonly _accessTokenService: IAccessTokenService,
     private readonly _refreshTokenService: IRefreshTokenService,
-    hashService: HashService,
-  ) {
-    this._userRepository = userRepository;
-    this._hashService = hashService;
-  }
+    private readonly _hashService: HashService,
+  ) {}
 
   public async handle(dto: SignInRequestDTO): Promise<SignInResponseDTO> {
     const user = await this._userRepository.findOneByEmail(dto.email);
