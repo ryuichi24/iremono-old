@@ -47,7 +47,7 @@ afterEach(async () => {
 });
 
 describe('test SignInUseCase handle method', () => {
-  it('should return authorized user', async () => {
+  it('return access token and refresh token', async () => {
     const mockHashService: HashService = {
       hash: jest.fn(async (value: string): Promise<string> => {
         return crypto.createHash('sha256').update('random-test-key').digest().toString();
