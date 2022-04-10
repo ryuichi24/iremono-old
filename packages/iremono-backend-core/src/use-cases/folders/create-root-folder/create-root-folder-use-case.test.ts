@@ -15,7 +15,7 @@ afterEach(async () => {});
 
 describe('test CreateRootFolderUseCase handle method', () => {
   it('should create new root folder item and return the create item', async () => {
-    const mockDownloadFileTokenService: HashService = {
+    const mockHashService: HashService = {
       hash: jest.fn(async (value: string): Promise<string> => {
         return crypto.createHash('sha256').update('random-test-key').digest().toString();
       }),
@@ -26,7 +26,7 @@ describe('test CreateRootFolderUseCase handle method', () => {
 
     const createRootFolderUseCase = new CreateRootFolderUseCase(
       mockStorageItemRepository,
-      mockDownloadFileTokenService,
+      mockHashService,
     );
 
     const mockCreateRootFolderDTO: CreateRootFolderRequestDTO = {
