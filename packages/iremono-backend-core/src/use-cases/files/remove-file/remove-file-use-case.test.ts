@@ -1,12 +1,13 @@
+import crypto from 'crypto';
 import { StorageItem } from '../../../entities';
 import { constructMockStorageItemRepository } from '../../../infra/data-access/mock/repositories/mock-storage-item-repository';
 import { RemoveFileRequestDTO } from './contracts';
 import { RemoveFileUseCase } from './remove-file-use-case';
 
-const TEST_USER_1_ID = '953a7c7d-efbf-467a-a57c-6be18b2456d7';
-const TEST_ROOT_FOLDER_1_ID = 'f6bbf56a-c4d1-404c-bf5d-66f54be46cca';
-const TEST_FOLDER_1_ID = '1a1cec9e-9bf0-4b93-bcc1-0f2032d73826';
-const TEST_FILE_1_ID = '44bc7bb7-5e8d-4382-bd26-41e8eb87a29e';
+const TEST_USER_1_ID = crypto.randomUUID();
+const TEST_ROOT_FOLDER_1_ID = crypto.randomUUID();
+const TEST_FOLDER_1_ID = crypto.randomUUID();
+const TEST_FILE_1_ID = crypto.randomUUID();
 
 const mockItems = [
   new StorageItem(
