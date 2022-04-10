@@ -52,11 +52,11 @@ afterEach(async () => {
 });
 
 describe('test DeleteAllInTrashUseCase handle method', () => {
-  it('should delete all items in trash and return the deleted items', async () => {
+  it('should delete all items in trash and return the deleted file items', async () => {
     const rootFolder = await mockStorageItemRepository.findRootFolderByOwnerId(TEST_USER_1_ID);
-    const prevTrashItems = await mockStorageItemRepository.findAllDescendantsById(rootFolder?.id!, true);
+    const trashItemsToDelete = await mockStorageItemRepository.findAllDescendantsById(rootFolder?.id!, true);
 
-    expect(prevTrashItems.length).toBeTruthy();
+    expect(trashItemsToDelete.length).toBeTruthy();
 
     const deleteAllInTrashUseCaseUseCase = new DeleteAllInTrashUseCase(mockStorageItemRepository);
 
@@ -66,9 +66,9 @@ describe('test DeleteAllInTrashUseCase handle method', () => {
 
     const responseDTO = await deleteAllInTrashUseCaseUseCase.handle(mockDeleteAllInTrashUseCaseDTO);
 
-    const currentTrashItems = await mockStorageItemRepository.findAllDescendantsById(rootFolder?.id!, true);
+    const trashItems = await mockStorageItemRepository.findAllDescendantsById(rootFolder?.id!, true);
 
-    expect(currentTrashItems.length).not.toBeTruthy();
+    expect(trashItems.length).not.toBeTruthy();
     expect(responseDTO.deletedFiles.length).toBeTruthy();
   });
 });
