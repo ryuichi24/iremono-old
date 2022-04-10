@@ -7,7 +7,6 @@ import { CreateFolderUseCase } from './create-folder-use-case';
 const TEST_USER_1_ID = crypto.randomUUID();
 const TEST_ROOT_FOLDER_1_ID = crypto.randomUUID();
 const TEST_FOLDER_1_ID = crypto.randomUUID();
-const TEST_FILE_1_ID = crypto.randomUUID();
 
 const mockItems = [
   new StorageItem(
@@ -17,10 +16,6 @@ const mockItems = [
   new StorageItem(
     { name: 'test folder 1', isFolder: true, ownerId: TEST_USER_1_ID, parentId: TEST_ROOT_FOLDER_1_ID },
     TEST_FOLDER_1_ID,
-  ),
-  new StorageItem(
-    { name: 'test file 1', isFolder: false, ownerId: TEST_USER_1_ID, parentId: TEST_FOLDER_1_ID },
-    TEST_FILE_1_ID,
   ),
 ];
 
@@ -39,7 +34,7 @@ afterEach(async () => {
 });
 
 describe('test CreateFolderUseCase handle method', () => {
-  it('should create new folder item and return the create item', async () => {
+  it('should create new folder item and return the created item', async () => {
     const createFolderUseCase = new CreateFolderUseCase(mockStorageItemRepository);
 
     const mockCreateFolderDTO: CreateFolderRequestDTO = {
