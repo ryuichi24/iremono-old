@@ -39,7 +39,7 @@ afterEach(async () => {
 });
 
 describe('test CreateFolderUseCase handle method', () => {
-  it('should create new folder item', async () => {
+  it('should create new folder item and return the create item', async () => {
     const createFolderUseCase = new CreateFolderUseCase(mockStorageItemRepository);
 
     const mockCreateFolderDTO: CreateFolderRequestDTO = {
