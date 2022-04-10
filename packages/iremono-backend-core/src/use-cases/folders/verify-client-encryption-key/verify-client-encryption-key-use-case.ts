@@ -21,6 +21,7 @@ export class VerifyClientEncryptionKeyUseCase implements IVerifyClientEncryption
       dto.clientEncryptionKey,
       cryptoRootFolder.clientEncryptionKeyHash!,
     );
+
     if (!isKeyValid) throw new InvalidRequestError('Invalid client encryption key is provided.');
 
     return {};
