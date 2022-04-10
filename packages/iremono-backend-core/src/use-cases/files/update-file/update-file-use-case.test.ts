@@ -10,7 +10,7 @@ const TEST_FILE_1_ID = '44bc7bb7-5e8d-4382-bd26-41e8eb87a29e';
 
 const mockItems = [
   new StorageItem(
-    { name: 'test root folder', isFolder: true, ownerId: TEST_USER_1_ID, parentId: null },
+    { name: 'test root folder', isFolder: true, ownerId: TEST_USER_1_ID, parentId: null, isRootFolder: true },
     TEST_ROOT_FOLDER_1_ID,
   ),
   new StorageItem(
