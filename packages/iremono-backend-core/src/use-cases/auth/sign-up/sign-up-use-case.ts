@@ -3,7 +3,7 @@ import { makeUserDTO } from '../../../models';
 import { UserRepository } from '../../../repositories';
 import { HashService, IAccessTokenService, IRefreshTokenService } from '../../../services';
 import { InvalidRequestError } from '../../../shared/utils/errors';
-import { CreateRootFolderUseCase } from '../../folders';
+import { ICreateRootFolderUseCase } from '../../folders';
 import { ISignUpUseCase, SignUpRequestDTO, SignUpResponseDTO } from './contracts';
 
 export class SignUpUseCase implements ISignUpUseCase {
@@ -12,7 +12,7 @@ export class SignUpUseCase implements ISignUpUseCase {
     private readonly _accessTokenService: IAccessTokenService,
     private readonly _refreshTokenService: IRefreshTokenService,
     private readonly _hashService: HashService,
-    private readonly _createRootFolderUseCase: CreateRootFolderUseCase,
+    private readonly _createRootFolderUseCase: ICreateRootFolderUseCase,
   ) {}
 
   public async handle(dto: SignUpRequestDTO): Promise<SignUpResponseDTO> {

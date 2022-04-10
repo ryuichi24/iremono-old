@@ -11,8 +11,8 @@ interface UserRow {
 }
 const userTable: UserRow[] = [];
 
-export const constructMockUserRepository = (loggerFactory: LoggerFactory): UserRepository => {
-  const logger = loggerFactory.createLogger('MockUserRepository');
+export const constructMockUserRepository = (loggerFactory?: LoggerFactory): UserRepository => {
+  const logger = loggerFactory?.createLogger('MockUserRepository');
 
   const _insert = async (entity: User) => {
     const userRow = makeUserRowFromEntity(entity);
@@ -37,7 +37,7 @@ export const constructMockUserRepository = (loggerFactory: LoggerFactory): UserR
     if (!entityExists) await _insert(entity);
     if (entityExists) await _update(entity);
 
-    logger.debug(`an user has been saved.`, `[user-memory-table="${JSON.stringify(userTable, null, '\t')}"]`);
+    logger?.debug(`an user has been saved.`, `[user-memory-table="${JSON.stringify(userTable, null, '\t')}"]`);
 
     return entity;
   };
