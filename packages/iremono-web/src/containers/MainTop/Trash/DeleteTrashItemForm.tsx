@@ -18,7 +18,6 @@ export const DeleteTrashItemForm = ({ trashItem, open, handleClose }: Props) => 
   const { removeTrashItem } = useTrashActions();
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
     handleClose();
 
     trashItem.isFolder

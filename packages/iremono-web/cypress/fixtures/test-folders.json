@@ -1,0 +1,8 @@
+{
+  "testFolders": [
+    { "name": "folder to create" },
+    { "name": "folder to rename" },
+    { "name": "folder to remove" },
+    { "name": "folder to delete" }
+  ]
+}

@@ -3,11 +3,7 @@ import { InvalidRequestError } from '../../../shared/utils/errors';
 import { IRemoveFolderUseCase, RemoveFolderRequestDTO, RemoveFolderResponseDTO } from './contracts';
 
 export class RemoveFolderUseCase implements IRemoveFolderUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: RemoveFolderRequestDTO): Promise<RemoveFolderResponseDTO> {
     const folderToRemove = await this._storageItemRepository.findOneById(dto.id);

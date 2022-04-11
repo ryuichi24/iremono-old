@@ -10,5 +10,6 @@
     {
       "path": "../iremono-util"
     }
-  ]
+  ],
+  "exclude": ["**/*.test.ts", "./dist/**/*"]
 }

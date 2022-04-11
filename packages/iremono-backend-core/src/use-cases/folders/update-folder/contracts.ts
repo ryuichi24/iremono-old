@@ -3,8 +3,8 @@ import { UseCase } from '../../../shared/use-case-lib/interfaces';
 
 export interface UpdateFolderRequestDTO {
   id: string;
-  name: string;
-  parentId: string;
+  name?: string;
+  parentId?: string;
   ownerId: string;
 }
 

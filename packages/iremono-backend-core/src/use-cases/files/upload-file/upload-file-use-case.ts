@@ -6,11 +6,7 @@ import { isRootFolder } from '../../../shared/utils/is-rootr-folder';
 import { IUploadFileUseCase, UploadFileRequestDTO, UploadFileResponseDTO } from './contracts';
 
 export class UploadFileUseCase implements IUploadFileUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: UploadFileRequestDTO): Promise<UploadFileResponseDTO> {
     let parentFolder;

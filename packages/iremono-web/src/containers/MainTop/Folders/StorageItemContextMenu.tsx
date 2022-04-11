@@ -34,7 +34,7 @@ export const StorageItemContextMenu = ({ children, storageItem, currentFolderId 
       </div>
 
       {showMenu && (
-        <ContextMenu yPos={yPos} xPos={xPos}>
+        <ContextMenu yPos={yPos} xPos={xPos} className="storage-item-context-menu">
           <ContextMenuItem
             onClick={async () => {
               const downloadFileToken = await filesService.getFileToken({

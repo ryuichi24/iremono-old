@@ -36,4 +36,3 @@ export class UploadFileController extends Controller<IUploadFileUseCase> {
     return this._created(result);
   }
 }
-``;

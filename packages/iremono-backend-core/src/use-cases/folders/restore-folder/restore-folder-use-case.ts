@@ -3,11 +3,7 @@ import { InvalidRequestError } from '../../../shared/utils/errors';
 import { IRestoreFolderUseCase, RestoreFolderRequestDTO, RestoreFolderResponseDTO } from './contracts';
 
 export class RestoreFolderUseCase implements IRestoreFolderUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: RestoreFolderRequestDTO): Promise<RestoreFolderResponseDTO> {
     const folderToRestore = await this._storageItemRepository.findOneById(dto.id);

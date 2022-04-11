@@ -5,11 +5,7 @@ import { isRootFolder } from '../../../shared/utils/is-rootr-folder';
 import { IListItemsInFolderUseCase, ListItemsInFolderRequestDTO, ListItemsInFolderResponseDTO } from './contracts';
 
 export class ListItemsInFolderUseCase implements IListItemsInFolderUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: ListItemsInFolderRequestDTO): Promise<ListItemsInFolderResponseDTO> {
     let parentFolder;

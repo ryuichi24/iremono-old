@@ -4,11 +4,7 @@ import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors
 import { IUpdateFileUseCase, UpdateFileRequestDTO, UpdateFileResponseDTO } from './contracts';
 
 export class UpdateFileUseCase implements IUpdateFileUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: UpdateFileRequestDTO): Promise<UpdateFileResponseDTO> {
     const fileToUpdate = await this._storageItemRepository.findOneById(dto.id);

@@ -1,32 +1,26 @@
-interface Token {
+export interface TokenOutput {
   value: string;
   expiresIn: string;
 }
 
-interface AccessToken extends Token {}
-interface RefreshToken extends Token {}
-interface DownloadFileToken extends Token {}
-interface StreamFileToken extends Token {}
-
-export interface DownloadFileTokenPayload {
+export interface FileTokenOutput {
   fileId: string;
   clientEncryptionKey?: string;
 }
 
-export interface StreamFileTokenTokenPayload {
-  fileId: string;
-  clientEncryptionKey?: string;
+interface ICanRevokeToken {
+  revoke(token: string): void;
 }
 
-export interface TokenService {
-  generateAccessToken(payload: { [key: string]: string }): AccessToken;
-  verifyAccessTokenToken(token: string): any;
-  generateRefreshToken(userId: string): RefreshToken;
-  verifyRefreshToken(token: string): string | null;
-  revokeRefreshToken(token: string): void;
-  generateDownloadFileToken(payload: DownloadFileTokenPayload): DownloadFileToken;
-  verifyDownloadFileToken(token: string): DownloadFileTokenPayload | null;
-  revokeDownloadFileToken(token: string): void;
-  generateStreamFileToken(payload: StreamFileTokenTokenPayload): StreamFileToken;
-  verifyStreamFileToken(token: string): StreamFileTokenTokenPayload | null;
+interface ITempTokenService<TPayload = any, TOutput = any> {
+  generate(payload: TPayload): TOutput;
+  verify(token: string): TPayload | null;
 }
+
+export interface IAccessTokenService extends ITempTokenService<{ [key: string]: string }, TokenOutput> {}
+
+export interface IRefreshTokenService extends ITempTokenService<string, TokenOutput>, ICanRevokeToken {}
+
+export interface IDownloadFileTokenService extends ITempTokenService<FileTokenOutput, TokenOutput>, ICanRevokeToken {}
+
+export interface IStreamFileTokenService extends ITempTokenService<FileTokenOutput, TokenOutput> {}

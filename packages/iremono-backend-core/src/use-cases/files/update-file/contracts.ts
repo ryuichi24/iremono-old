@@ -4,7 +4,7 @@ import { UseCase } from '../../../shared/use-case-lib/interfaces';
 export interface UpdateFileRequestDTO {
   id: string;
   name: string;
-  parentId: string;
+  parentId?: string;
   ownerId: string;
 }
 

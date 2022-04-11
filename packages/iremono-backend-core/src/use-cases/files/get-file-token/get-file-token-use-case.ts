@@ -1,16 +1,14 @@
 import { StorageItemRepository } from '../../../repositories';
-import { TokenService } from '../../../services';
+import { IDownloadFileTokenService, IStreamFileTokenService } from '../../../services';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
 import { GetFileTokenRequestDTO, GetFileTokenResponseDTO, IGetFileTokenUseCase } from './contracts';
 
 export class GetFileTokenUseCase implements IGetFileTokenUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-  private readonly _tokenService: TokenService;
-
-  constructor(storageItemRepository: StorageItemRepository, tokenService: TokenService) {
-    this._storageItemRepository = storageItemRepository;
-    this._tokenService = tokenService;
-  }
+  constructor(
+    private readonly _storageItemRepository: StorageItemRepository,
+    private readonly _downloadFileTokenService: IDownloadFileTokenService,
+    private readonly _streamFileTokenService: IStreamFileTokenService,
+  ) {}
 
   public async handle(dto: GetFileTokenRequestDTO): Promise<GetFileTokenResponseDTO> {
     const fileToDownload = await this._storageItemRepository.findOneById(dto.id);
@@ -34,13 +32,13 @@ export class GetFileTokenUseCase implements IGetFileTokenUseCase {
     let fileToken;
 
     if (dto.tokenType === 'download')
-      fileToken = this._tokenService.generateDownloadFileToken({
+      fileToken = this._downloadFileTokenService.generate({
         fileId: fileToDownload.id,
         clientEncryptionKey: dto.clientEncryptionKey,
       });
 
     if (dto.tokenType === 'stream')
-      fileToken = this._tokenService.generateStreamFileToken({
+      fileToken = this._streamFileTokenService.generate({
         fileId: fileToDownload.id,
         clientEncryptionKey: dto.clientEncryptionKey,
       });

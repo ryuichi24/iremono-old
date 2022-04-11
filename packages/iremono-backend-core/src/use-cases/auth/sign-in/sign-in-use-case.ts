@@ -1,19 +1,16 @@
 import { makeUserDTO } from '../../../models';
 import { UserRepository } from '../../../repositories';
-import { HashService, TokenService } from '../../../services';
+import { HashService, IAccessTokenService, IRefreshTokenService } from '../../../services';
 import { AuthError } from '../../../shared/utils/errors';
 import { ISignInUseCase, SignInRequestDTO, SignInResponseDTO } from './contracts';
 
 export class SignInUseCase implements ISignInUseCase {
-  private readonly _userRepository: UserRepository;
-  private readonly _tokenService: TokenService;
-  private readonly _hashService: HashService;
-
-  constructor(userRepository: UserRepository, tokenService: TokenService, hashService: HashService) {
-    this._userRepository = userRepository;
-    this._tokenService = tokenService;
-    this._hashService = hashService;
-  }
+  constructor(
+    private readonly _userRepository: UserRepository,
+    private readonly _accessTokenService: IAccessTokenService,
+    private readonly _refreshTokenService: IRefreshTokenService,
+    private readonly _hashService: HashService,
+  ) {}
 
   public async handle(dto: SignInRequestDTO): Promise<SignInResponseDTO> {
     const user = await this._userRepository.findOneByEmail(dto.email);
@@ -22,8 +19,8 @@ export class SignInUseCase implements ISignInUseCase {
     const isPasswordValid = await this._hashService.compare(dto.password, user.hashedPassword);
     if (!isPasswordValid) throw new AuthError(`email or password is invalid`);
 
-    const accessToken = this._tokenService.generateAccessToken({ id: user.id });
-    const refreshToken = this._tokenService.generateRefreshToken(user.id);
+    const accessToken = this._accessTokenService.generate({ id: user.id });
+    const refreshToken = this._refreshTokenService.generate(user.id);
 
     return {
       accessToken,

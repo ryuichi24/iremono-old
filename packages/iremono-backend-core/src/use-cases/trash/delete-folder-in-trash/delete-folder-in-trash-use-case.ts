@@ -8,11 +8,7 @@ import {
 } from './contracts';
 
 export class DeleteFolderInTrashUseCase implements IDeleteFolderInTrashUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: DeleteFolderInTrashRequestDTO): Promise<DeleteFolderInTrashResponseDTO> {
     const folderInTrashToDelete = await this._storageItemRepository.findOneById(dto.id);

@@ -3,11 +3,7 @@ import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors
 import { IRestoreFileUseCase, RestoreFileRequestDTO, RestoreFileResponseDTO } from './contracts';
 
 export class RestoreFileUseCase implements IRestoreFileUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-
-  constructor(storageItemRepository: StorageItemRepository) {
-    this._storageItemRepository = storageItemRepository;
-  }
+  constructor(private readonly _storageItemRepository: StorageItemRepository) {}
 
   public async handle(dto: RestoreFileRequestDTO): Promise<RestoreFileResponseDTO> {
     const fileToRestore = await this._storageItemRepository.findOneById(dto.id);
@@ -17,6 +13,7 @@ export class RestoreFileUseCase implements IRestoreFileUseCase {
       throw new InvalidRequestError(`the owner does not match the folder's owner`);
 
     const parentFolder = await this._storageItemRepository.findOneById(fileToRestore.parentId!);
+
     if (parentFolder?.isInTrash) throw new InvalidRequestError('the parent folder is in a trash.');
 
     fileToRestore.restore();

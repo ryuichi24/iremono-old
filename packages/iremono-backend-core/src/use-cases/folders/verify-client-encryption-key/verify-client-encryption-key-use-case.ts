@@ -8,13 +8,10 @@ import {
 } from './contracts';
 
 export class VerifyClientEncryptionKeyUseCase implements IVerifyClientEncryptionKeyUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-  private readonly _hashService: HashService;
-
-  constructor(storageItemRepository: StorageItemRepository, hashService: HashService) {
-    this._storageItemRepository = storageItemRepository;
-    this._hashService = hashService;
-  }
+  constructor(
+    private readonly _storageItemRepository: StorageItemRepository,
+    private readonly _hashService: HashService,
+  ) {}
 
   public async handle(dto: VerifyClientEncryptionKeyRequestDTO): Promise<VerifyClientEncryptionKeyResponseDTO> {
     const cryptoRootFolder = await this._storageItemRepository.findCryptoRootFolderByOwnerId(dto.ownerId);
@@ -24,6 +21,7 @@ export class VerifyClientEncryptionKeyUseCase implements IVerifyClientEncryption
       dto.clientEncryptionKey,
       cryptoRootFolder.clientEncryptionKeyHash!,
     );
+
     if (!isKeyValid) throw new InvalidRequestError('Invalid client encryption key is provided.');
 
     return {};

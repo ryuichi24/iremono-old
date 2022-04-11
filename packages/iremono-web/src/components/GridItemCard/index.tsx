@@ -11,7 +11,7 @@ interface Props {
 
 export const GridItemCard = ({ item, handleClick, handleDoubleClick, thumbnailURL }: Props) => {
   return (
-    <>
+    <div className='folder-item'>
       {item.isFolder ? (
         <GridFolderItemCard folder={item} handleClick={handleClick} handleDoubleClick={handleDoubleClick} />
       ) : (
@@ -22,6 +22,6 @@ export const GridItemCard = ({ item, handleClick, handleDoubleClick, thumbnailUR
           thumbnailURL={thumbnailURL}
         />
       )}
-    </>
+    </div>
   );
 };

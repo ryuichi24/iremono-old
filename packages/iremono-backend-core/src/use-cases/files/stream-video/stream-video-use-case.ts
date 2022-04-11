@@ -1,19 +1,16 @@
 import { StorageItemRepository } from '../../../repositories';
-import { TokenService } from '../../../services';
+import { IStreamFileTokenService } from '../../../services';
 import { InvalidRequestError, NotExistError } from '../../../shared/utils/errors';
 import { IStreamVideoUseCase, StreamVideoRequestDTO, StreamVideoResponseDTO } from './contracts';
 
 export class StreamVideoUseCase implements IStreamVideoUseCase {
-  private readonly _storageItemRepository: StorageItemRepository;
-  private readonly _tokenService: TokenService;
-
-  constructor(storageItemRepository: StorageItemRepository, tokenService: TokenService) {
-    this._storageItemRepository = storageItemRepository;
-    this._tokenService = tokenService;
-  }
+  constructor(
+    private readonly _storageItemRepository: StorageItemRepository,
+    private readonly _streamFileTokenService: IStreamFileTokenService,
+  ) {}
 
   public async handle(dto: StreamVideoRequestDTO): Promise<StreamVideoResponseDTO> {
-    const payloadFromToken = this._tokenService.verifyStreamFileToken(dto.streamFileToken);
+    const payloadFromToken = this._streamFileTokenService.verify(dto.streamFileToken);
 
     if (payloadFromToken?.fileId !== dto.id) throw new InvalidRequestError('the stream file token is invalid.');
 
