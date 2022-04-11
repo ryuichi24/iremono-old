@@ -1,0 +1,8 @@
+{
+  "$schema": "https://on.cypress.io/cypress.schema.json",
+  "baseUrl": "http://localhost:8080",
+  "env": {},
+  "video": false,
+  "videosFolder": "cypress/videos",
+  "screenshotOnRunFailure": false
+}

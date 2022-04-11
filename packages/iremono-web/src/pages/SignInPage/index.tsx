@@ -51,7 +51,7 @@ export const SignInPage = () => {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="Email"
             name="email"
             autoComplete="email"
             onChange={(e) => setEmail(e.target.value)}
