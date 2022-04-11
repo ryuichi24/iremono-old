@@ -28,7 +28,7 @@ export const TrashItemContextMenu = ({ children, trashItem }: Props) => {
       </div>
 
       {showMenu && (
-        <ContextMenu yPos={yPos} xPos={xPos}>
+        <ContextMenu yPos={yPos} xPos={xPos} className="trash-item-context-menu">
           <ContextMenuItem onClick={() => handleOpenRestoreTrashItemItemForm()}>
             <RestoreOutlinedIcon />
             <Typography>Restore</Typography>

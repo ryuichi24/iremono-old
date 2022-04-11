@@ -23,7 +23,6 @@ export const RestoreTrashItemForm = ({ trashItem, open, handleClose }: Props) =>
   const { addOneFileItem } = useFilesActions();
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
     handleClose();
 
     trashItem.isFolder

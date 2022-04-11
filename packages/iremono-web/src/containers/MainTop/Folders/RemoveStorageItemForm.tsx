@@ -25,7 +25,6 @@ export const RemoveStorageItemForm = ({ storageItem, currentFolderId, open, hand
   const { removeFileItem } = useFilesActions();
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
     handleClose();
 
     storageItem.isFolder

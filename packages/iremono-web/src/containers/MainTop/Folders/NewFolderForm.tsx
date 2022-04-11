@@ -22,16 +22,15 @@ export const NewFolderForm = ({ currentFolderId, open, handleClose }: Props) => 
 
   const { addOneFolderItem } = useFoldersActions();
 
-  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-    handleClose();
-    foldersService
-      .create({ parentId: currentFolderId, name: folderName })
-      .then((result) => {
-        addOneFolderItem({ folderItem: result, parentId: currentFolderId });
-        setFolderName('Untitled folder');
-      })
-      .catch((err) => console.log(err));
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
+    try {
+      const createdItem = await foldersService.create({ parentId: currentFolderId, name: folderName });
+      addOneFolderItem({ folderItem: createdItem, parentId: currentFolderId });
+      setFolderName('Untitled folder');
+      handleClose();
+    } catch (error) {
+      console.log(error)
+    }
   };
   return (
     <Dialog open={open} onClose={handleClose}>

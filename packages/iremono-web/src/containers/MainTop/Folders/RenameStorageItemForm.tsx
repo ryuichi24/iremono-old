@@ -27,7 +27,6 @@ export const RenameStorageItemForm = ({ storageItem, currentFolderId, open, hand
   const { updateFileItem } = useFilesActions();
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
     handleClose();
 
     storageItem.isFolder

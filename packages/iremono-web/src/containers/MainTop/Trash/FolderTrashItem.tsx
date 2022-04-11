@@ -9,12 +9,12 @@ interface Props {
 
 export const FolderTrashItem = ({ folderTrashItem, arrangeType }: Props) => {
   return (
-    <>
+    <div className='folder-trash-item'>
       {arrangeType === 'grid' ? (
         <GridItemCard item={folderTrashItem} handleDoubleClick={() => alert(folderTrashItem)} />
       ) : (
         <ListItemCard item={folderTrashItem} handleDoubleClick={() => alert(folderTrashItem)} />
       )}
-    </>
+    </div>
   );
 };
