@@ -9,7 +9,7 @@ const createConnection = ({ dbName }: Options) => {
   const sqlite = sqlite3.verbose();
   const connection = new sqlite.Database(dbName, (err) => {
     if (err) {
-      console.error(err.message);
+      throw err;
     }
     console.log(`it has successfully connected to database: ${dbName}!`);
   });

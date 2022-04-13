@@ -33,4 +33,6 @@ ENV NODE_ENV=production
 
 RUN cd /app/packages/iremono-server && yarn install --frozen-lockfile
 
+RUN yarn init-sqlite-db-prod
+
 CMD yarn start
