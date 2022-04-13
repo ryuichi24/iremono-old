@@ -7,8 +7,7 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "build": "yarn tsc --build",
-    "postinstall": "yarn build"
+    "build": "yarn tsc --build"
   },
   "devDependencies": {
     "@types/node": "^17.0.13",

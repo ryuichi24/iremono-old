@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+
+  backend:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile.sqlite
+    container_name: iremono-backend-container-prod
+    ports:
+      - 5555:5555
+    volumes:
+      # - path/to/media/folder/in/machine:/path/to/media/folder/in/container
+      # - path/to/sqilte/file/in/machine:/path/to/sqilte/file/in/container
+      - ./tmp/iremono.db:/app/iremono.db:rw
+      - ./tmp/iremono_media:/app/iremono_media:rw
+
+    networks: [ 'iremono-prod' ]
+
+networks: { iremono-prod: { driver: bridge } }
