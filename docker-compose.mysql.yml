@@ -1,0 +1,34 @@
+version: '3.7'
+
+services:
+
+  backend:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    container_name: iremono-backend-container-prod
+    ports:
+      - 5555:5555
+    volumes:
+      - ./iremono_media:/app/iremono_media:rw
+      - ./.env.prod:/app/.env.prod:rw
+
+    networks: [ 'iremono-prod' ]
+
+  mysql:
+    image: mysql:8
+    restart: always
+    container_name: iremono-mysql-container-prod
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql/mysql-auth.cnf:/etc/mysql/conf.d/mysql-auth.cnf
+      - ./mysql/mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: thisisreallystrongpassword
+      MYSQL_DATABASE: iremono_db
+      MYSQL_USER: iremono
+      MYSQL_PASSWORD: thisisreallystrongpassword
+
+networks: { iremono-prod: { driver: bridge } }
