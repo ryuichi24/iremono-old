@@ -25,3 +25,5 @@ demo_iremono_media
 dist
 
 tsconfig.tsbuildinfo
+
+mysql_data
