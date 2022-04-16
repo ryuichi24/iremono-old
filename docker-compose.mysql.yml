@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   backend:
-    restart: unless-stopped
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile.mysql
@@ -27,12 +27,13 @@ services:
       - 3306:3306
     volumes:
       - ./packages/iremono-backend-core/scripts/mysql/init-tables.sql:/docker-entrypoint-initdb.d/init-tables.sql
-      - ./mysql/config:/etc/mysql/conf.d
+      # - ./mysql/config:/etc/mysql
       - ./mysql/mysql_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: thisisreallystrongpassword
       MYSQL_DATABASE: iremono_db
       MYSQL_USER: iremono
       MYSQL_PASSWORD: thisisreallystrongpassword
+    networks: [ 'iremono-prod' ]
 
 networks: { iremono-prod: { driver: bridge } }

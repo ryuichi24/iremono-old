@@ -12,11 +12,7 @@ export class MysqlDatabase {
   private static connectionPool: Pool;
 
   public static async connectDB({ dbHost, dbName, dbPassword, dbUsername }: Options) {
-    try {
-      this.connectionPool = await mysqlHelper.createConnectionPool({ dbHost, dbName, dbPassword, dbUsername });
-    } catch (error) {
-      throw error;
-    }
+    this.connectionPool = await mysqlHelper.createConnectionPool({ dbHost, dbName, dbPassword, dbUsername });
   }
 
   public static getConnection() {
