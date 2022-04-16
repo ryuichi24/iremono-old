@@ -140,6 +140,74 @@ yarn dev
 yarn dev-server
 ```
 
+## How to deploy with docker
+
+### With SQLite
+
+```bash
+yarn make-prod-env-file
+```
+
+```txt
+HOST=
+PORT=5555
+
+...
+
+# directory/folder path where all files and thumbnails are saved encrypted
+PATH_TO_MEDIA_DIR=/app # <- update here to "/app"
+
+# currently support "mysql" and "sqlite"
+DB_TYPE=sqlite
+
+# credentials for database
+DB_HOST=
+DB_USERNAME=
+DB_PASSWORD=
+
+# if sqlite selected, path and the database file name
+DB_NAME=../../iremono.db
+```
+
+```bash
+
+docker-compose -f docker-compose.sqlite.yml up -d
+
+```
+
+### With MySQL
+
+```bash
+yarn make-prod-env-file
+```
+
+```txt
+HOST=
+PORT=5555
+
+...
+
+# directory/folder path where all files and thumbnails are saved encrypted
+PATH_TO_MEDIA_DIR=/app # <- must always be "/app"
+
+# currently support "mysql" and "sqlite"
+DB_TYPE=mysql
+
+# credentials for database
+DB_HOST=mysql
+DB_USERNAME=iremono
+DB_PASSWORD=thisisreallystrongpassword
+
+# if sqlite selected, path and the database file name
+DB_NAME=iremono_db
+```
+
+```bash
+
+docker-compose -f docker-compose.mysql.yml up -d
+
+```
+
 ## Credit to
 
 sleeping cat.jpeg: Photo by <a href="https://unsplash.com/@michaelsum1228?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Michael Sum</a> on <a href="https://unsplash.com/s/photos/cat?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
