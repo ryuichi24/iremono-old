@@ -155,7 +155,7 @@ PORT=5555
 ...
 
 # directory/folder path where all files and thumbnails are saved encrypted
-PATH_TO_MEDIA_DIR=/app # <- update here to "/app"
+PATH_TO_MEDIA_DIR=../.. # <- update here to "/app"
 
 # currently support "mysql" and "sqlite"
 DB_TYPE=sqlite
@@ -188,7 +188,7 @@ PORT=5555
 ...
 
 # directory/folder path where all files and thumbnails are saved encrypted
-PATH_TO_MEDIA_DIR=/app # <- must always be "/app"
+PATH_TO_MEDIA_DIR=../.. # <- must always be "/app"
 
 # currently support "mysql" and "sqlite"
 DB_TYPE=mysql
