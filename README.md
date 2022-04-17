@@ -152,27 +152,6 @@ yarn make-prod-env-file
 yarn init-sqlite-db-prod
 ```
 
-```txt
-HOST=
-PORT=5555
-
-...
-
-# directory/folder path where all files and thumbnails are saved encrypted
-PATH_TO_MEDIA_DIR=../.. # <- update here to "/app"
-
-# currently support "mysql" and "sqlite"
-DB_TYPE=sqlite
-
-# credentials for database
-DB_HOST=
-DB_USERNAME=
-DB_PASSWORD=
-
-# if sqlite selected, path and the database file name
-DB_NAME=../../iremono.db
-```
-
 ```bash
 
 docker-compose -f docker-compose.sqlite.yml up -d
@@ -191,19 +170,16 @@ PORT=5555
 
 ...
 
-# directory/folder path where all files and thumbnails are saved encrypted
-PATH_TO_MEDIA_DIR=../.. # <- update here to "/app"
-
 # currently support "mysql" and "sqlite"
-DB_TYPE=mysql
+DB_TYPE=mysql # <- update here to "mysql"
 
 # credentials for database
-DB_HOST=mysql
-DB_USERNAME=iremono
-DB_PASSWORD=thisisreallystrongpassword
+DB_HOST=mysql # <- update here to "mysql"
+DB_USERNAME=iremono # <- must match environmental variables in "docker-compose.mysql.yml"
+DB_PASSWORD=thisisreallystrongpassword # <- must match environmental variables in "docker-compose.mysql.yml"
 
 # if sqlite selected, path and the database file name
-DB_NAME=iremono_db
+DB_NAME=iremono_db # <- must match environmental variables in "docker-compose.mysql.yml"
 ```
 
 ```bash
