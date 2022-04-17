@@ -148,6 +148,10 @@ yarn dev-server
 yarn make-prod-env-file
 ```
 
+```bash
+yarn init-sqlite-db-prod
+```
+
 ```txt
 HOST=
 PORT=5555

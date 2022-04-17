@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     build:
       context: .
-      dockerfile: Dockerfile.sqlite
+      dockerfile: Dockerfile
     container_name: iremono-backend-container-prod
     ports:
       - 5555:5555
