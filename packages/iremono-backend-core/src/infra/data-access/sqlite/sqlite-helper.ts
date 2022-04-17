@@ -1,4 +1,3 @@
-import fs from 'fs';
 import sqlite3 from 'sqlite3';
 
 interface Options {
@@ -48,18 +47,6 @@ const createConnection = ({ dbName }: Options) => {
   return Object.freeze({ all, get, run, close });
 };
 
-const runSqlFile = async (pathToFile: string, dbConnection: any) => {
-  const queryList = fs.readFileSync(pathToFile).toString().split(';');
-
-  for (const queryItem of queryList) {
-    if (!queryItem || queryItem === '\n') continue;
-    await dbConnection.run(queryItem);
-  }
-
-  console.log('Query successfully executed!');
-  await dbConnection.close();
-};
-
-export const sqliteHelper = Object.freeze({ createConnection, runSqlFile });
+export const sqliteHelper = Object.freeze({ createConnection });
 
 export type SqliteConnection = ReturnType<typeof createConnection>;

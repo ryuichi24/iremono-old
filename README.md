@@ -145,6 +145,10 @@ yarn dev-server
 ### With SQLite
 
 ```bash
+yarn install
+```
+
+```bash
 yarn make-prod-env-file
 ```
 
