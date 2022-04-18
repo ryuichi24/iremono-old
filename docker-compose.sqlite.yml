@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+
+  backend:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: iremono-backend-container-prod
+    ports:
+      - 5555:5555
+    volumes:
+      - ./iremono.db:/app/iremono.db:rw
+      - ./iremono_media:/app/iremono_media:rw
+      - ./.env.prod:/app/.env.prod:rw
+
+    networks: [ 'iremono-prod' ]
+
+networks: { iremono-prod: { driver: bridge } }

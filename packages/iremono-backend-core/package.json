@@ -9,7 +9,6 @@
   "scripts": {
     "build": "yarn tsc --build",
     "test": "NODE_OPTIONS='--experimental-vm-modules --experimental-specifier-resolution=node' jest",
-    "postinstall": "yarn build",
     "init-mysql-db": "node scripts/mysql/initialize-db.js",
     "cleanup-mysql-db": "node scripts/mysql/cleanup-db.js",
     "init-sqlite-db": "node scripts/sqlite/initialize-db.js",

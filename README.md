@@ -140,6 +140,58 @@ yarn dev
 yarn dev-server
 ```
 
+## How to deploy with docker
+
+### With SQLite
+
+```bash
+yarn install
+```
+
+```bash
+yarn make-prod-env-file
+```
+
+```bash
+yarn init-sqlite-db-prod
+```
+
+```bash
+
+docker-compose -f docker-compose.sqlite.yml up -d
+
+```
+
+### With MySQL
+
+```bash
+yarn make-prod-env-file
+```
+
+```txt
+HOST=
+PORT=5555
+
+...
+
+# currently support "mysql" and "sqlite"
+DB_TYPE=mysql # <- update here to "mysql"
+
+# credentials for database
+DB_HOST=mysql # <- update here to "mysql"
+DB_USERNAME=iremono # <- must match environmental variables in "docker-compose.mysql.yml"
+DB_PASSWORD=thisisreallystrongpassword # <- must match environmental variables in "docker-compose.mysql.yml"
+
+# if sqlite selected, path and the database file name
+DB_NAME=iremono_db # <- must match environmental variables in "docker-compose.mysql.yml"
+```
+
+```bash
+
+docker-compose -f docker-compose.mysql.yml up -d
+
+```
+
 ## Credit to
 
 sleeping cat.jpeg: Photo by <a href="https://unsplash.com/@michaelsum1228?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Michael Sum</a> on <a href="https://unsplash.com/s/photos/cat?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
