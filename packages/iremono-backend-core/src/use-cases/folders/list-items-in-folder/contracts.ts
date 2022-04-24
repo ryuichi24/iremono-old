@@ -7,6 +7,7 @@ export interface ListItemsInFolderRequestDTO {
 }
 
 export interface ListItemsInFolderResponseDTO {
+  folder: StorageItemDTO;
   entries: StorageItemDTO[];
 }
 

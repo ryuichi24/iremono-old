@@ -23,6 +23,7 @@ export class ListItemsInFolderUseCase implements IListItemsInFolderUseCase {
     const items = await this._storageItemRepository.findByParentId(parentFolder.id, false);
 
     return {
+      folder: makeStorageItemDTO(parentFolder),
       entries: items.map((item) => makeStorageItemDTO(item)),
     };
   }

@@ -60,5 +60,6 @@ describe('test ListItemsInFolderUseCase handle method', () => {
     const responseDTO = await listItemsInFolderUseCase.handle(mockListItemsInFolderDTO);
 
     expect(responseDTO.entries.length).toBe(3);
+    expect(responseDTO.folder?.id).toBe(TEST_FOLDER_1_ID);
   });
 });
