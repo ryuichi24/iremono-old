@@ -5,7 +5,6 @@ import { Typography } from '@mui/material';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 // child components
 import { RenameStorageItemForm } from './RenameStorageItemForm';
 import { RemoveStorageItemForm } from './RemoveStorageItemForm';

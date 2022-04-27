@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import GridViewIcon from '@mui/icons-material/GridView';
 import ViewListIcon from '@mui/icons-material/ViewList';
 // child components
