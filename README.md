@@ -10,6 +10,10 @@ There is demo to play around with: [iremono demo](https://iremono.herokuapp.com/
 
 \*The demo account does not have any write access.
 
+## API Documentation
+
+Here is the link to the API documentation: https://documenter.getpostman.com/view/12920936/UyrDEbM2
+
 ## How to run iremono
 
 ### Clone repo
